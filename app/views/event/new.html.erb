@@ -1,0 +1,47 @@
+<%= form_for @event, url: { action: :create}, html: { class: '' } do |f| %>
+  <pre>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </pre>
+  <%= f.fields_for :client do |client_form| %>
+    <div class="form-group">
+      <%= client_form.label :location, 'Location' %>
+      <%= client_form.text_field :location, {class: 'form-control'} %>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <p class="font-weight-normal">View availability for</p>
+    <% @agents.each do |agent| %>
+      <div class="form-check form-check-inline">
+        <%= f.radio_button :agent_id, agent.id, { class: 'form-check-input' } %>
+        <%= f.label :agent_id, agent.display_name, { class: 'form-check-label'} %>
+      </div>
+    <% end %>
+  </div>
+  <div class="form-group">
+    <%= f.label :event_type_id, 'Appointment Type' %>
+    <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc'), {}, { class: 'form-control' } %>
+  </div>
+
+  <div id="event_calendar" />
+
+  <%= f.fields_for :client do |client_form| %>
+    <div class="form-group">
+      <%= client_form.label :name, 'Full name' %>
+      <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
+    </div>
+    <div class="form-group">
+      <%= client_form.label :email %>
+      <%= client_form.email_field :email, {class: 'form-control'} %>
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <%= client_form.label :phone, 'Phone Number' %>
+      <%= client_form.phone_field :phone, {class: 'form-control'} %>
+      <small id="phoneHelp" class="form-text text-muted">Enter your full phone number with international code. Ie +61 08 2222 3333</small>
+    </div>
+  <% end %>
+  <button class="btn btn-primary" type="submit">Save</button>
+<% end %>

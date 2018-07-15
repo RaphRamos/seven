@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agent: one
+  event_type: one
+  start: 2018-07-14 12:59:41
+  end: 2018-07-14 12:59:41
+
+two:
+  agent: two
+  event_type: two
+  start: 2018-07-14 12:59:41
+  end: 2018-07-14 12:59:41
