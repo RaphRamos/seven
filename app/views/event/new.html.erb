@@ -1,4 +1,6 @@
 <%= form_for @event, url: { action: :create}, html: { class: '' } do |f| %>
+  <%= f.hidden_field :start, value: Time.now %>
+  <%= f.hidden_field :end, value: 1.hour.from_now %>
   <pre>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -23,6 +25,7 @@
   <div class="form-group">
     <%= f.label :event_type_id, 'Appointment Type' %>
     <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc'), {}, { class: 'form-control' } %>
+    <%= f.select :appointment_id, options_from_collection_for_select(@appointments, 'id', 'desc'), {}, { class: 'form-control' } %>
   </div>
 
   <div id="event_calendar" />
@@ -41,6 +44,10 @@
       <%= client_form.label :phone, 'Phone Number' %>
       <%= client_form.phone_field :phone, {class: 'form-control'} %>
       <small id="phoneHelp" class="form-text text-muted">Enter your full phone number with international code. Ie +61 08 2222 3333</small>
+    </div>
+    <div class="form-group form-check">
+      <%= f.check_box :terms_of_service, {class: 'form-check-label'} %>
+      <%= f.label :terms_of_service, 'I agree with Terms of Service.'%>
     </div>
   <% end %>
   <button class="btn btn-primary" type="submit">Save</button>
