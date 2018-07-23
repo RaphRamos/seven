@@ -1,6 +1,6 @@
 <%= form_for @event, url: { action: :create}, html: { class: '' } do |f| %>
-  <%= f.hidden_field :start, value: Time.now %>
-  <%= f.hidden_field :end, value: 1.hour.from_now %>
+  <%= f.hidden_field :start %>
+  <%= f.hidden_field :end %>
   <pre>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -11,6 +11,20 @@
     <div class="form-group">
       <%= client_form.label :location, 'Location' %>
       <%= client_form.text_field :location, {class: 'form-control'} %>
+    </div>
+    <div class="form-group">
+      <%= client_form.label :name, 'Full name' %>
+      <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
+    </div>
+    <div class="form-group">
+      <%= client_form.label :email %>
+      <%= client_form.email_field :email, {class: 'form-control'} %>
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <%= client_form.label :phone, 'Phone Number' %>
+      <%= client_form.phone_field :phone, {class: 'form-control'} %>
+      <small id="phoneHelp" class="form-text text-muted">Enter your full phone number with international code. Ie +61 08 2222 3333</small>
     </div>
   <% end %>
   <div class="form-group">
@@ -30,25 +44,10 @@
 
   <div id="event_calendar" />
 
-  <%= f.fields_for :client do |client_form| %>
-    <div class="form-group">
-      <%= client_form.label :name, 'Full name' %>
-      <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
-    </div>
-    <div class="form-group">
-      <%= client_form.label :email %>
-      <%= client_form.email_field :email, {class: 'form-control'} %>
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>
-    <div class="form-group">
-      <%= client_form.label :phone, 'Phone Number' %>
-      <%= client_form.phone_field :phone, {class: 'form-control'} %>
-      <small id="phoneHelp" class="form-text text-muted">Enter your full phone number with international code. Ie +61 08 2222 3333</small>
-    </div>
-    <div class="form-group form-check">
-      <%= f.check_box :terms_of_service, {class: 'form-check-label'} %>
-      <%= f.label :terms_of_service, 'I agree with Terms of Service.'%>
-    </div>
-  <% end %>
+  <div class="form-group form-check">
+    <%= f.check_box :terms_of_service, {class: 'form-check-label'} %>
+    <%= f.label :terms_of_service, 'I agree with Terms of Service.'%>
+  </div>
+
   <button class="btn btn-primary" type="submit">Save</button>
 <% end %>

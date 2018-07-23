@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_14_060353) do
+ActiveRecord::Schema.define(version: 2018_07_21_043934) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2018_07_14_060353) do
     t.datetime "end", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "temporary", default: true, null: false
     t.index ["agent_id"], name: "index_events_on_agent_id"
     t.index ["appointment_id"], name: "index_events_on_appointment_id"
     t.index ["client_id"], name: "index_events_on_client_id"
