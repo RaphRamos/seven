@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_21_043934) do
+ActiveRecord::Schema.define(version: 2018_07_24_131336) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -94,6 +94,26 @@ ActiveRecord::Schema.define(version: 2018_07_21_043934) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_payments_on_client_id"
     t.index ["event_id"], name: "index_payments_on_event_id"
+  end
+
+  create_table "timetable_event_types", force: :cascade do |t|
+    t.integer "timetable_id"
+    t.integer "event_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_type_id"], name: "index_timetable_event_types_on_event_type_id"
+    t.index ["timetable_id"], name: "index_timetable_event_types_on_timetable_id"
+  end
+
+  create_table "timetables", force: :cascade do |t|
+    t.integer "agent_id", null: false
+    t.string "dow", null: false
+    t.time "start_time", null: false
+    t.time "end_time", null: false
+    t.boolean "activated", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_timetables_on_agent_id"
   end
 
   create_table "versions", force: :cascade do |t|

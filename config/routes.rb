@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get  'busy_events'
       get  'temp_events'
       post 'create_temp_event'
+      get  'timetable'
     end
   end
 end

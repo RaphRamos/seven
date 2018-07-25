@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agent: one
+  dow: MyString
+  start_time: 2018-07-24 20:04:17
+  end_time: 2018-07-24 20:04:17
+  activated: false
+
+two:
+  agent: two
+  dow: MyString
+  start_time: 2018-07-24 20:04:17
+  end_time: 2018-07-24 20:04:17
+  activated: false

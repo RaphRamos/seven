@@ -8,7 +8,8 @@ class Event < ApplicationRecord
 
   accepts_nested_attributes_for :client
 
-  validates :terms_of_service, acceptance: true
+  validates :terms_of_service, acceptance: true, unless: :temporary
+  validates_associated :client
 
   def autosave_associated_records_for_client
     c = Client.arel_table
@@ -18,7 +19,7 @@ class Event < ApplicationRecord
       self.client.save!
       self.client_id = self.client.id
     else
-      self.client = new_client.first
+      self.client = new_client.first if !client.email.blank? && !client.name.blank?
     end
   end
 
@@ -29,19 +30,20 @@ class Event < ApplicationRecord
   end
 
   def self.busy_events(start_time, end_time)
-    Event.where(start: start_time..end_time, temporary: false).map do |event|
+    Event.where(start: start_time..end_time).map do |event|
       { title: 'Not Available',
         start: event.start.iso8601,
         end: event.end.iso8601 }
     end
   end
 
-  def self.temp_events_for(start_time, end_time, client_name, client_email)
+  def self.temp_events_for(start_time, end_time, client_email)
+    return if client_email.blank?
     Event.where(start: start_time..end_time, temporary: true)
       .joins(:client)
-      .where('clients.email = ? OR clients.name LIKE ?', client_email, "%#{client_name}%")
+      .where('clients.email = ?', client_email)
       .map do |event|
-        { title: 'Reserved',
+        { title: 'Your Reservation Here',
           start: event.start.iso8601,
           end: event.end.iso8601 }
     end

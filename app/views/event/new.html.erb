@@ -42,6 +42,9 @@
     <%= f.select :appointment_id, options_from_collection_for_select(@appointments, 'id', 'desc'), {}, { class: 'form-control' } %>
   </div>
 
+  <div class="calendar-message">
+    <p>Select an agent to display his timetable.</p>
+  </div>
   <div id="event_calendar" />
 
   <div class="form-group form-check">
@@ -51,3 +54,71 @@
 
   <button class="btn btn-primary" type="submit">Save</button>
 <% end %>
+
+<script>
+function eventCalendar() {
+  $(".calendar-message").hide();
+  return $('#event_calendar').fullCalendar({
+    defaultView: 'agendaWeek',
+    minTime: '09:00:00',
+    maxTime: '17:00:00',
+    hiddenDays: timetable.hiddenDays,
+    allDaySlot: false,
+    height: 'auto',
+    selectable: true,
+    selectConstraint: 'businessHours',
+    validRange: function(nowDate) {
+      return {
+        start: nowDate.clone().add(-1, 'day'),
+        end: nowDate.clone().add(2, 'months')
+      };
+    },
+    eventSources: [
+      {
+        url: '/event/busy_events',
+        rendering: 'background'
+      },
+      {
+        url: '/event/temp_events',
+        data: {
+          client_name: function() {
+            return $('#event_client_attributes_name').val()
+          },
+          client_email: function() {
+            return $('#event_client_attributes_email').val()
+          },
+        },
+      }
+    ],
+    select: function (start, end){
+      $('#event_start').val(start.format());
+      $.post(`/event/create_temp_event?${$('#new_event').serialize()}`).done(
+        function() {
+          $('#event_calendar').fullCalendar('refetchEvents');
+        }
+      );
+    },
+    selectOverlap: false,
+    businessHours: timetable.businessHours
+  });
+};
+function loadTimetable(){
+  var agentId = $("input[name='event[agent_id]']:checked").val();
+  var eventTypeId = $("#event_event_type_id").val();
+  $.get("/event/timetable", {agent_id: agentId, event_type_id: eventTypeId })
+   .done(function(response){
+     timetable = response;
+     clearCalendar();
+     eventCalendar();
+   });
+}
+function onPageLoad() {
+  $("input[name='event[agent_id]']").on('change', function() {
+    loadTimetable();
+  });
+  $("#event_event_type_id").on('change', function() {
+    loadTimetable();
+  });
+}
+$(document).on('turbolinks:load', onPageLoad);
+</script>

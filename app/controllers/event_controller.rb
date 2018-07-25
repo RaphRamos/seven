@@ -19,22 +19,37 @@ class EventController < ApplicationController
   end
 
   def temp_events
-    puts params
     render json: Event.temp_events_for(params[:start].to_date,
                                        params[:end].to_date,
-                                       params[:client_name],
                                        params[:client_email])
   end
 
   def create_temp_event
     event = Event.new(event_params)
-    event.end = event.start + 30.minutes
+    num_events = Client.find_by_email(event.client.email).events.count
+    app_duration = num_events > 0 ? 30.minutes : 1.hour
+    event.end = event.start + app_duration
 
-    if event.save
+    if event.save!
       render json: { success: true }
     else
       render json: { success: false, errors: event.errors.full_messages }
     end
+  end
+
+  def timetable
+    agent_id = params[:agent_id]
+    event_type_id = params[:event_type_id]
+    response = {}
+    response[:businessHours] = Timetable.joins(:event_types).where(agent_id: agent_id,
+      activated: true, event_types: { id: event_type_id }).map do |tt|
+        { start: tt.start_time.strftime('%R'),
+          end: tt.end_time.strftime('%R'),
+          dow: tt.dow.split(',').map(&:to_i) }
+      end
+    response[:hiddenDays] = Array(0..6) - response[:businessHours].map {|d| d[:dow] }.flatten
+
+    render json: response
   end
 
   private
