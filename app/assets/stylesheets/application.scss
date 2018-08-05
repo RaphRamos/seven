@@ -11,6 +11,21 @@
   .btn-primary.after-calendar {
     margin-top: 15px;
   }
+   .form-check {
+     padding: 0;
+   }
+
+   .modal-body {
+     ul {
+       margin-left: 25px;
+       list-style: initial
+     }
+
+     span {
+       font-size: x-small;
+       color: darkgray;
+     }
+   }
 }
 
 input[aria-invalid="true"] {

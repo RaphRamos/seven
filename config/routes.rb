@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   end
 
   get '/client_by_email', to: 'client#client_by_email'
+
 end
