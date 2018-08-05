@@ -11,4 +11,6 @@ Rails.application.routes.draw do
       get  'timetable'
     end
   end
+
+  get '/client_by_email', to: 'client#client_by_email'
 end

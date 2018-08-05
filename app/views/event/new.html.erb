@@ -1,59 +1,80 @@
-<%= form_for @event, url: { action: :create}, html: { class: '' } do |f| %>
-  <%= f.hidden_field :start %>
-  <%= f.hidden_field :end %>
-  <pre>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </pre>
-  <%= f.fields_for :client do |client_form| %>
-    <div class="form-group">
-      <%= client_form.label :location, 'Location' %>
-      <%= client_form.text_field :location, {class: 'form-control'} %>
-    </div>
-    <div class="form-group">
-      <%= client_form.label :name, 'Full name' %>
-      <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
-    </div>
-    <div class="form-group">
-      <%= client_form.label :email %>
-      <%= client_form.email_field :email, {class: 'form-control'} %>
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-    </div>
-    <div class="form-group">
-      <%= client_form.label :phone, 'Phone Number' %>
-      <%= client_form.phone_field :phone, {class: 'form-control'} %>
-      <small id="phoneHelp" class="form-text text-muted">Enter your full phone number with international code. Ie +61 08 2222 3333</small>
-    </div>
-  <% end %>
-  <div class="form-group">
-    <p class="font-weight-normal">View availability for</p>
-    <% @agents.each do |agent| %>
-      <div class="form-check form-check-inline">
-        <%= f.radio_button :agent_id, agent.id, { class: 'form-check-input' } %>
-        <%= f.label :agent_id, agent.display_name, { class: 'form-check-label'} %>
+<div class="container seven-panel">
+  <%= form_for @event, url: { action: :create}, html: { class: 'justify-content-center' } do |f| %>
+    <%= f.hidden_field :start %>
+    <%= f.hidden_field :end %>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <%= f.fields_for :client do |client_form| %>
+      <div class="form-row">
+        <div class="col">
+          <div class="form-group">
+            <%= client_form.label :email %>
+            <%= client_form.email_field :email, {class: 'form-control'} %>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <%= client_form.label :name, 'Full name' %>
+            <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col">
+          <div class="form-group">
+            <%= client_form.label :location, 'Location' %>
+            <%= client_form.text_field :location, {class: 'form-control'} %>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <%= client_form.label :phone, 'Phone Number' %>
+            <%= client_form.phone_field :phone, {class: 'form-control'} %>
+            <small id="phoneHelp" class="form-text text-muted">Enter your full phone number with international code. Ie +61 08 2222 3333</small>
+          </div>
+        </div>
       </div>
     <% end %>
-  </div>
-  <div class="form-group">
-    <%= f.label :event_type_id, 'Appointment Type' %>
-    <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc'), {}, { class: 'form-control' } %>
-    <%= f.select :appointment_id, options_from_collection_for_select(@appointments, 'id', 'desc'), {}, { class: 'form-control' } %>
-  </div>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <p class="font-weight-normal">View availability for</p>
+          <% @agents.each do |agent| %>
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :agent_id, agent.id, { class: 'form-check-input' } %>
+            <%= f.label :agent_id, agent.display_name, { class: 'form-check-label'} %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <%= f.label :event_type_id, 'Appointment Type' %>
+          <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc'), {}, { class: 'form-control' } %>
+          <%= f.select :appointment_id, options_from_collection_for_select(@appointments, 'id', 'desc'), {}, { class: 'form-control' } %>
+        </div>
+      </div>
+    </div>
+    <div class="form-check">
+      <%= f.check_box :terms_of_service, {class: 'form-check-label'} %>
+      <%= f.label :terms_of_service, 'I agree with Terms of Service.'%>
+    </div>
 
-  <div class="calendar-message">
-    <p>Select an agent to display his timetable.</p>
-  </div>
-  <div id="event_calendar" />
+    <div class="calendar-message">
+      <p>Select an agent to display his timetable.</p>
+    </div>
+    <div id="event_calendar" />
 
-  <div class="form-group form-check">
-    <%= f.check_box :terms_of_service, {class: 'form-check-label'} %>
-    <%= f.label :terms_of_service, 'I agree with Terms of Service.'%>
-  </div>
-
-  <button class="btn btn-primary" type="submit">Save</button>
-<% end %>
+    <div class="form-group">
+      <button class="btn btn-primary after-calendar" type="submit">Book Now!</button>
+    </div>
+  <% end %>
+</div>
 
 <script>
 function eventCalendar() {
@@ -69,7 +90,7 @@ function eventCalendar() {
     selectConstraint: 'businessHours',
     validRange: function(nowDate) {
       return {
-        start: nowDate.clone().add(-1, 'day'),
+        start: nowDate.clone().add(-2, 'day'),
         end: nowDate.clone().add(2, 'months')
       };
     },
@@ -112,12 +133,93 @@ function loadTimetable(){
      eventCalendar();
    });
 }
+function loadClientByEmail(email) {
+  $.get("/client_by_email", {email: email}).done(function(data) {
+    if (data.client) {
+      console.log(data);
+      $("#event_client_attributes_name").val(data.client.name);
+      $("#event_client_attributes_phone").val(data.client.phone);
+      $("#event_client_attributes_location").val(data.client.location);
+      if (data.event_type_id) {
+        $("[name='event[event_type_id]']").val(data.event_type_id);
+      }
+      if (data.appointment_id) {
+        $("[name='event[appointment_id]']").val(data.appointment_id);
+      }
+      if (data.agent_id) {
+        $(`#event_agent_id_${data.agent_id}`).prop('checked', true);
+        loadTimetable();
+      }
+    }
+  });
+}
 function onPageLoad() {
   $("input[name='event[agent_id]']").on('change', function() {
     loadTimetable();
   });
   $("#event_event_type_id").on('change', function() {
     loadTimetable();
+  });
+  $("#event_client_attributes_email").on('change', function() {
+    loadClientByEmail($(this).val());
+  });
+  $('#new_event').validate({
+    rules: {
+      "event[client_attributes][email]": {
+        required: true,
+        minlength: 5
+      },
+      "event[client_attributes][name]": {
+        required: true,
+        minlength: 5
+      },
+      "event[client_attributes][location]": {
+        required: true,
+        minlength: 3
+      },
+      "event[client_attributes][phone]": {
+        required: true,
+        minlength: 6
+      },
+      "event[terms_of_service]": {
+        required: true
+      }
+    },
+    errorElement: "em",
+		errorPlacement: function ( error, element ) {
+			// Add the `help-block` class to the error element
+			error.addClass( "help-block" );
+
+			// Add `has-feedback` class to the parent div.form-group
+			// in order to add icons to inputs
+			element.parents( ".col-sm-5" ).addClass( "has-feedback" );
+
+			if ( element.prop( "type" ) === "checkbox" ) {
+				error.insertAfter( element.parent( "label" ) );
+			} else {
+				error.insertAfter( element );
+			}
+
+			// Add the span element, if doesn't exists, and apply the icon classes to it.
+			if ( !element.next( "span" )[ 0 ] ) {
+				$( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+			}
+		},
+		success: function ( label, element ) {
+			// Add the span element, if doesn't exists, and apply the icon classes to it.
+			if ( !$( element ).next( "span" )[ 0 ] ) {
+				$( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+			}
+		},
+		highlight: function ( element, errorClass, validClass ) {
+			$( element ).parents( ".col-sm-5" ).addClass( "has-error" ).removeClass( "has-success" );
+			$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+		},
+		unhighlight: function ( element, errorClass, validClass ) {
+			$( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
+			$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+		}
+
   });
 }
 $(document).on('turbolinks:load', onPageLoad);

@@ -26,7 +26,16 @@ class EventController < ApplicationController
 
   def create_temp_event
     event = Event.new(event_params)
-    num_events = Client.find_by_email(event.client.email).events.count
+    lastTempEvent = Event.joins(:client).where(temporary: true, clients: { email: event.client.email}).last
+
+    if lastTempEvent.present?
+      lastTempEvent.start = event.start
+      lastTempEvent.event_type_id = event.event_type_id
+      lastTempEvent.appointment_id = event.appointment_id
+      event = lastTempEvent
+    end
+
+    num_events = Client.find_by_email(event.client.email).events.where(temporary: false).count
     app_duration = num_events > 0 ? 30.minutes : 1.hour
     event.end = event.start + app_duration
 
