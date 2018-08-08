@@ -9,16 +9,20 @@
 puts 'Seeding DB...'
 # Admins
 Admin.create!(name: 'Raphael Ramos', email: 'raphael.au@icloud.com', password: 'n7T-2?w8LUF*)5nzb6r)', password_confirmation: 'n7T-2?w8LUF*)5nzb6r)')
-Admin.create!(name: 'Laura Ramos', email: 'laura@sevenmigration.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
+Admin.create!(name: 'Laura Ramos', email: 'info@sevenmigration.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
+Admin.create!(name: 'Claudio Garzini', email: 'claudio@sevenmigration.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
+Admin.create!(name: 'Ana Julia Caruzi', email: 'ana.julia@sevenmigration.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
+Admin.create!(name: 'Flavia', email: 'flavia@sevenmigration.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
+Admin.create!(name: 'Joao Pedro', email: 'pedro.fandinho@informationplanet.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
 
 Agent.create!(name: 'Ana Julia Carusi', display_name: 'Ana Julia Carusi', email: 'ana.julia@sevenmigration.com.au')
 Agent.create!(name: 'Claudio Garzini',  display_name: 'Claudio Garzini',  email: 'claudio@sevenmigration.com.au')
 
 Appointment.create!(desc: 'Outside Australia', price: 215.0, returns: 2, available: true)
-Appointment.create!(desc: 'Inside Australia',  price: 180.0, returns: 3, available: true)
+Appointment.create!(desc: 'Perth - Australia',  price: 180.0, returns: 3, available: true)
 
 EventType.create!(desc: 'Appointment In Person')
-EventType.create!(desc: 'Appointment Via Skype')
+EventType.create!(desc: 'Appointment Via Videocall')
 EventType.create!(desc: 'Appointment Via Phone Call')
 
 Timetable.create!(agent_id: 1, dow: '1,5', start_time: '09:00', end_time: '12:00', activated: true)

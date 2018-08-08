@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_24_131336) do
+ActiveRecord::Schema.define(version: 2018_08_08_110521) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -59,6 +62,7 @@ ActiveRecord::Schema.define(version: 2018_07_24_131336) do
     t.boolean "premium"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "notes"
   end
 
   create_table "event_types", force: :cascade do |t|
@@ -121,9 +125,9 @@ ActiveRecord::Schema.define(version: 2018_07_24_131336) do
     t.integer "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object", limit: 1073741823
+    t.text "object"
     t.datetime "created_at"
-    t.text "object_changes", limit: 1073741823
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

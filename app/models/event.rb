@@ -12,9 +12,7 @@ class Event < ApplicationRecord
   validates_associated :client
 
   def autosave_associated_records_for_client
-    c = Client.arel_table
-    new_client = Client.where(email: client.email).or(
-                  Client.where(c[:name].matches("%#{client.name}%")))
+    new_client = Client.where(email: client.email)
     if new_client.size == 0
       self.client.save!
       self.client_id = self.client.id

@@ -43,8 +43,8 @@
           <div class="form-group">
             <%= f.label :event_type_id, 'Appointment Type' %>
             <div class="form-inline">
-              <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc'), {}, { class: 'form-control' } %>
-              <%= f.select :appointment_id, options_from_collection_for_select(@appointments, 'id', 'desc'), {}, { class: 'form-control' } %>
+              <%= f.hidden_field :appointment_id %>
+              <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc', @eventTypes[1].id), {}, { class: 'form-control' } %>
             </div>
           </div>
         </div>
@@ -295,7 +295,33 @@ function setProperModal() {
   }
   $('#bookNowBtn').attr('data-target', `#${modalId}`);
 }
+function filterEventTypes(appointment_id) {
+  if (appointment_id == '1') {
+    $("#event_event_type_id option:first").attr('disabled', true);
+  } else {
+    $("#event_event_type_id option:first").attr('disabled', false);
+  }
+
+  if ($("#event_event_type_id option:selected").val() == '1') {
+    $("#event_event_type_id option:selected").removeAttr('selected');
+    $("#event_event_type_id").val('2');
+  }
+}
+function filterAppointmentType(location) {
+  if (location == 'Perth') {
+    $('#event_appointment_id').val('2');
+  } else {
+    $('#event_appointment_id').val('1');
+  }
+  $("#event_appointment_id").trigger('change');
+}
 function onPageLoad() {
+  filterAppointmentType($('#event_client_attributes_location').val());
+  $('#event_client_attributes_location')
+    .geocomplete()
+    .bind("geocode:result", function(event, result){
+      filterAppointmentType(result.vicinity);
+    });
   $("[name='event[appointment_id]']").on('change', function () {
     setProperModal();
   });
@@ -307,6 +333,10 @@ function onPageLoad() {
   });
   $("#event_client_attributes_email").on('change', function() {
     loadClientByEmail($(this).val());
+  });
+  filterEventTypes($("#event_appointment_id").val());
+  $("#event_appointment_id").on('change', function() {
+    filterEventTypes($(this).val());
   });
   $('#new_event').validate({
     rules: {
