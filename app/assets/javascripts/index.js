@@ -26,11 +26,6 @@ $(function() {
 	if($search.length > 0) {
 		$search.on('click', searchAction)
 	}
-
-	var $calendar = $('#calendar')
-	if($calendar.length > 0) {
-		$calendar.fullCalendar(fullCalendarCFG)
-	}
 });
 function businessHours(){
   var openTime  = new Date();
