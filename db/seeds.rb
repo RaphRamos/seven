@@ -19,7 +19,7 @@ Agent.create!(name: 'Ana Julia Carusi', display_name: 'Ana Julia Carusi', email:
 Agent.create!(name: 'Claudio Garzini',  display_name: 'Claudio Garzini',  email: 'claudio@sevenmigration.com.au')
 
 Appointment.create!(desc: 'Outside Australia', price: 215.0, returns: 2, available: true)
-Appointment.create!(desc: 'Perth - Australia',  price: 180.0, returns: 3, available: true)
+Appointment.create!(desc: 'Inside Australia',  price: 180.0, returns: 3, available: true)
 
 EventType.create!(desc: 'Appointment In Person')
 EventType.create!(desc: 'Appointment Via Videocall')
@@ -57,6 +57,45 @@ TimetableEventType.create!(timetable_id: 6, event_type_id: 1)
 TimetableEventType.create!(timetable_id: 6, event_type_id: 2)
 
 # Load legacy data
-# csv_path = '/db/legacy_data/appointment_setmore.csv'
-# csv = CSV.parse(File.read(csv_path), headers: true)
-# data = csv.map(&:to_h)
+csv_path = 'db/legacy_data/seven_from_2016.csv'
+csv = CSV.parse(File.read(csv_path), headers: true)
+data = csv.map(&:to_h)
+
+puts 'Loading legacy data...'
+data.each do |e|
+  print '.'
+  next if e['Email'].blank?
+  next unless e['Status'].downcase == 'confirmed'
+  next if e['Label'] == 'No-Show'
+
+  agent = Agent.find_by_name e['Resource Name']
+  next unless agent.present?
+
+  next if e['Service/Class'].downcase.include?('no fee')
+
+  event_type_id = 1
+  event_type_id = 2 if e['Service/Class'].downcase.include?('skype')
+  event_type_id = 3 if e['Service/Class'].downcase.include?('phone')
+
+  client = Client.find_by_email(e['Email'])
+  unless client.present?
+    client = Client.new(email: e['Email'], name: e['Customer Name'],
+                        phone: "#{e['Country Code']}#{e['Phone']}",
+                        location: "#{e['City']} - #{e['State']}")
+    client.save!(validate: false)
+  end
+
+  start_time = "#{e['Date']} #{e['Time'].split(' - ').first} +0800".to_datetime
+  end_time = "#{e['Date']} #{e['Time'].split(' - ').second} +0800".to_datetime
+
+  if start_time < '1 Jul 2017'.to_date
+    next if client.events.count.positive?
+  end
+
+  event = Event.new(agent_id: agent.id, event_type_id: event_type_id,
+                    client_id: client.id, start: start_time, end: end_time,
+                    temporary: false, appointment_id: event_type_id == 1 ? 2 : 1)
+  event.save!(validate: false)
+end
+
+puts 'Seeding completed!'

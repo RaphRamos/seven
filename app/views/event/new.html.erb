@@ -1,217 +1,93 @@
-<div class="container seven-panel">
-  <%= form_for @event, url: { action: :create}, html: { class: 'justify-content-center' } do |f| %>
-    <%= f.hidden_field :start %>
-    <%= f.hidden_field :end %>
-    <p>
-      Fill out the form below to make an appointment with one of Seven Migration agents.
-    </p>
-    <p>
-      If you are a returning customer, please fill in your email address and we'll look out your details for you.
-    </p>
-    <%= f.fields_for :client do |client_form| %>
-      <%= client_form.hidden_field :premium %>
-      <%= hidden_field_tag :subsequent_event %>
-      <div class="form-row">
-        <div class="col">
-          <div class="form-group">
-            <%= client_form.label :email %>
-            <%= client_form.email_field :email, {class: 'form-control', placeholder: 'Your email here: john.doe@example.com'} %>
+<!-- CONTENT -->
+<main id="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <%= form_for @event, url: { action: :create}, html: { class: 'needs-validation' } do |f| %>
+          <%= f.hidden_field :start %>
+          <%= f.hidden_field :end %>
+          <h4 class="mb-3">Bookings</h4>
+          <p>Fill out the form below to make an appointment with one of Seven Migration agents.</p>
+          <p>If you are a returning customer, please fill in your email address and we'll look out your details for you.</p>
+          <%= f.fields_for :client do |client_form| %>
+            <%= client_form.hidden_field :premium %>
+            <%= hidden_field_tag :subsequent_event %>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <%= client_form.label :email %>
+                <%= client_form.email_field :email, {class: 'form-control', placeholder: 'Your email here: john.doe@example.com'} %>
+              </div>
+              <div class="col-md-6">
+                <%= client_form.label :name, 'Full name' %>
+                <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <%= client_form.label :location, 'Location' %>
+                <%= client_form.text_field :location, {class: 'form-control', placeholder: 'Your location here: Sao Paulo - Brazil'} %>
+              </div>
+              <div class="col-md-6">
+                <%= client_form.label :phone, 'Phone Number' %>
+                <%= client_form.text_field :phone, {class: 'form-control', placeholder: 'Your phone number here... '} %>
+              </div>
+            </div>
+          <% end %>
+          <div class="customCheckBox">
+            <%= f.label :terms_of_service, {class: 'cpw'} do %>
+              I agree with
+              <%= f.check_box :terms_of_service, {class: 'custom-control-input'} %>
+              <span class="checkmark"></span>
+              <a href="#" class="gradient textGradient" data-toggle="modal" data-target="#termsOfServicesModal">Terms of Service.</a>
+            <% end %>
           </div>
-        </div>
-        <div class="col">
-          <div class="form-group">
-            <%= client_form.label :name, 'Full name' %>
-            <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
+          <hr class="mb-4">
+          <h4 class="mb-3">Available Agents</h4>
+          <div class="d-block my-3">
+            <% @agents.each do |agent| %>
+            <div class="customRadio">
+              <%= f.label "agent_id_#{agent.id}", { class: 'cpw'} do %>
+                <%= f.radio_button :agent_id, agent.id, { class: 'custom-control-input' } %>
+                <span class="checkmark"></span>
+                <%= agent.display_name %>
+              <% end %>
+            </div>
+            <% end %>
           </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="col-4">
-          <div class="form-group">
-            <%= client_form.label :location, 'Location' %>
-            <%= client_form.text_field :location, {class: 'form-control', placeholder: 'Your location here: Sao Paulo - Brazil'} %>
-            <small id="locationHelp" class="form-text text-muted">Enter your city and country. Ie: Sao Paulo - Brazil</small>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="form-group">
-            <%= client_form.label :phone, 'Phone Number' %>
-            <%= client_form.text_field :phone, {class: 'form-control', placeholder: 'Your phone number here... '} %>
-          </div>
-        </div>
-        <div class="col-auto">
-          <div class="form-group">
-            <%= f.label :event_type_id, 'Appointment Type' %>
-            <div class="form-inline">
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.label :event_type_id, 'Appointment Type' %>
               <%= f.hidden_field :appointment_id %>
-              <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc', @eventTypes[1].id), {}, { class: 'form-control' } %>
+              <%= f.select :event_type_id, options_from_collection_for_select(@eventTypes, 'id', 'desc', @eventTypes[1].id), {}, { class: 'custom-select d-block w-100' } %>
             </div>
           </div>
-        </div>
-      </div>
-    <% end %>
-    <div class="form-row">
-      <div class="col-auto">
-        <div class="form-group">
-          <p class="font-weight-normal">View availability for</p>
-          <% @agents.each do |agent| %>
-          <div class="form-check form-check-inline">
-            <%= f.radio_button :agent_id, agent.id, { class: 'form-check-input' } %>
-            <%= f.label :agent_id, agent.display_name, { class: 'form-check-label'} %>
-          </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="form-check">
-      <%= f.check_box :terms_of_service, {class: 'form-check-label'} %>
-      <%= f.label :terms_of_service, 'I agree with Terms of Service.'%>
-    </div>
-
-    <div class="calendar-message">
-      <p>Select an agent to display his timetable.</p>
-    </div>
-    <div id="event_calendar" />
-
-    <div class="form-group">
-      <button class="btn btn-primary after-calendar" type="button"
-      data-toggle="modal" data-target="#offshoreModal" id="bookNowBtn">
-        Book Now!
-      </button>
-    </div>
-  <% end %>
-</div>
-
-<div class="modal fade" id="onshoreModal" tabindex="-1" role="dialog" aria-labelledby="onshoreModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="onshoreModalLabel">Onshore Consultations:</h5>
-      </div>
-      <div class="modal-body">
-        <p>
-          For clients in Australia, Seven Migration renders face-to-face consultations
-          with our Registered Migration Agents in Perth (WA) and Adelaide (SA)
-          (subject to availability) as well as Skype Video Conferences for those
-          elsewhere within Australia (subject to availability and time differences).
-        </p>
-        <p>
-          Consultation Fee: AUD$180.00 (GST Inclusive)*
-        </p>
-        <p>
-          Services Included:  
-        </p>
-        <ul>
-          <li>Analysis of visa eligibility, according to clients’ circumstances and individual objectives/background.</li>
-          <li>Provision of migration advice and development of an initial migration plan, subject to clients’ circumstances and individual objectives/background.</li>
-          <li>Provision of general orientation in regards to professional validation processes (subject to individual analysis).</li>
-        </ul>
-        <span>
-          *As part of the Consultation Fee for your 1st appointment, you will
-          also receive an entitlement to <b>two</b> free-of-charge follow-up consultations,
-          which can be scheduled at anytime of your discretion. Please also note
-          that this Consultation Fee <b>does not include</b> fees related to visa
-          applications, legal representation (as well as any other migration
-          agent costs) or any other fees applicable throughout the process of
-          lodging and/or appealing for a visa.
-        </span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Checkout</button>
+          <hr class="mb-4">
+          <div id="event_calendar"></div>
+          <hr class="mb-4">
+          <button class="btn gradient backgroundGradient btn-lg btn-custom-gradient" type="button" data-toggle="modal" data-target="#offshoreModal">Book now</button>
+        <% end %>
       </div>
     </div>
   </div>
-</div>
+  <!-- </div> -->
+</main>
 
-<div class="modal fade" id="offshoreModal" tabindex="-1" role="dialog" aria-labelledby="offshoreModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="offshoreModalLabel">Offshore Consultations:</h5>
-      </div>
-      <div class="modal-body">
-        <p>
-          For clients outside Australia, Seven Migration renders Skype Video
-          Conferences with our Registered Migration Agents (subject to
-          availability and time differences).
-        </p>
-        <p>
-          Consultation Fee: AUD$215.00 (GST Inclusive)*
-        </p>
-        <p>
-          Services Included:  
-        </p>
-        <ul>
-          <li>Analysis of visa eligibility, according to clients’ circumstances and individual objectives/background.</li>
-          <li>Provision of migration advice and development of an initial migration plan, subject to clients’ circumstances and individual objectives/background.</li>
-          <li>Provision of general orientation in regards to professional validation processes (subject to individual analysis).</li>
-        </ul>
-        <span>
-          *As part of the Consultation Fee for your 1st appointment, you will
-          also receive an entitlement to <b>one</b> free-of-charge follow-up
-          consultations, which can be scheduled at anytime of your discretion.
-          Please also note that this Consultation Fee <b>does not include</b> fees
-          related to visa applications, legal representation (as well as any
-          other migration agent costs) or any other fees applicable throughout
-          the process of lodging and/or appealing for a visa.
-        </span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Checkout</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="returnCustomerModal" tabindex="-1" role="dialog" aria-labelledby="returnCustomerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="returnCustomerModalLabel">Subsequent Consultations:</h5>
-      </div>
-      <div class="modal-body">
-        <p>
-          For clients in and outside Australia who have already undergone preliminary
-          appointments, Seven Migration renders subsequent face-to-face
-          consultations with our Registered Migration Agents in Perth (WA)
-          and Adelaide (SA) (subject to availability) as well as Skype Video
-          Conferences for those elsewhere (subject to availability and time differences).
-        </p>
-        <p>
-          Consultation Fee: AUD$50.00 per appointment (GST Inclusive)* 
-        </p>
-        <p>
-          Services Included:  
-        </p>
-        <ul>
-          <li>Analysis of visa eligibility, according to clients’ circumstances and individual objectives/background.</li>
-          <li>Provision of migration advice and development of an initial migration plan, subject to clients’ circumstances and individual objectives/background.</li>
-          <li>Provision of general orientation in regards to professional validation processes (subject to individual analysis).</li>
-        </ul>
-        <span>
-          *Please also note that this Consultation Fee does not include fees
-          related to visa applications, legal representation (as well as any
-          other migration agent costs) or any other fees applicable throughout
-          the process of lodging and/or appealing for a visa.
-        </span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Checkout</button>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render 'shared/modals/onshore_customer_disclaimer' %>
+<%= render 'shared/modals/offshore_customer_disclaimer' %>
+<%= render 'shared/modals/return_customer_disclaimer' %>
+<%= render 'shared/modals/terms_of_service' %>
 
 <script>
 function eventCalendar() {
   $(".calendar-message").hide();
   return $('#event_calendar').fullCalendar({
     defaultView: 'agendaWeek',
-    minTime: '09:00:00',
-    maxTime: '17:00:00',
-    hiddenDays: timetable.hiddenDays,
+    minTime: businessHours.minTime,
+    maxTime: businessHours.maxTime,
+    // hiddenDays: timetable.hiddenDays,
     allDaySlot: false,
     height: 'auto',
+    timezone: 'local',
     selectable: true,
     selectConstraint: 'businessHours',
     validRange: function(nowDate) {
@@ -249,73 +125,8 @@ function eventCalendar() {
     businessHours: timetable.businessHours
   });
 };
-function loadTimetable(){
-  var agentId = $("input[name='event[agent_id]']:checked").val();
-  var eventTypeId = $("#event_event_type_id").val();
-  $.get("/event/timetable", {agent_id: agentId, event_type_id: eventTypeId })
-   .done(function(response){
-     timetable = response;
-     clearCalendar();
-     eventCalendar();
-   });
-}
-function loadClientByEmail(email) {
-  $.get("/client_by_email", {email: email}).done(function(data) {
-    if (data.client) {
-      console.log(data);
-      $("#event_client_attributes_name").val(data.client.name);
-      $("#event_client_attributes_premium").val(data.client.premium);
-      $("#event_client_attributes_phone").val(data.client.phone);
-      $("#event_client_attributes_location").val(data.client.location);
-      $("#subsequent_event").val(data.subsequent_event);
-      if (data.event_type_id) {
-        $("[name='event[event_type_id]']").val(data.event_type_id);
-      }
-      if (data.appointment_id) {
-        $("[name='event[appointment_id]']").val(data.appointment_id);
-        $("[name='event[appointment_id]']").trigger('change');
-      }
-      if (data.agent_id) {
-        $(`#event_agent_id_${data.agent_id}`).prop('checked', true);
-        $(`#event_agent_id_${data.agent_id}`).trigger('change');
-      }
-    }
-  });
-}
-function setProperModal() {
-  var modalId = 'onshoreModal';
-  if ($('#subsequent_event').val() === 'true' ) {
-    modalId = 'returnCustomerModal';
-  } else {
-    if ($("[name='event[appointment_id]']").val() == 1) {
-      modalId = 'offshoreModal';
-    } else {
-      modalId = 'onshoreModal';
-    }
-  }
-  $('#bookNowBtn').attr('data-target', `#${modalId}`);
-}
-function filterEventTypes(appointment_id) {
-  if (appointment_id == '1') {
-    $("#event_event_type_id option:first").attr('disabled', true);
-  } else {
-    $("#event_event_type_id option:first").attr('disabled', false);
-  }
-
-  if ($("#event_event_type_id option:selected").val() == '1') {
-    $("#event_event_type_id option:selected").removeAttr('selected');
-    $("#event_event_type_id").val('2');
-  }
-}
-function filterAppointmentType(location) {
-  if (location == 'Perth') {
-    $('#event_appointment_id').val('2');
-  } else {
-    $('#event_appointment_id').val('1');
-  }
-  $("#event_appointment_id").trigger('change');
-}
 function onPageLoad() {
+  businessHours();
   filterAppointmentType($('#event_client_attributes_location').val());
   $('#event_client_attributes_location')
     .geocomplete()
@@ -333,6 +144,7 @@ function onPageLoad() {
   });
   $("#event_client_attributes_email").on('change', function() {
     loadClientByEmail($(this).val());
+    loadTimetable();
   });
   filterEventTypes($("#event_appointment_id").val());
   $("#event_appointment_id").on('change', function() {
@@ -394,8 +206,7 @@ function onPageLoad() {
 			$( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
 			$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
 		}
-
   });
-}
+};
 $(document).on('turbolinks:load', onPageLoad);
 </script>

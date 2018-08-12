@@ -43,6 +43,13 @@ RailsAdmin.config do |config|
     exclude_fields :events
   end
 
+  config.model 'Event' do
+    include_fields :id, :client, :agent, :event_type, :appointment, :temporary, :start, :end, :created_at, :updated_at
+    field :client do
+      nested_form false
+    end
+  end
+
   config.model 'Timetable' do
     list do
       include_fields :id, :agent, :dow, :start_time, :end_time, :activated, :timetable_event_types, :event_types
