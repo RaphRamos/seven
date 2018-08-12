@@ -37,15 +37,14 @@ function businessHours(){
   closeTime.setUTCMinutes('0');
   closeTime.setUTCSeconds('0');
 
-  businessHours = { minTime: openTime.toLocaleTimeString(), maxTime: closeTime.toLocaleTimeString() };
+  businessHours = { minTime: openTime.toLocaleTimeString('en-AU', { hour12: false }), maxTime: closeTime.toLocaleTimeString('en-AU', { hour12: false }) };
 };
 function loadTimetable(){
   var agentId = $("input[name='event[agent_id]']:checked").val();
   var eventTypeId = $("#event_event_type_id").val();
   var email = $('#event_client_attributes_email').val();
   $.get("/event/timetable", {agent_id: agentId, event_type_id: eventTypeId, client_email: email })
-   .done(function(response){
-     console.log(response);
+   .done(function(response) {
      timetable = response;
      clearCalendar();
      eventCalendar();
