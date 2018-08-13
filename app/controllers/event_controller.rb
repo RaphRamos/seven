@@ -50,7 +50,6 @@ class EventController < ApplicationController
     agent_id = params[:agent_id]
     event_type_id = params[:event_type_id]
     first_appointment = !Client.joins(:events).where(email: params[:client_email], events: { temporary: false }).present?
-    # timezone_offset = params[:timezone_offset].to_i
     response = {}
     response[:businessHours] = Timetable.joins(:event_types).where(agent_id: agent_id,
       activated: true, event_types: { id: event_type_id }).map do |tt|
@@ -59,8 +58,6 @@ class EventController < ApplicationController
           dow: tt.dow.split(',').map(&:to_i) }
       end
     response[:hiddenDays] = Array(0..6) - response[:businessHours].map {|d| d[:dow] }.flatten
-    # response[:openHours] = { minTime: ('09:00'.to_time.utc + timezone_offset.minutes).strftime('%H:%M:%S'),
-    #                          maxTime: ('17:00'.to_time.utc + timezone_offset.minutes).strftime('%H:%M:%S') }
     render json: response
   end
 

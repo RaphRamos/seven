@@ -1,0 +1,77 @@
+<main id="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <%= select_tag :agent_id, options_from_collection_for_select(@agents, 'id', 'name', @agents[0].id), { class: 'custom-select d-block w-100' } %>
+      </div>
+    </div>
+    <div class="row">
+      <h4 class="mb-3" style="margin-left: 15px; margin-top: 30px;">Appointments</h4>
+      <div id="event_calendar" />
+    </div>
+  </div>
+</div>
+<%= form_tag admin_events_path, method: :post, authenticity_token: true do |f|%>
+  <%= hidden_field_tag :event_id %>
+  <%= hidden_field_tag :event_start %>
+  <%= hidden_field_tag :event_end %>
+<% end %>
+<script>
+function loadTimetable(){
+  var agentId = $("#agent_id").val();
+  $.get("/admin_timetable", { agent_id: agentId }).done(function(response) {
+     eventCalendar(response);
+   });
+};
+function eventCalendar(timetable) {
+  $(".calendar-message").hide();
+  return $('#event_calendar').fullCalendar({
+    defaultView: 'agendaWeek',
+    allDaySlot: false,
+    height: 'auto',
+    timezone: 'local',
+    selectable: true,
+    eventSources: [
+      {
+        url: '/admin_events',
+        data: {
+          agent_id: function() {
+            return $('#agent_id').val()
+          }
+        }
+      }
+    ],
+    selectOverlap: false,
+    hiddenDays: [0, 6],
+    minTime: '06:00:00',
+    maxTime: '21:00:00',
+    nowIndicator: true,
+    editable: true,
+    businessHours: timetable,
+    eventDrop: function (event, delta, revertFunc, jsEvent, ui, view){
+      postEvent(event);
+    },
+    eventResize: function (event, delta, revertFunc, jsEvent, ui, view){
+      postEvent(event);
+    }
+  });
+};
+function postEvent(event){
+  $('#event_id').val(event.id);
+  $('#event_start').val(event.start.format());
+  $('#event_end').val(event.end.format());
+  $.post('/admin_events', $('form').serialize()).done(
+    function() {
+      $('#event_calendar').fullCalendar('refetchEvents');
+    }
+  );
+};
+function onPageLoad(){
+  loadTimetable();
+  $('#agent_id').on('change', function(){
+    clearCalendar();
+    loadTimetable();
+  });
+};
+$(document).on('turbolinks:load', onPageLoad);
+</script>

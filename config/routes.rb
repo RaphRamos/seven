@@ -12,6 +12,11 @@ Rails.application.routes.draw do
     end
   end
 
+
   get '/client_by_email', to: 'client#client_by_email'
+  get '/admin_calendar', to: 'admin/event#calendar'
+  get '/admin_events', to: 'admin/event#events'
+  post '/admin_events', to: 'admin/event#update'
+  get '/admin_timetable', to: 'admin/event#timetable'
 
 end
