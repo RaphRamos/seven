@@ -65,6 +65,6 @@ class EventController < ApplicationController
     def event_params
       params.require(:event).permit(:agent_id, :event_type_id, :appointment_id,
         :start, :end, :terms_of_service,
-        client_attributes: [:location, :name, :email, :phone])
+        client_attributes: [:location, :name, :email, :phone, :reference])
     end
 end
