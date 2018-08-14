@@ -72,7 +72,7 @@ function loadClientByEmail(email) {
     }
   });
 };
-function setProperModal() {
+function setProperModal(notValid = false) {
   var modalId = 'onshoreModal';
   if ($('#subsequent_event').val() === 'true' ) {
     modalId = 'returnCustomerModal';
@@ -83,6 +83,9 @@ function setProperModal() {
       modalId = 'onshoreModal';
     }
   }
+	if (notValid) {
+		modalId = '';
+	}
   $('#bookNowBtn').attr('data-target', `#${modalId}`);
 };
 function filterEventTypes(appointment_id) {

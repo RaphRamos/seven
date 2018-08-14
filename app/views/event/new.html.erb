@@ -7,29 +7,35 @@
           <%= f.hidden_field :start %>
           <%= f.hidden_field :end %>
           <h4 class="mb-3">Bookings</h4>
-          <p>Fill out the form below to make an appointment with one of Seven Migration agents.</p>
-          <p>If you are a returning customer, please fill in your email address and we'll look out your details for you.</p>
+          <p>Please fillout the information below to schedule your appointment with Seven Migration.</p>
+          <p>If you are a returning client, please fill in your email address and we'll search for your details.</p>
           <%= f.fields_for :client do |client_form| %>
             <%= client_form.hidden_field :premium %>
             <%= hidden_field_tag :subsequent_event %>
             <div class="row mb-3">
               <div class="col-md-6">
                 <%= client_form.label :email %>
-                <%= client_form.email_field :email, {class: 'form-control', placeholder: 'Your email here: john.doe@example.com'} %>
+                <%= client_form.email_field :email, {class: 'form-control', placeholder: 'john.smith@example.com'} %>
               </div>
               <div class="col-md-6">
                 <%= client_form.label :name, 'Full name' %>
-                <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Enter your full name here...'} %>
+                <%= client_form.text_field :name, {class: 'form-control', placeholder: 'Please enter your full name here'} %>
               </div>
             </div>
             <div class="row mb-3">
               <div class="col-md-6">
                 <%= client_form.label :location, 'Location' %>
-                <%= client_form.text_field :location, {class: 'form-control', placeholder: 'Your location here: Sao Paulo - Brazil'} %>
+                <%= client_form.text_field :location, {class: 'form-control', placeholder: 'Perth, Western Australia'} %>
               </div>
               <div class="col-md-6">
                 <%= client_form.label :phone, 'Phone Number' %>
-                <%= client_form.text_field :phone, {class: 'form-control', placeholder: 'Your phone number here... '} %>
+                <%= client_form.text_field :phone, {class: 'form-control', placeholder: 'Please enter your phone number here'} %>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <%= client_form.label :reference, 'How did you hear from us?' %>
+                <%= client_form.text_field :reference, {class: 'form-control', placeholder: 'Google - Facebook - Information Planet'} %>
               </div>
             </div>
           <% end %>
@@ -38,8 +44,13 @@
               I agree with
               <%= f.check_box :terms_of_service, {class: 'custom-control-input'} %>
               <span class="checkmark"></span>
-              <a href="#" class="gradient textGradient" data-toggle="modal" data-target="#termsOfServicesModal">Terms of Service.</a>
+              <a href="#" class="gradient textGradient" data-toggle="modal" data-target="#termsOfServicesModal">Terms and Conditions.</a>
             <% end %>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <p>Note: For in person appointment in Adelaide, please contact <a href="mailto:info@sevenmigration.com.au">info@sevenmigration.com.au</a> to check availability.</p>
+            </div>
           </div>
           <hr class="mb-4">
           <h4 class="mb-3">Available Agents</h4>
@@ -64,7 +75,7 @@
           <hr class="mb-4">
           <div id="event_calendar"></div>
           <hr class="mb-4">
-          <button class="btn gradient backgroundGradient btn-lg btn-custom-gradient" type="button" data-toggle="modal" data-target="#offshoreModal">Book now</button>
+          <button class="btn gradient backgroundGradient btn-lg btn-custom-gradient" id="bookBtn" type="button" data-toggle="modal" data-target="#offshoreModal">Book now</button>
         <% end %>
       </div>
     </div>
@@ -151,6 +162,7 @@ function onPageLoad() {
     filterEventTypes($(this).val());
   });
   $('#new_event').validate({
+    focusInvalid: true,
     rules: {
       "event[client_attributes][email]": {
         required: true,
@@ -170,6 +182,10 @@ function onPageLoad() {
       },
       "event[terms_of_service]": {
         required: true
+      },
+      "event[client_attributes][reference]": {
+        required: true,
+        minlength: 2
       }
     },
     errorElement: "em",
@@ -206,6 +222,9 @@ function onPageLoad() {
 			$( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
 			$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
 		}
+  });
+  $('#bookBtn').on('click', function (e){
+    $(this).attr('data-toggle', $('#new_event').valid() ? 'modal' : '');
   });
 };
 $(document).on('turbolinks:load', onPageLoad);

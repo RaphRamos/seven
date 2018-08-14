@@ -22,7 +22,7 @@ Appointment.create!(desc: 'Outside Australia', price: 215.0, returns: 2, availab
 Appointment.create!(desc: 'Inside Australia',  price: 180.0, returns: 3, available: true)
 
 EventType.create!(desc: 'Appointment In Person')
-EventType.create!(desc: 'Appointment Via Videocall')
+EventType.create!(desc: 'Appointment Via Video Conference')
 EventType.create!(desc: 'Appointment Via Phone Call')
 
 Timetable.create!(agent_id: 1, dow: '1,5', start_time: '09:00', end_time: '12:00', activated: true)
