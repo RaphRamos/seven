@@ -41,7 +41,7 @@ class Event < ApplicationRecord
       .joins(:client)
       .where('clients.email = ?', client_email)
       .map do |event|
-        { title: client.name,
+        { title: event.client.name,
           start: event.start.iso8601,
           end: event.end.iso8601 }
     end
