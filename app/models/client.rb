@@ -9,7 +9,7 @@ class Client < ApplicationRecord
 
   def notes
     events&.map do |e|
-      "Date: #{e.start.strftime('%v')}</br>#{e.notes.gsub(/\n/, '</br>')}</br></br>"
+      "Date: #{e.start.strftime('%v')}</br>#{e.notes&.gsub(/\n/, '</br>')}</br></br>"
     end.join('</br>').html_safe
   end
 end
