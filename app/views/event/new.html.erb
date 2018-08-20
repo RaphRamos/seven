@@ -35,7 +35,7 @@
             <div class="row mb-3">
               <div class="col-md-12">
                 <%= client_form.label :reference, 'How did you hear from us?' %>
-                <%= client_form.text_field :reference, {class: 'form-control', placeholder: 'Google - Facebook - Information Planet'} %>
+                <%= client_form.select :reference, options_from_collection_for_select(@references, 'desc', 'desc'), {}, { class: 'custom-select d-block w-100' } %>
               </div>
             </div>
           <% end %>
@@ -182,10 +182,6 @@ function onPageLoad() {
       },
       "event[terms_of_service]": {
         required: true
-      },
-      "event[client_attributes][reference]": {
-        required: true,
-        minlength: 2
       }
     },
     errorElement: "em",

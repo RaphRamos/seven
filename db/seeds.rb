@@ -15,6 +15,16 @@ Admin.create!(name: 'Ana Julia Caruzi', email: 'ana.julia@sevenmigration.com.au'
 Admin.create!(name: 'Flavia', email: 'flavia@sevenmigration.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
 Admin.create!(name: 'Joao Pedro', email: 'pedro.fandinho@informationplanet.com.au', password: 'sevenmigration777', password_confirmation: 'sevenmigration777')
 
+ClientReference.create!(desc: 'Google', active: true)
+ClientReference.create!(desc: 'Friend', active: true)
+ClientReference.create!(desc: 'Family', active: true)
+ClientReference.create!(desc: 'YouTube', active: true)
+ClientReference.create!(desc: 'Facebook', active: true)
+ClientReference.create!(desc: 'Information Planet Brazil', active: true)
+ClientReference.create!(desc: 'Information Planet Australia', active: true)
+ClientReference.create!(desc: 'Information Planet Global', active: true)
+ClientReference.create!(desc: 'Other', active: true)
+
 Agent.create!(name: 'Ana Julia Carusi', display_name: 'Ana Julia Carusi', email: 'ana.julia@sevenmigration.com.au')
 Agent.create!(name: 'Claudio Garzini',  display_name: 'Claudio Garzini',  email: 'claudio@sevenmigration.com.au')
 

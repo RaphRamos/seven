@@ -1,0 +1,2 @@
+class ClientReference < ApplicationRecord
+end

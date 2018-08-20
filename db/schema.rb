@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_20_020856) do
+ActiveRecord::Schema.define(version: 2018_08_20_031738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,13 @@ ActiveRecord::Schema.define(version: 2018_08_20_020856) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "client_references", force: :cascade do |t|
+    t.string "desc", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "clients", force: :cascade do |t|
     t.string "name"
     t.string "location"
@@ -62,6 +69,7 @@ ActiveRecord::Schema.define(version: 2018_08_20_020856) do
     t.boolean "premium"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reference"
   end
 
   create_table "event_types", force: :cascade do |t|

@@ -6,6 +6,7 @@ class EventController < ApplicationController
     @agents = Agent.all
     @eventTypes = EventType.all
     @appointments = Appointment.all
+    @references = ClientReference.where(active: true)
   end
 
   def create
