@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_14_035552) do
+ActiveRecord::Schema.define(version: 2018_08_20_020856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,8 +62,6 @@ ActiveRecord::Schema.define(version: 2018_08_14_035552) do
     t.boolean "premium"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "notes"
-    t.string "reference"
   end
 
   create_table "event_types", force: :cascade do |t|
@@ -83,6 +81,7 @@ ActiveRecord::Schema.define(version: 2018_08_14_035552) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "temporary", default: true, null: false
+    t.text "notes"
     t.index ["agent_id"], name: "index_events_on_agent_id"
     t.index ["appointment_id"], name: "index_events_on_appointment_id"
     t.index ["client_id"], name: "index_events_on_client_id"

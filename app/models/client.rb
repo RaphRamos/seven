@@ -7,4 +7,9 @@ class Client < ApplicationRecord
   validates :location, length: { minimum: 3 }, presence: true
   validates :phone, length: { minimum: 6 }, presence: true
 
+  def notes
+    events&.map do |e|
+      "Date: #{e.start.strftime('%v')}</br>#{e.notes.gsub(/\n/, '</br>')}</br></br>"
+    end.join('</br>').html_safe
+  end
 end

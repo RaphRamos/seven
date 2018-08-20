@@ -41,10 +41,13 @@ RailsAdmin.config do |config|
 
   config.model 'Client' do
     exclude_fields :events
+    field :notes do
+      read_only true
+    end
   end
 
   config.model 'Event' do
-    include_fields :id, :client, :agent, :event_type, :appointment, :temporary, :start, :end, :created_at, :updated_at
+    include_fields :id, :client, :agent, :event_type, :appointment, :temporary, :start, :end, :notes, :created_at, :updated_at
     field :client do
       nested_form false
     end
