@@ -91,6 +91,7 @@
 <script>
 function eventCalendar() {
   $(".calendar-message").hide();
+
   return $('#event_calendar').fullCalendar({
     defaultView: 'agendaWeek',
     minTime: businessHours.minTime,
@@ -155,7 +156,7 @@ function onPageLoad() {
   });
   $("#event_client_attributes_email").on('change', function() {
     loadClientByEmail($(this).val());
-    loadTimetable();
+    // loadTimetable();
   });
   filterEventTypes($("#event_appointment_id").val());
   $("#event_appointment_id").on('change', function() {

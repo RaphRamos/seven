@@ -109,3 +109,5 @@ data.each do |e|
 end
 
 puts 'Seeding completed!'
+
+# Heroku password: N<%NbM-p`*;&M9^e
