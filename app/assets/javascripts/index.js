@@ -77,7 +77,7 @@ function setProperModal(notValid = false) {
   if ($('#subsequent_event').val() === 'true' ) {
     modalId = 'returnCustomerModal';
   } else {
-    if ($("[name='event[appointment_id]']").val() == 1) {
+    if ($("[name='event[appointment_id]']").val() === '1') {
       modalId = 'offshoreModal';
     } else {
       modalId = 'onshoreModal';
@@ -86,7 +86,7 @@ function setProperModal(notValid = false) {
 	if (notValid) {
 		modalId = '';
 	}
-  $('#bookNowBtn').attr('data-target', `#${modalId}`);
+  $('#bookBtn').attr('data-target', `#${modalId}`);
 };
 function filterEventTypes(appointment_id) {
   if (appointment_id == '1') {
@@ -100,8 +100,8 @@ function filterEventTypes(appointment_id) {
     $("#event_event_type_id").val('2');
   }
 }
-function filterAppointmentType(location) {
-  if (location == 'Perth') {
+function filterAppointmentType(onshore) {
+  if (onshore) {
     $('#event_appointment_id').val('2');
   } else {
     $('#event_appointment_id').val('1');

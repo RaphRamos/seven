@@ -143,7 +143,12 @@ function onPageLoad() {
   $('#event_client_attributes_location')
     .geocomplete()
     .bind("geocode:result", function(event, result){
-      filterAppointmentType(result.vicinity);
+      var isAU = result.address_components
+        .filter(x => x.types.includes('country'))
+        .map( x => x.short_name)
+        .includes('AU');
+      $("#event_event_type_id option:last").attr('disabled', !isAU);
+      filterAppointmentType(isAU);
     });
   $("[name='event[appointment_id]']").on('change', function () {
     setProperModal();
