@@ -73,7 +73,13 @@
             </div>
           </div>
           <hr class="mb-4">
-          <div id="event_calendar"></div>
+          <div class="calendarWrapper">
+            <ul class="calendarLegend">
+              <li><span class="available"></span> Available</li>
+              <li><span class="notAvailable"></span> Not Available</li>
+            </ul>
+            <div id="event_calendar"></div>
+          </div>
           <hr class="mb-4">
           <button class="btn gradient backgroundGradient btn-lg btn-custom-gradient" id="bookBtn" type="button" data-toggle="modal" data-target="#offshoreModal">Book now</button>
         <% end %>

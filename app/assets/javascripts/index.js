@@ -1,17 +1,17 @@
 $(function() {
 	var $header = $('#header')
-	if($header.length > 0) {
-		// scrolling fx for the sticky header / menu
-		$(window).scroll(function (e) {
-			if($header.length > 0 && $header.offset().top > 20 ) {
-				if(!$header.hasClass('compact')){
-					$header.addClass('compact')
-				}
-			} else {
-				$header.removeClass('compact')
-			}
-		})
-	}
+	// if($header.length > 0) {
+	// 	// scrolling fx for the sticky header / menu
+	// 	$(window).scroll(function (e) {
+	// 		if($header.length > 0 && $header.offset().top > 20 ) {
+	// 			if(!$header.hasClass('compact')){
+	// 				$header.addClass('compact')
+	// 			}
+	// 		} else {
+	// 			$header.removeClass('compact')
+	// 		}
+	// 	})
+	// }
 
 	// search box
 	var $search = $('[data-bind-searchAction]')

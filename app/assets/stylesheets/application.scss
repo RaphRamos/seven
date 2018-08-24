@@ -30,7 +30,6 @@ h1, h2, h3, h4, h5 {
   display: -ms-flex;
   display: flex;
   width: 100%;
-  transition: all ease-in-out 0.3s .5s;
 
   &.sticky {
     position: sticky;
@@ -469,8 +468,47 @@ img {
   max-width: 100%;
 }
 
-#event_calendar {
+.calendarWrapper {
   padding: 20px;
+
+  .calendarLegend {
+    border-top: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 0;
+    font-size: 12px;
+    color: #777;
+    display: flex;
+    margin-bottom: 20px;
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-right: 30px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    span {
+      display: inline-block;
+      height: 25px;
+      width: 25px;
+      background-color: #eee;
+      border-radius: 3px;
+      margin-right: 20px;
+    }
+
+    .available{
+      background-color: rgba(71, 72, 130, 0.2);
+    }
+    .notAvailable{
+      background-color: rgba(71, 72, 130, 0.6);
+    }
+  }
+}
+
+#event_calendar {
   h2 {
     font-family: "Roboto", sans-serif;
     font-size: 1.3rem;
@@ -491,19 +529,38 @@ img {
     border: none;
   }
 
-  .fc-state-disabled {
-    cursor: default !important;
+  .fc-nonbusiness,
+  .fc-bgevent,
+  .fc-disabled-day {
+    opacity: 1;
+  }
+
+  .fc-unselectable {
+    .fc-disabled-day {
+      background-color: rgba(71, 72, 130, 0.6) !important;
+    }
+  }
+
+  .fc-axis {
+    background-color: white;
+  }
+  .fc-widget-content:not(.fc-axis) {
+    background-color: initial;
+  }
+  .fc-nonbusiness {
+    background-color: rgba(71, 72, 130, 0.6);
+  }
+
+  .fc-bgevent {
+    background-color: rgba(71, 72, 130, 0.6);
   }
 
   .fc-head{
     color: #474882;
     .fc-day-header {
+      background-color: white;
       padding: 20px;
     }
-  }
-
-  tr{
-    transition: all ease-in-out 0.3s;
   }
 
   .fc-slats{
@@ -522,13 +579,10 @@ img {
   }
 
   .fc-highlight {
-    background: #283891;
-    background: -moz-linear-gradient(30deg,#283891 0%,#9b98c8 100%);
-    background: -webkit-gradient(linear,left bottom,right top,color-stop(0%,#283891),color-stop(100%,#9b98c8));
-    background: -webkit-linear-gradient(30deg,#283891 0%,#9b98c8 100%);
-    background: -o-linear-gradient(30deg,#283891 0%,#9b98c8 100%);
-    background: -ms-linear-gradient(30deg,#283891 0%,#9b98c8 100%);
-    background: linear-gradient(30deg,#283891 0%,#9b98c8 100%);
+    background-color: rgba(71, 72, 130, .8);
+    opacity: 1;
+    border: 1px solid rgba(71, 72, 130, 1);
+    margin-top: 1px;
   }
 
   .fc-axis {
@@ -537,14 +591,6 @@ img {
     text-align: center;
     font-size: 12px;
     color: #777;
-  }
-
-  .fc-nonbusiness {
-    background-color: #474882;
-  }
-
-  .fc-bgevent {
-    background-color: #474882;
   }
 }
 
