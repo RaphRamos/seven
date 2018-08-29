@@ -73,6 +73,7 @@ function loadClientByEmail(email) {
         $(`#event_agent_id_${data.agent_id}`).prop('checked', true);
         $(`#event_agent_id_${data.agent_id}`).trigger('change');
       }
+			filterAppointmentType(data.client.location.search(/australia/i) > 0);
     }
   });
 };

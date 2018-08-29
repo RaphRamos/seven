@@ -234,7 +234,14 @@ function onPageLoad() {
 		}
   });
   $('#bookBtn').on('click', function (e){
-    $(this).attr('data-toggle', $('#new_event').valid() ? 'modal' : '');
+    if (!$('#paypal_custom_variable').val()) {
+      alert('Please fill out the form and select an available time prior to book.');
+    }
+    if ($('#new_event').valid() && $('#paypal_custom_variable').val()) {
+      $(this).attr('data-toggle', 'modal');
+    } else {
+      $(this).attr('data-toggle', '');
+    }
   });
 };
 $(document).on('turbolinks:load', onPageLoad);
