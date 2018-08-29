@@ -4,13 +4,11 @@ class PaymentNotificationsController < ApplicationController
     response = validate_IPN_notification(request.raw_post, request.user_agent)
     case response
     when "VERIFIED"
-      event = Event.find(response[:event_id])
+      event = Event.find(params[:custom]) # custom variable sent to PayPal (Event ID)
       event.temporary = false
       event.save!
 
       EventMailer.with(event: event).confirmation_email.deliver_now
-
-      event = Event.find(params[:custom]) # custom variable sent to PayPal (Event ID)
       Payment.create!(client_id: event.client_id, event_id: event.id, transaction_code: params[:txn_id],
                       price: params[:payment_gross], status: 2)
     when "INVALID"
