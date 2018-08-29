@@ -39,9 +39,10 @@ class EventController < ApplicationController
     num_events = Client.find_by_email(event.client.email)&.events&.where(temporary: false)&.count || 0
     app_duration = num_events > 0 ? 30.minutes : 1.hour
     event.end = event.start + app_duration
+    event.temporary = true
 
     if event.save!
-      render json: { success: true }
+      render json: { success: true, event_id: event.id }
     else
       render json: { success: false, errors: event.errors.full_messages }
     end

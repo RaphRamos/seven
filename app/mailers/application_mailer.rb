@@ -1,4 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
+  default from:     'bookings@sevenmigration.com.au',
+          reply_to: 'info@sevenmigration.com.au'
+
   layout 'mailer'
 end
