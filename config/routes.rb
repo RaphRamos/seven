@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :payment_notification, only: [:create]
 
   get '/client_by_email', to: 'client#client_by_email'
   get '/admin_calendar', to: 'admin/event#calendar'

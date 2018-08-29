@@ -133,10 +133,13 @@ function eventCalendar() {
     ],
     select: function (start, end){
       $('#event_start').val(start.format());
-      $.post(`/event/create_temp_event?${$('#new_event').serialize()}`).done((response) =>
-        $('#paypal_custom_variable').val(response.event.id); // Ver se esta funcionando
-        $('#event_calendar').fullCalendar('refetchEvents');
-      );
+      $.post(`/event/create_temp_event?${$('#new_event').serialize()}`)
+       .done((response) => {
+         $('input[name="custom"]').each((_i, el) => {
+           el.value = response.event_id;
+         });
+         $('#event_calendar').fullCalendar('refetchEvents');
+       });
     },
     selectOverlap: false,
     businessHours: timetable.businessHours
