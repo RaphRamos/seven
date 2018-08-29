@@ -10,7 +10,7 @@ class PaymentNotificationsController < ApplicationController
 
       EventMailer.with(event: event).confirmation_email.deliver_now
       Payment.create!(client_id: event.client_id, event_id: event.id, transaction_code: params[:txn_id],
-                      price: params[:payment_gross], status: 2)
+                      price: params[:mc_gross], status: 2)
     when "INVALID"
       puts 'PAYPAL INVALID RESPONSE'
       puts response
