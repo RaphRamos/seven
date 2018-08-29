@@ -13,11 +13,6 @@ module SevenMigration
     config.load_defaults 5.2
     config.time_zone = 'Perth'
 
-    config.smtp_settings.address = 'smtp.gmail.com'
-    config.smtp_settings.port = '465'
-    config.smtp_settings.username = 'info@sevenmigration.com.au'
-    config.smtp_settings.password = 'Sevenmigration12345#'
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
