@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>Seven Migration - Template Email</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  </head>
+  <body style="margin:0px;">
+    <table cellpadding="0" cellspacing="0" width="700" align="center" border="0" style="font-family: 'Open Sans', sans-serif; font-size:12px;margin-top:10px;border-spacing: 0 1em;">
+      <tbody style="background-color:rgba(241, 245, 247, 0.5);vertical-align: top;line-height: 20px;">
+        <tr>
+          <td style="background-color:#ffffff;padding: 30px 40px;border: 1px solid #c2c2c2;border-radius: 7px;">
+            <div style="border-bottom: 1px solid #e5e5e5;padding-bottom: 5px;margin-bottom: 20px;">
+              <h1 style="color:#4e5b63;font-size: 28px;margin: 15px 0px 0px;font-weight: 500;">Thank You</h1>
+              <h6 style="color:#4e5b63;font-size: 15px;margin: 25px 0px 10px;font-weight: 500;">Hi <%= @event.client.name %>,</h6>
+              <p style="color:#788a95;font-size: 15px;margin: 10px 0px 15px;">Your appointment has been booked with Seven Migration.</p>
+            </div>
+            <div style="border-bottom: 1px solid #e5e5e5;margin-bottom: 20px;padding-bottom: 15px;">
+              <div style="position: relative;display: inline-block;width: 100%;">
+                <label style="color:#788a95;font-size:15px;">When:&nbsp;</label>
+
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event_formated_date %></p>
+              </div>
+              <div style="position: relative;display: inline-block;width: 100%;">
+                <label style="color:#788a95;font-size:15px;">Service:&nbsp;</label>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.event_type.desc %></p>
+              </div>
+              <div style="position: relative;display: inline-block;width: 100%;">
+                <label style="color:#788a95;font-size:15px;">Agent:&nbsp;</label>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.agent.name %></p>
+              </div>
+
+              <div style="position: relative;display: inline-block;width: 100%;word-wrap: break-word;">
+                <label style="color:#788a95;font-size:15px;">Booking ID:&nbsp;</label>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.id %></p>
+              </div>
+
+            </div>
+
+            <div>
+              <dl>
+                <dd style="color:#788a95;font-size:15px;margin: 0;">Thank you,<br>Seven Migration.</dd>
+              </dl>
+            </div>
+          </td>
+          <td style="background-color:rgba(241, 245, 247, 0.5);padding:20px;border-top-right-radius: 7px;border-bottom-right-radius: 7px;">
+            <div style="width: 158px; line-height:0px;padding : 2px;"><img src="http://lh3.googleusercontent.com/-3Zv7qew1Oqdq8rp1nJHClSfOShxDO25FD5OrmWqWPmj223Fh_M9DFDOQKlbegvPFFb5nhKiYqbAjrjdrvM8PrmaHjvbvwGjMJo=s250" style="height: auto; width: 158px;border-radius: 5px;margin-bottom: 20px;"/></div>
+
+            <div style="color:#4e5b63;width:150px;">Seven Migration</div>
+            <dl style="margin: 0px 0px 20px 0px;color:#95a5a6;line-height: 20px;width: 150px;">
+              <dd style="margin:0 0 5px 0;">Level 3, 23 Barrack Street,
+                <br/>Perth,
+                <br/>WA, 6000<br/>61677000</dd>
+              <a href="mailto:info@sevenmigration.com.au" style="color:#33c3ba; text-decoration:none;">Email</a>
+              <a href="http://www.sevenmigration.com.au" style="display: block;margin:0 0 5px 0; cursor: pointer; text-decoration: none;color: #33c3ba;">View Website</a>
+              <a href="http://maps.google.com/?q=Level+3,+23+Barrack+Street,+Perth,+WA,+6000" target="_blank;" style=" color:#33c3ba; text-decoration: none;display: inline-block;width: 100%;">Get Directions</a>
+            </dl><br/>
+          </td>
+
+        </tr>
+        <tr>
+          <td colspan="2" style="border: 1px solid #ebebeb;background: #fcfcfc;padding: 15px;color: #8a8a8a;border-radius: 5px; margin-to: 10px;">
+            You've received this essential service message due to your recently booked appointment.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

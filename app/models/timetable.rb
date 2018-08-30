@@ -1,7 +1,7 @@
 class Timetable < ApplicationRecord
   has_paper_trail
   belongs_to :agent
-  has_many :timetable_event_types
+  has_many :timetable_event_types, dependent: :delete_all
   has_many :event_types, through: :timetable_event_types
 
   validates_presence_of :dow, :start_time, :end_time

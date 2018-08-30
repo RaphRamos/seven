@@ -15,7 +15,7 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <%= client_form.label :email %>
-                <%= client_form.email_field :email, {class: 'form-control', placeholder: 'john.smith@example.com'} %>
+                <%= client_form.email_field :email, {class: 'form-control', placeholder: 'Please enter your email here'} %>
               </div>
               <div class="col-md-6">
                 <%= client_form.label :name, 'Full name' %>
@@ -25,7 +25,7 @@
             <div class="row mb-3">
               <div class="col-md-6">
                 <%= client_form.label :location, 'Location' %>
-                <%= client_form.text_field :location, {class: 'form-control', placeholder: 'Perth, Western Australia'} %>
+                <%= client_form.text_field :location, {class: 'form-control', placeholder: 'Please start typing your location for autocomplete'} %>
               </div>
               <div class="col-md-6">
                 <%= client_form.label :phone, 'Phone Number' %>
@@ -33,7 +33,7 @@
               </div>
             </div>
             <div class="row mb-3">
-              <div class="col-md-12">
+              <div class="col-md-6">
                 <%= client_form.label :reference, 'How did you hear from us?' %>
                 <%= client_form.select :reference, options_from_collection_for_select(@references, 'desc', 'desc'), {}, { class: 'custom-select d-block w-100' } %>
               </div>
@@ -133,11 +133,13 @@ function eventCalendar() {
     ],
     select: function (start, end){
       $('#event_start').val(start.format());
-      $.post(`/event/create_temp_event?${$('#new_event').serialize()}`).done(
-        function() {
-          $('#event_calendar').fullCalendar('refetchEvents');
-        }
-      );
+      $.post(`/event/create_temp_event?${$('#new_event').serialize()}`)
+       .done((response) => {
+         $('input[name="custom"]').each((_i, el) => {
+           el.value = response.event_id;
+         });
+         $('#event_calendar').fullCalendar('refetchEvents');
+       });
     },
     selectOverlap: false,
     businessHours: timetable.businessHours
@@ -232,7 +234,14 @@ function onPageLoad() {
 		}
   });
   $('#bookBtn').on('click', function (e){
-    $(this).attr('data-toggle', $('#new_event').valid() ? 'modal' : '');
+    if (!$('#paypal_custom_variable').val()) {
+      alert('Please fill out the form and select an available time prior to book.');
+    }
+    if ($('#new_event').valid() && $('#paypal_custom_variable').val()) {
+      $(this).attr('data-toggle', 'modal');
+    } else {
+      $(this).attr('data-toggle', '');
+    }
   });
 };
 $(document).on('turbolinks:load', onPageLoad);

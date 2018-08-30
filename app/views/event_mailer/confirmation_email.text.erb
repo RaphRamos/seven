@@ -1,0 +1,13 @@
+Thank You
+
+Hi <%= @event.client.name %>,
+
+Your appointment has been booked with Seven Migration.
+
+When:  <%= @event_formated_date %>
+Service: <%= @event.event_type.desc %>
+Agent: <%= @event.agent.name %>
+Booking ID: <%= @event.id %>
+
+Thank you,
+Seven Migration.

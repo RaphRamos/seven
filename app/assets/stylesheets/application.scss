@@ -740,3 +740,18 @@ img {
 .error.help-block {
   color: #dc3545;
 }
+
+#termsOfServicesModal {
+  .modal-body {
+    h5 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    ol {
+      li {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
