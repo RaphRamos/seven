@@ -497,10 +497,11 @@ img {
       background-color: #eee;
       border-radius: 3px;
       margin-right: 20px;
+      border: 1px solid black;
     }
 
     .available{
-      background-color: rgba(71, 72, 130, 0.2);
+      background-color: white;
     }
     .notAvailable{
       background-color: rgba(71, 72, 130, 0.6);
