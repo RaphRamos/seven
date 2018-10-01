@@ -4,7 +4,7 @@ Hi <%= @event.client.name %>,
 
 Your appointment has been booked with Seven Migration.
 
-When:  <%= @event_formated_date %>
+When:  <%= @event_formated_date %> (your local time)
 Service: <%= @event.event_type.desc %>
 Agent: <%= @event.agent.name %>
 Booking ID: <%= @event.id %>
