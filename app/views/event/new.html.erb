@@ -10,8 +10,9 @@
           <p>Please fillout the information below to schedule your appointment with Seven Migration.</p>
           <p>If you are a returning client, please fill in your email address and we'll search for your details.</p>
           <%= f.fields_for :client do |client_form| %>
-            <%= client_form.hidden_field :premium %>
+            <%= client_form.hidden_field :premium, value: false %>
             <%= hidden_field_tag :subsequent_event %>
+            <%= hidden_field_tag :free %>
             <div class="row mb-3">
               <div class="col-md-6">
                 <%= client_form.label :email %>
@@ -135,6 +136,7 @@ function eventCalendar() {
       $('#event_start').val(start.format());
       $.post(`/event/create_temp_event?${$('#new_event').serialize()}`)
        .done((response) => {
+         $('#free').val(response.free);
          $('input[name="custom"]').each((_i, el) => {
            el.value = response.event_id;
          });
@@ -160,7 +162,6 @@ function onPageLoad() {
         .filter(x => x.types.includes('administrative_area_level_1'))
         .map( x => x.short_name)
         .includes('WA');
-      console.log('Location', result);
       $("#event_event_type_id option:last").attr('disabled', !isAU);
       filterAppointmentType(isWA);
     });
@@ -244,7 +245,18 @@ function onPageLoad() {
       alert('Please fill out the form and select an available time prior to book.');
     }
     if ($('#new_event').valid() && $('#paypal_custom_variable').val()) {
-      $(this).attr('data-toggle', 'modal');
+      const event_id = $('#paypal_custom_variable').val();
+      if ($('#event_client_attributes_premium').val() || ($('#free').val() && !$('#subsequent_event').val()) ) {
+        e.preventDefault();
+        $(this).attr('data-toggle', '');
+        $.get(`/event/confirm_event?event_id=` + event_id)
+         .done((response) => {
+           alert('Thanks for booking with us!\nConfirmation email will be sent shortly.');
+           window.location.href = 'http://www.sevenmigration.com.au';
+         });
+      } else {
+        $(this).attr('data-toggle', 'modal');
+      }
     } else {
       $(this).attr('data-toggle', '');
     }

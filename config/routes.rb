@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get  'temp_events'
       post 'create_temp_event'
       get  'timetable'
+      get  'confirm_event'
     end
   end
 

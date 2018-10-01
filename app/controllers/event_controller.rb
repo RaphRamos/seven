@@ -42,7 +42,7 @@ class EventController < ApplicationController
     event.temporary = true
 
     if event.save!
-      render json: { success: true, event_id: event.id }
+      render json: { success: true, event_id: event.id, free: free_appointment?(event.client.email) }
     else
       render json: { success: false, errors: event.errors.full_messages }
     end
@@ -63,10 +63,28 @@ class EventController < ApplicationController
     render json: response
   end
 
+  def confirm_event
+    event = Event.find(params[:event_id])
+    if free_appointment?(event.client.email)
+      event.temporary = false
+      event.save!
+
+      EventMailer.with(event: event).confirmation_email.deliver_now
+    end
+
+    redirect_to :root
+  end
+
   private
     def event_params
       params.require(:event).permit(:agent_id, :event_type_id, :appointment_id,
         :start, :end, :terms_of_service,
         client_attributes: [:location, :name, :email, :phone, :reference])
+    end
+
+    def free_appointment?(client_email)
+      num_events = Client.find_by_email(client_email)&.events&.where(temporary: false)&.count || 0
+      qtd_appointment_paid = Client.find_by_email(client_email)&.events&.where(temporary: false)&.last&.appointment&.returns || 0
+      num_events > 0 && num_events < qtd_appointment_paid
     end
 end
