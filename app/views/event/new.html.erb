@@ -151,11 +151,17 @@ function onPageLoad() {
   $('#event_client_attributes_location')
     .geocomplete()
     .bind("geocode:result", function(event, result){
+      var isAU = result.address_components
+        .filter(x => x.types.includes('country'))
+        .map( x => x.short_name)
+        .includes('AU');
+
       var isWA = result.address_components
         .filter(x => x.types.includes('administrative_area_level_1'))
         .map( x => x.short_name)
         .includes('WA');
-      $("#event_event_type_id option:last").attr('disabled', !isWA);
+      console.log('Location', result);
+      $("#event_event_type_id option:last").attr('disabled', !isAU);
       filterAppointmentType(isWA);
     });
   $("[name='event[appointment_id]']").on('change', function () {
