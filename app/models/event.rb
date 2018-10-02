@@ -27,8 +27,8 @@ class Event < ApplicationRecord
       .or(Event.where(end: start_time..end_time))
   end
 
-  def self.busy_events(start_time, end_time)
-    Event.where(start: start_time..end_time).map do |event|
+  def self.busy_events(start_time, end_time, agent_id)
+    Event.where(start: start_time..end_time, agent_id: agent_id).map do |event|
       { title: 'Not Available',
         start: event.start.iso8601,
         end: event.end.iso8601 }

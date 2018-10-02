@@ -16,7 +16,8 @@ class EventController < ApplicationController
 
   def busy_events
     render json: Event.busy_events(params[:start].to_date,
-                                   params[:end].to_date)
+                                   params[:end].to_date,
+                                   params[:agent_id])
   end
 
   def temp_events

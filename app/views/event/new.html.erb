@@ -118,6 +118,9 @@ function eventCalendar() {
     eventSources: [
       {
         url: '/event/busy_events',
+        data: { agent_id: function () {
+          return $("input[name='event[agent_id]']:checked").val();
+        }},
         rendering: 'background'
       },
       {
