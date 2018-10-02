@@ -41,6 +41,7 @@ class EventController < ApplicationController
     app_duration = num_events > 0 ? 30.minutes : 1.hour
     event.end = event.start + app_duration
     event.temporary = true
+    event.by_admin = false
 
     if event.save!
       render json: { success: true, event_id: event.id, free: free_appointment?(event.client.email) }

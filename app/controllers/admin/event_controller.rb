@@ -9,10 +9,17 @@ class Admin::EventController < ApplicationController
     agent_id = params[:agent_id]
     events = Event.preload(:client, :event_type).where(agent_id: agent_id, start: params[:start].to_date..params[:end].to_date)
     json = events.map do |e|
+      event_color = if e.by_admin
+                      '#ffb84d'
+                    elsif e.temporary
+                      '#6fa026'
+                    else
+                      '#474882'
+                    end
       { title: "#{e.client.name}\n #{e.event_type.desc.split('Appointment ').second}",
         start: e.start,
         end: e.end,
-        color: e.temporary ? '#6fa026' : '#474882',
+        color: event_color,
         id: e.id,
         url: rails_admin.edit_path(model_name: e.class.name, id: e.id) }
     end.to_json

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_20_031738) do
+ActiveRecord::Schema.define(version: 2018_10_02_023910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,11 +62,11 @@ ActiveRecord::Schema.define(version: 2018_08_20_031738) do
   end
 
   create_table "clients", force: :cascade do |t|
-    t.string "name"
-    t.string "location"
-    t.string "phone"
-    t.string "email"
-    t.boolean "premium"
+    t.string "name", null: false
+    t.string "location", null: false
+    t.string "phone", null: false
+    t.string "email", null: false
+    t.boolean "premium", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference"
@@ -80,16 +80,17 @@ ActiveRecord::Schema.define(version: 2018_08_20_031738) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.integer "agent_id", null: false
-    t.integer "event_type_id", null: false
-    t.integer "appointment_id", null: false
-    t.integer "client_id", null: false
+    t.bigint "agent_id", null: false
+    t.bigint "event_type_id", null: false
+    t.bigint "appointment_id", null: false
+    t.bigint "client_id", null: false
     t.datetime "start", null: false
     t.datetime "end", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "temporary", default: true, null: false
     t.text "notes"
+    t.boolean "by_admin", default: true, null: false
     t.index ["agent_id"], name: "index_events_on_agent_id"
     t.index ["appointment_id"], name: "index_events_on_appointment_id"
     t.index ["client_id"], name: "index_events_on_client_id"
@@ -99,8 +100,8 @@ ActiveRecord::Schema.define(version: 2018_08_20_031738) do
   create_table "payments", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.float "price", default: 0.0, null: false
-    t.integer "client_id", null: false
-    t.integer "event_id", null: false
+    t.bigint "client_id", null: false
+    t.bigint "event_id", null: false
     t.string "transaction_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -109,8 +110,8 @@ ActiveRecord::Schema.define(version: 2018_08_20_031738) do
   end
 
   create_table "timetable_event_types", force: :cascade do |t|
-    t.integer "timetable_id"
-    t.integer "event_type_id"
+    t.bigint "timetable_id"
+    t.bigint "event_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_type_id"], name: "index_timetable_event_types_on_event_type_id"
@@ -118,7 +119,7 @@ ActiveRecord::Schema.define(version: 2018_08_20_031738) do
   end
 
   create_table "timetables", force: :cascade do |t|
-    t.integer "agent_id", null: false
+    t.bigint "agent_id", null: false
     t.string "dow", null: false
     t.time "start_time", null: false
     t.time "end_time", null: false
@@ -139,4 +140,13 @@ ActiveRecord::Schema.define(version: 2018_08_20_031738) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "events", "agents"
+  add_foreign_key "events", "appointments"
+  add_foreign_key "events", "clients"
+  add_foreign_key "events", "event_types"
+  add_foreign_key "payments", "clients"
+  add_foreign_key "payments", "events"
+  add_foreign_key "timetable_event_types", "event_types"
+  add_foreign_key "timetable_event_types", "timetables"
+  add_foreign_key "timetables", "agents"
 end
