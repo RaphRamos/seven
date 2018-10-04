@@ -132,6 +132,9 @@ function eventCalendar() {
           client_email: function() {
             return $('#event_client_attributes_email').val()
           },
+          agent_id: function () {
+            return $("input[name='event[agent_id]']:checked").val();
+          }
         },
       }
     ],
@@ -139,11 +142,15 @@ function eventCalendar() {
       $('#event_start').val(start.format());
       $.post(`/event/create_temp_event?${$('#new_event').serialize()}`)
        .done((response) => {
-         $('#free').val(response.free);
-         $('input[name="custom"]').each((_i, el) => {
-           el.value = response.event_id;
-         });
-         $('#event_calendar').fullCalendar('refetchEvents');
+         if (!response.success) {
+           alert('Please, select a time with at least 2 slots available.');
+         } else {
+           $('#free').val(response.free);
+           $('input[name="custom"]').each((_i, el) => {
+             el.value = response.event_id;
+           });
+           $('#event_calendar').fullCalendar('refetchEvents');
+         }
        });
     },
     selectOverlap: false,

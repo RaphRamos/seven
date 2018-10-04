@@ -28,16 +28,19 @@ class Event < ApplicationRecord
   end
 
   def self.busy_events(start_time, end_time, agent_id)
-    Event.where(start: start_time..end_time, agent_id: agent_id).map do |event|
+    Event.where('events.start < ? AND events.end >= ?', start_time, start_time)
+         .or(Event.where(start: start_time..end_time))
+         .or(Event.where(end: start_time..end_time))
+         .where(agent_id: agent_id).map do |event|
       { title: 'Not Available',
         start: event.start.iso8601,
         end: event.end.iso8601 }
     end
   end
 
-  def self.temp_events_for(start_time, end_time, client_email)
+  def self.temp_events_for(start_time, end_time, client_email, agent_id)
     return if client_email.blank?
-    Event.where(start: start_time..end_time, temporary: true)
+    Event.where(start: start_time..end_time, temporary: true, agent_id: agent_id)
       .joins(:client)
       .where('clients.email = ?', client_email)
       .map do |event|
@@ -45,5 +48,12 @@ class Event < ApplicationRecord
           start: event.start.iso8601,
           end: event.end.iso8601 }
     end
+  end
+
+  def self.overlaps?(event_start, event_end, agent_id)
+    Event.where('events.start > ? AND events.start < ?', event_start, event_end)
+         .or(Event.where('events.end > ? AND events.end < ?', event_start, event_end))
+         .where(agent_id: agent_id)
+         .count.positive?
   end
 end

@@ -23,7 +23,8 @@ class EventController < ApplicationController
   def temp_events
     render json: Event.temp_events_for(params[:start].to_date,
                                        params[:end].to_date,
-                                       params[:client_email])
+                                       params[:client_email],
+                                       params[:agent_id])
   end
 
   def create_temp_event
@@ -43,7 +44,9 @@ class EventController < ApplicationController
     event.temporary = true
     event.by_admin = false
 
-    if event.save!
+    if Event.overlaps?(event.start, event.end, event.agent_id)
+      render json: { success: false, errors: 'Time chosen is not available.' }
+    elsif event.save!
       render json: { success: true, event_id: event.id, free: free_appointment?(event.client.email) }
     else
       render json: { success: false, errors: event.errors.full_messages }
