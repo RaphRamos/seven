@@ -143,7 +143,7 @@ function eventCalendar() {
       $.post(`/event/create_temp_event?${$('#new_event').serialize()}`)
        .done((response) => {
          if (!response.success) {
-           alert('Please, select a time with at least 2 slots available.');
+           alert('This is your first appointment and we might need a little more time with you.\nPlease select with at least 2 slots available.');
          } else {
            $('#free').val(response.free);
            $('input[name="custom"]').each((_i, el) => {
@@ -256,7 +256,7 @@ function onPageLoad() {
     }
     if ($('#new_event').valid() && $('#paypal_custom_variable').val()) {
       const event_id = $('#paypal_custom_variable').val();
-      if ($('#event_client_attributes_premium').val() || ($('#free').val() && !$('#subsequent_event').val()) ) {
+      if (($('#event_client_attributes_premium').val() == 'true') || ($('#free').val() == 'true' && $('#subsequent_event').val() == 'false') ) {
         e.preventDefault();
         $(this).attr('data-toggle', '');
         $.get(`/event/confirm_event?event_id=` + event_id)
