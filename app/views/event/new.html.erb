@@ -103,7 +103,8 @@ function eventCalendar() {
     defaultView: 'agendaWeek',
     minTime: businessHours.minTime,
     maxTime: businessHours.maxTime,
-    // hiddenDays: timetable.hiddenDays,
+    hiddenDays: [6],
+    firstDay: 0,
     allDaySlot: false,
     height: 'auto',
     timezone: 'local',
@@ -111,17 +112,27 @@ function eventCalendar() {
     selectConstraint: 'businessHours',
     validRange: function(nowDate) {
       return {
-        start: nowDate.clone().add(-2, 'day'),
-        end: nowDate.clone().add(2, 'months')
+        start: nowDate.clone(),
+        end: nowDate.clone().add(6, 'months')
       };
     },
     eventSources: [
       {
         url: '/event/busy_events',
-        data: { agent_id: function () {
-          return $("input[name='event[agent_id]']:checked").val();
-        }},
-        rendering: 'background'
+        data: {
+          client_name: function() {
+            return $('#event_client_attributes_name').val()
+          },
+          client_email: function() {
+            return $('#event_client_attributes_email').val()
+          },
+          agent_id: function () {
+            return $("input[name='event[agent_id]']:checked").val();
+          },
+          event_type_id: function () {
+            return $("#event_event_type_id").val();
+          }
+        },
       },
       {
         url: '/event/temp_events',
