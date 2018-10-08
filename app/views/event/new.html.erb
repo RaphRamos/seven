@@ -103,7 +103,8 @@ function eventCalendar() {
     defaultView: 'agendaWeek',
     minTime: businessHours.minTime,
     maxTime: businessHours.maxTime,
-    // hiddenDays: timetable.hiddenDays,
+    hiddenDays: [6],
+    firstDay: 0,
     allDaySlot: false,
     height: 'auto',
     timezone: 'local',
@@ -111,17 +112,27 @@ function eventCalendar() {
     selectConstraint: 'businessHours',
     validRange: function(nowDate) {
       return {
-        start: nowDate.clone().add(-2, 'day'),
-        end: nowDate.clone().add(2, 'months')
+        start: nowDate.clone(),
+        end: nowDate.clone().add(6, 'months')
       };
     },
     eventSources: [
       {
         url: '/event/busy_events',
-        data: { agent_id: function () {
-          return $("input[name='event[agent_id]']:checked").val();
-        }},
-        rendering: 'background'
+        data: {
+          client_name: function() {
+            return $('#event_client_attributes_name').val()
+          },
+          client_email: function() {
+            return $('#event_client_attributes_email').val()
+          },
+          agent_id: function () {
+            return $("input[name='event[agent_id]']:checked").val();
+          },
+          event_type_id: function () {
+            return $("#event_event_type_id").val();
+          }
+        },
       },
       {
         url: '/event/temp_events',
@@ -132,6 +143,9 @@ function eventCalendar() {
           client_email: function() {
             return $('#event_client_attributes_email').val()
           },
+          agent_id: function () {
+            return $("input[name='event[agent_id]']:checked").val();
+          }
         },
       }
     ],
@@ -139,11 +153,15 @@ function eventCalendar() {
       $('#event_start').val(start.format());
       $.post(`/event/create_temp_event?${$('#new_event').serialize()}`)
        .done((response) => {
-         $('#free').val(response.free);
-         $('input[name="custom"]').each((_i, el) => {
-           el.value = response.event_id;
-         });
-         $('#event_calendar').fullCalendar('refetchEvents');
+         if (!response.success) {
+           alert('This is your first appointment and we might need a little more time with you.\nPlease select with at least 2 slots available.');
+         } else {
+           $('#free').val(response.free);
+           $('input[name="custom"]').each((_i, el) => {
+             el.value = response.event_id;
+           });
+           $('#event_calendar').fullCalendar('refetchEvents');
+         }
        });
     },
     selectOverlap: false,
@@ -249,7 +267,7 @@ function onPageLoad() {
     }
     if ($('#new_event').valid() && $('#paypal_custom_variable').val()) {
       const event_id = $('#paypal_custom_variable').val();
-      if ($('#event_client_attributes_premium').val() || ($('#free').val() && !$('#subsequent_event').val()) ) {
+      if (($('#event_client_attributes_premium').val() == 'true') || ($('#free').val() == 'true' && $('#subsequent_event').val() == 'false') ) {
         e.preventDefault();
         $(this).attr('data-toggle', '');
         $.get(`/event/confirm_event?event_id=` + event_id)

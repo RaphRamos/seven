@@ -15,15 +15,36 @@ class EventController < ApplicationController
   end
 
   def busy_events
-    render json: Event.busy_events(params[:start].to_date,
-                                   params[:end].to_date,
-                                   params[:agent_id])
+    agent_id = params[:agent_id]
+    event_type_id = params[:event_type_id]
+    start_day = params[:start].to_date
+    end_day = params[:end].to_date
+
+    dow = Timetable.joins(:event_types)
+                   .where(agent_id: agent_id, event_types: { id: event_type_id })
+                   .pluck(:dow)
+                   .join(',')
+                   .split(',')
+
+    response = {}
+    response = (start_day..end_day).to_a.flat_map do |day|
+      if dow.include?(day.wday.to_s)
+        Timetable.build_busy_slots(day, agent_id).map do |a_slot|
+          { start: a_slot.first, end: a_slot.second, dow: [day.wday], rendering: 'background' }
+        end
+      end
+    end.compact
+    render json: response
+    # render json: Event.busy_events(params[:start].to_date,
+    #                                params[:end].to_date,
+    #                                params[:agent_id])
   end
 
   def temp_events
     render json: Event.temp_events_for(params[:start].to_date,
                                        params[:end].to_date,
-                                       params[:client_email])
+                                       params[:client_email],
+                                       params[:agent_id])
   end
 
   def create_temp_event
@@ -43,7 +64,9 @@ class EventController < ApplicationController
     event.temporary = true
     event.by_admin = false
 
-    if event.save!
+    if Event.overlaps?(event.start, event.end, event.agent_id)
+      render json: { success: false, errors: 'Time chosen is not available.' }
+    elsif event.save!
       render json: { success: true, event_id: event.id, free: free_appointment?(event.client.email) }
     else
       render json: { success: false, errors: event.errors.full_messages }
@@ -53,8 +76,17 @@ class EventController < ApplicationController
   def timetable
     agent_id = params[:agent_id]
     event_type_id = params[:event_type_id]
-    first_appointment = !Client.joins(:events).where(email: params[:client_email], events: { temporary: false }).present?
+    # start_day = params[:start]&.to_date || Time.now.beginning_of_week.to_date
+    # end_day = start_day.end_of_week.to_date
+    #
     response = {}
+    # response[:businessHours] = (start_day..end_day).to_a.flat_map do |day|
+    #   Timetable.build_available_slots(day, agent_id, event_type_id).map do |a_slot|
+    #     { start: a_slot.first, end: a_slot.second, dow: [day.wday] }
+    #   end
+    # end
+
+    first_appointment = !Client.joins(:events).where(email: params[:client_email], events: { temporary: false }).present?
     response[:businessHours] = Timetable.joins(:event_types).where(agent_id: agent_id,
       activated: true, event_types: { id: event_type_id }).map do |tt|
         { start: tt.start_time.strftime('%R'),

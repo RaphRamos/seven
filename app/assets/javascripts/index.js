@@ -44,15 +44,23 @@ function businessHours(){
 	}
 };
 function loadTimetable(){
+	clearCalendar();
   var agentId = $("input[name='event[agent_id]']:checked").val();
-  var eventTypeId = $("#event_event_type_id").val();
-  var email = $('#event_client_attributes_email').val();
-  $.get("/event/timetable", {agent_id: agentId, event_type_id: eventTypeId, client_email: email })
-   .done(function(response) {
-     timetable = response;
-     clearCalendar();
-     eventCalendar();
-   });
+
+	if (agentId) {
+		var eventTypeId = $("#event_event_type_id").val();
+		var email = $('#event_client_attributes_email').val();
+		var params = {agent_id: agentId, event_type_id: eventTypeId, client_email: email};
+
+		if ($('#event_calendar').fullCalendar('getCalendar')) {
+			params.start = $('#event_calendar').fullCalendar('getCalendar').view.start._d;
+		}
+
+		$.get("/event/timetable", params).done(function(response) {
+			timetable = response;
+			eventCalendar();
+		});
+	}
 };
 function loadClientByEmail(email) {
   $.get("/client_by_email", {email: email}).done(function(data) {
