@@ -111,6 +111,7 @@ function filterEventTypes(appointment_id) {
   if ($("#event_event_type_id option:selected").val() == '1') {
     $("#event_event_type_id option:selected").removeAttr('selected');
     $("#event_event_type_id").val('2');
+		$("#event_event_type_id").trigger('change');
   }
 }
 function filterAppointmentType(onshore) {

@@ -169,6 +169,7 @@ function eventCalendar() {
   });
 };
 function onPageLoad() {
+  $("#event_event_type_id option:last").attr('disabled', true);
   businessHours();
   filterAppointmentType($('#event_client_attributes_location').val());
   $('#event_client_attributes_location')
@@ -183,6 +184,12 @@ function onPageLoad() {
         .filter(x => x.types.includes('administrative_area_level_1'))
         .map( x => x.short_name)
         .includes('WA');
+
+      if (!isAU) {
+        $("#event_event_type_id").val('2');
+        $("#event_event_type_id").trigger('change');
+      }
+
       $("#event_event_type_id option:last").attr('disabled', !isAU);
       filterAppointmentType(isWA);
     });
