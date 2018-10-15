@@ -101,13 +101,12 @@ function eventCalendar() {
 
   return $('#event_calendar').fullCalendar({
     defaultView: 'agendaWeek',
-    minTime: businessHours.minTime,
-    maxTime: businessHours.maxTime,
+    minTime: '09:00',
+    maxTime: '17:00',
     hiddenDays: [6],
     firstDay: 0,
     allDaySlot: false,
     height: 'auto',
-    timezone: 'local',
     selectable: true,
     selectConstraint: 'businessHours',
     validRange: function(nowDate) {
@@ -169,6 +168,7 @@ function eventCalendar() {
   });
 };
 function onPageLoad() {
+  $("#event_event_type_id option:first").attr('disabled', true);
   $("#event_event_type_id option:last").attr('disabled', true);
   businessHours();
   filterAppointmentType($('#event_client_attributes_location').val());
@@ -185,13 +185,18 @@ function onPageLoad() {
         .map( x => x.short_name)
         .includes('WA');
 
-      if (!isAU) {
-        $("#event_event_type_id").val('2');
-        $("#event_event_type_id").trigger('change');
-      }
-
+      $("#event_event_type_id").val('2');
+      $("#event_event_type_id option:first").attr('disabled', !isWA);
       $("#event_event_type_id option:last").attr('disabled', !isAU);
-      filterAppointmentType(isWA);
+      $("#event_event_type_id").trigger('change');
+
+      // if (!isAU) {
+      //   $("#event_event_type_id").val('2');
+      //   $("#event_event_type_id").trigger('change');
+      // }
+      //
+      // $("#event_event_type_id option:last").attr('disabled', !isAU);
+      filterAppointmentType(isAU);
     });
   $("[name='event[appointment_id]']").on('change', function () {
     setProperModal();
@@ -206,10 +211,10 @@ function onPageLoad() {
     loadClientByEmail($(this).val());
     // loadTimetable();
   });
-  filterEventTypes($("#event_appointment_id").val());
-  $("#event_appointment_id").on('change', function() {
-    filterEventTypes($(this).val());
-  });
+  // filterEventTypes($("#event_appointment_id").val());
+  // $("#event_appointment_id").on('change', function() {
+  //   filterEventTypes($(this).val());
+  // });
   $('#new_event').validate({
     focusInvalid: true,
     rules: {

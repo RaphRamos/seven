@@ -38,10 +38,10 @@ function businessHours(){
   closeTime.setUTCSeconds('0');
 
   businessHours = { minTime: openTime.toLocaleTimeString('en-AU', { hour12: false }), maxTime: closeTime.toLocaleTimeString('en-AU', { hour12: false }) };
-	if (parseInt(openTime.toLocaleTimeString('en-AU', { hour12: false }).substr(0, 2)) > parseInt(closeTime.toLocaleTimeString('en-AU', { hour12: false }).substr(0, 2))) {
-		businessHours.minTime = '00:00:00';
-		businessHours.maxTime = '23:59:59';
-	}
+	// if (parseInt(openTime.toLocaleTimeString('en-AU', { hour12: false }).substr(0, 2)) > parseInt(closeTime.toLocaleTimeString('en-AU', { hour12: false }).substr(0, 2))) {
+	// 	businessHours.minTime = '00:00:00';
+	// 	businessHours.maxTime = '23:59:59';
+	// }
 };
 function loadTimetable(){
 	clearCalendar();
