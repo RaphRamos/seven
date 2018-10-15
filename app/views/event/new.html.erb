@@ -101,13 +101,12 @@ function eventCalendar() {
 
   return $('#event_calendar').fullCalendar({
     defaultView: 'agendaWeek',
-    minTime: businessHours.minTime,
-    maxTime: businessHours.maxTime,
+    minTime: '09:00',
+    maxTime: '17:00',
     hiddenDays: [6],
     firstDay: 0,
     allDaySlot: false,
     height: 'auto',
-    timezone: 'local',
     selectable: true,
     selectConstraint: 'businessHours',
     validRange: function(nowDate) {
