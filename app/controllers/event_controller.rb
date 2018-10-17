@@ -1,5 +1,8 @@
 class EventController < ApplicationController
 
+  def new_calendar
+  end
+
   def new
     @event = Event.new
     @event.client = Client.new

@@ -1,5 +1,9 @@
 @import "bootstrap";
 @import "fullcalendar";
+@import "bootstrap-datepicker.standalone";
+@import "smart_wizard";
+@import "smart_wizard_theme_arrows";
+@import "jquery-ui";
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 @import url('https://fonts.googleapis.com/css?family=Rosario');
 @import url('https://use.fontawesome.com/releases/v5.2.0/css/all.css');
@@ -740,6 +744,7 @@ img {
 
 .error.help-block {
   color: #dc3545;
+  display: block;
 }
 
 #termsOfServicesModal {
@@ -755,4 +760,8 @@ img {
       }
     }
   }
+}
+
+.sw-theme-arrows .step-content {
+  padding: 10px 15px 5px 15px;
 }

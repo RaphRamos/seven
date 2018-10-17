@@ -10,8 +10,11 @@ Rails.application.routes.draw do
       post 'create_temp_event'
       get  'timetable'
       get  'confirm_event'
+      get  'new_calendar'
     end
   end
+
+  resources :test
 
   resources :payment_notifications, only: [:create]
 

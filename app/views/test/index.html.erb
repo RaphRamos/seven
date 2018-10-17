@@ -1,0 +1,204 @@
+<main id="main">
+  <div clas="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <h4 class="mb-3">Bookings</h4>
+        <p>Please fillout the information below to schedule your appointment with Seven Migration.</p>
+        <p>If you are a returning client, please fill in your email address and we'll search for your details.</p>
+
+        <div id="smartwizard">
+          <ul>
+            <li><a href="#step-1">Choose your service</a></li>
+            <li><a href="#step-2">Pick a date</a></li>
+            <li><a href="#step-3">Contact info</a></li>
+            <li><a href="#step-4">Payment</a></li>
+            <li><a href="#step-5">Booking details</a></li>
+          </ul>
+          <div>
+            <%= render 'step_1' %>
+            <%= render 'step_2' %>
+            <%= render 'step_3' %>
+            <%= render 'step_4' %>
+            <%= render 'step_5' %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+  <%= render 'shared/modals/terms_of_service' %>
+</main>
+
+<script type="text/javascript">
+  function updateServices(location) {
+    // location: 1 - Perth, 2 - Australia, 3 - Outside Australia
+    // Habilita todos os servicos
+
+    if (location === '1') {
+      $('#serviceRadio1').attr('disabled', false);
+      $('#serviceRadio3').attr('disabled', false);
+      $('label[for="serviceRadio1"]').trigger('click');
+    }else if (location === '2') {
+      $("#serviceRadio1").attr('disabled', true);
+      $('#serviceRadio3').attr('disabled', false);
+      $('label[for="serviceRadio2"]').trigger('click');
+    } else if (location === '3') {
+      $("#serviceRadio1").attr('disabled', true);
+      $("#serviceRadio3").attr('disabled', true);
+      $('label[for="serviceRadio2"]').trigger('click');
+    }
+
+    return true;
+  }
+
+  function updateAgent(agent) {
+    // Agent: 1 - Ana Julia, 2 - Claudio
+    var name = 'Ana Julia';
+    var imgUrl = '<%= asset_path 'ana.png' %>';
+    var desc = `
+    <p class="text-justify">
+      Ana Julia Carusi is a Registered Migration Agent who graduated at the Australian National University. She is the Managing Director of Seven Migration and also Managing Director of Information Planet Perth, specialized in services for international students.
+    </p>
+    <p class="text-justify">
+      Originally from Brazil, Ana Julia has been in Australia for the past 10 years assisting migrants to reach their dreams. She is also a member of the Migration Institute of Australia (MIA).
+    </p>
+    <p class="text-justify">
+    MARN 157155
+    </p>`;
+
+    if (agent === '2') {
+      name = 'Claudio Garzini';
+      imgUrl = '<%= asset_path 'tiririca.jpg' %>';
+      desc = `
+      <p class="text-justify">
+        Claudio eh um cabra bem legal...
+      </p>
+      <p class="text-justify">
+        Pena q nao pode ver mulher...
+      </p>
+      <p class="text-justify">
+        Na danca ja pede pra abaixar...
+      </p>`;
+    }
+
+    var component = `
+      <img class="mr-3 rounded-circle" src="${imgUrl}" alt="${name}">
+      <div class="media-body">
+        <h5 class="mt-0">About ${name}</h5>
+        ${desc}
+      </div>
+    `;
+
+    $('#agentMedia').html(component);
+  }
+
+  function rebuildTimetable() {
+    var agent = $('input[name="agentRadio"]:checked').val();
+    var location = $('input[name="locationRadio"]:checked').val();
+    var service = $('input[name="serviceRadio"]:checked').val();
+
+    var availableTimes = ['09:00', '09:30', '10:30', '11:00', '14:00', '14:30', '15:30']; // Ajax fetching timetable
+    var availableTimesList = availableTimes.map((time, i) => {
+      return `
+        <input type="radio" id="availableTime${i}" name="availableTimeRadio"
+          class="custom-control-input" value="${time}">
+        <label for="availableTime${i}">${time}</label>
+      `;
+    });
+
+    $('#available-times-container').html(availableTimesList);
+  }
+
+  $(document).ready(function(){
+    updateAgent($('input[name="agentRadio"]:checked').val());
+    rebuildTimetable();
+
+    $('input[name="locationRadio"]').on('change', function() {
+      updateServices($(this).val());
+    });
+
+    $('input[name="agentRadio"]').on('change', function() {
+      updateAgent($(this).val());
+    });
+
+    $('input[type="radio"]').checkboxradio({
+      icon: false
+    });
+
+    $('#smartwizard').smartWizard({
+      theme: 'arrows',
+      showStepURLhash: false
+    });
+
+    $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+      if (stepDirection === 'forward') {
+        $('#form-3').validate({
+          debug: true,
+          focusInvalid: true,
+          rules: {
+            clientEmail: { required: true, minlength: 5 },
+            clientName:  { required: true, minlength: 5 },
+            clientPhone: { required: true, minlength: 3 },
+            referenceSelector: { required: true },
+            termsAndConditionsCheck: { required: true }
+          },
+          errorElement: "em",
+          errorPlacement: function ( error, element ) {
+            // Add the `help-block` class to the error element
+            error.addClass( "help-block" );
+
+            // Add `has-feedback` class to the parent div.form-group
+            // in order to add icons to inputs
+            element.parents( ".col-sm-5" ).addClass( "has-feedback" );
+
+            if ( element.prop( "type" ) === "checkbox" ) {
+              error.insertAfter( element.parent( "div" ) );
+            } else {
+              error.insertAfter( element );
+            }
+
+            // Add the span element, if doesn't exists, and apply the icon classes to it.
+            if ( !element.next( "span" )[ 0 ] ) {
+              $( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+            }
+          },
+          success: function ( label, element ) {
+            // Add the span element, if doesn't exists, and apply the icon classes to it.
+            if ( !$( element ).next( "span" )[ 0 ] ) {
+              $( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
+            }
+          },
+          highlight: function ( element, errorClass, validClass ) {
+            $( element ).parents( ".col-sm-5" ).addClass( "has-error" ).removeClass( "has-success" );
+            $( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+          },
+          unhighlight: function ( element, errorClass, validClass ) {
+            $( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
+            $( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+          }
+        });
+        return $('#form-3').valid();
+      } else {
+        return true;
+      }
+     });
+
+    $('#new_calendar').datepicker({
+      format: "dd/mm/yyyy",
+      maxViewMode: 1,
+      todayBtn: 'linked',
+      keyboardNavigation: false,
+      daysOfWeekDisabled: "0,6",
+      datesDisabled: ['16/10/2018'],
+      startDate: '15/10/2018',
+      endDate: '31/12/2018',
+      toggleActive: true
+    }).on('changeDate', function(e) {
+      // $('.popover').popover('dispose');
+      $('.active.day').popover({
+       content: 'bla bla bla'
+     });
+    });
+  });
+</script>

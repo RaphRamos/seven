@@ -1,0 +1,23 @@
+<div id="new_calendar"></div>
+<script>
+  function onPageLoad() {
+    $('#new_calendar').datepicker({
+      format: "dd/mm/yyyy",
+      maxViewMode: 1,
+      todayBtn: true,
+      keyboardNavigation: false,
+      daysOfWeekDisabled: "0,6",
+      todayHighlight: true,
+      datesDisabled: ['16/10/2018'],
+      startDate: '15/10/2018',
+      endDate: '31/12/2018',
+      toggleActive: true
+    }).on('changeDate', function(e) {
+      // $('.popover').popover('dispose');
+      $('.active.day').popover({
+       content: 'bla bla bla'
+     });
+    });
+  }
+  $(document).on('turbolinks:load', onPageLoad);
+</script>

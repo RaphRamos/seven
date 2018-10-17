@@ -19,6 +19,8 @@
 //= require moment
 //= require fullcalendar
 //= require fullcalendar/lang/en-au.js
+//= require jquery.smartWizard.min
+//= require jquery-ui.min
 //= require_tree .
 
 function clearCalendar() {
