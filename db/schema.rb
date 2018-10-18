@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_02_023910) do
+ActiveRecord::Schema.define(version: 2018_10_18_122857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2018_10_02_023910) do
     t.boolean "temporary", default: true, null: false
     t.text "notes"
     t.boolean "by_admin", default: true, null: false
+    t.string "admin_comment"
     t.index ["agent_id"], name: "index_events_on_agent_id"
     t.index ["appointment_id"], name: "index_events_on_appointment_id"
     t.index ["client_id"], name: "index_events_on_client_id"

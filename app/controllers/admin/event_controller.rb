@@ -19,7 +19,8 @@ class Admin::EventController < ApplicationController
                     else
                       '#474882'
                     end
-      { title: "#{e.client.name}\n #{e.event_type.desc.split('Appointment ').second}",
+      title = e.admin_comment.blank? ? e.client.name : e.admin_comment
+      { title: "#{title}\n #{e.event_type.desc.split('Appointment ').second}",
         start: e.start,
         end: e.end,
         color: event_color,
