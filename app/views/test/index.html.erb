@@ -10,8 +10,8 @@
         <div id="smartwizard">
           <ul>
             <li><a href="#step-1">Choose your service</a></li>
-            <li><a href="#step-2">Pick a date</a></li>
-            <li><a href="#step-3">Contact info</a></li>
+            <li><a href="#step-2">Contact info</a></li>
+            <li><a href="#step-3">Pick a date</a></li>
             <li><a href="#step-4">Payment</a></li>
             <li><a href="#step-5">Booking details</a></li>
           </ul>
@@ -58,10 +58,12 @@
     var imgUrl = '<%= asset_path 'ana.png' %>';
     var desc = `
     <p class="text-justify">
-      Ana Julia Carusi is a Registered Migration Agent who graduated at the Australian National University. She is the Managing Director of Seven Migration and also Managing Director of Information Planet Perth, specialized in services for international students.
+      Ana Julia Carusi is a Registered Migration Agent who graduated at the Australian National University.
+      She is the Managing Director of Seven Migration and also Managing Director of Information Planet Perth, specialized in services for international students.
     </p>
     <p class="text-justify">
-      Originally from Brazil, Ana Julia has been in Australia for the past 10 years assisting migrants to reach their dreams. She is also a member of the Migration Institute of Australia (MIA).
+      Originally from Brazil, Ana Julia has been in Australia for the past 10 years assisting migrants to reach their dreams.
+      She is also a member of the Migration Institute of Australia (MIA).
     </p>
     <p class="text-justify">
     MARN 157155
@@ -123,7 +125,6 @@
   }
 
   function updateBlockedDays(date) {
-    console.log(date);
     var agent = $('input[name="agentRadio"]:checked').val();
     var service = $('input[name="serviceRadio"]:checked').val();
 
@@ -155,15 +156,18 @@
       showStepURLhash: false
     });
 
-    $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
-      console.log('STEP', stepNumber);
-      if (stepDirection === 'forward' && stepNumber === 0) {
-        updateBlockedDays(new Date());
-      }
+    $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
+         if (stepNumber === 2) {
+           updateBlockedDays(new Date());
+         }
 
-      if (stepDirection === 'forward' && stepNumber === 1) {
+         return true;
+      });
+
+    $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+      if (stepDirection === 'forward' && stepNumber === 2) {
         if ($('input[name="availableTimeRadio"]').length > 0) {
-          $('#form-2').validate({
+          $('#form-3').validate({
             rules: { availableTimeRadio: { required: true } },
             messages: { availableTimeRadio: { required: 'Please select an available time.'} },
             errorElement: "em",
@@ -177,13 +181,13 @@
             },
           });
 
-          return $('#form-2').valid();
+          return $('#form-3').valid();
         } else {
           alert('Please select an available date on calendar before continue.');
           return false;
         }
-      } else if (stepDirection === 'forward' && stepNumber === 2) {
-        $('#form-3').validate({
+      } else if (stepDirection === 'forward' && stepNumber === 1) {
+        $('#form-2').validate({
           focusInvalid: true,
           rules: {
             clientEmail: { required: true, minlength: 5 },
@@ -224,7 +228,7 @@
             $( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
           }
         });
-        return $('#form-3').valid();
+        return $('#form-2').valid();
       } else {
         return true;
       }

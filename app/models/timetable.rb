@@ -50,8 +50,8 @@ class Timetable < ApplicationRecord
 
       start_time = first.to_time
       loop do
-        # busy_slots << start_time.strftime('%R')
-        busy_slots << [start_time.strftime('%R'), (start_time + 30.minutes).strftime('%R')]
+        busy_slots << start_time.strftime('%R')
+        # busy_slots << [start_time.strftime('%R'), (start_time + 30.minutes).strftime('%R')]
         start_time += 30.minutes
         break if start_time >= last.to_time
       end
