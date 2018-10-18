@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :test
+  resources :test do
+    collection do
+      get 'fetch_timetable'
+      get 'fetch_blocked_days'
+    end
+  end
 
   resources :payment_notifications, only: [:create]
 

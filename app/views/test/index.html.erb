@@ -93,26 +93,50 @@
     $('#agentMedia').html(component);
   }
 
-  function rebuildTimetable() {
+  function rebuildTimetable(date) {
     var agent = $('input[name="agentRadio"]:checked').val();
-    var location = $('input[name="locationRadio"]:checked').val();
     var service = $('input[name="serviceRadio"]:checked').val();
 
-    var availableTimes = ['09:00', '09:30', '10:30', '11:00', '14:00', '14:30', '15:30']; // Ajax fetching timetable
-    var availableTimesList = availableTimes.map((time, i) => {
-      return `
-        <input type="radio" id="availableTime${i}" name="availableTimeRadio"
-          class="custom-control-input" value="${time}">
-        <label for="availableTime${i}">${time}</label>
-      `;
-    });
+    var params = { agent_id: agent, service_id: service, date: date };
 
-    $('#available-times-container').html(availableTimesList);
+    $('#available-times-container').html('<i class="fas fa-spinner"></i>');
+    $.get("/test/fetch_timetable", params).done(function(resp) {
+      if (resp.timetable.length > 0) {
+        var availableTimesList = resp.timetable.map((time, i) => {
+          return `
+          <input type="radio" id="availableTime${i}" name="availableTimeRadio"
+          class="custom-control-input" value="${time}" />
+          <label for="availableTime${i}">${time}</label>
+          `;
+        });
+
+        $('#available-times-container').html(availableTimesList);
+        $('input[type="radio"][name="availableTimeRadio"]').checkboxradio({
+          icon: false
+        });
+      } else {
+        $('#available-times-container').html('<div>No time available on this date.</div>');
+      }
+    }).fail(function(resp) {
+      $('#available-times-container').html('<div>Fail to load timetables!!!!</div>');
+    });
+  }
+
+  function updateBlockedDays(date) {
+    console.log(date);
+    var agent = $('input[name="agentRadio"]:checked').val();
+    var service = $('input[name="serviceRadio"]:checked').val();
+
+    var params = { agent_id: agent, service_id: service, date: date };
+
+    $('#available-times-container').html('<i class="fas fa-spinner"></i>');
+    $.get("/test/fetch_blocked_days", params).done(function(resp) {
+      $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
+    });
   }
 
   $(document).ready(function(){
     updateAgent($('input[name="agentRadio"]:checked').val());
-    rebuildTimetable();
 
     $('input[name="locationRadio"]').on('change', function() {
       updateServices($(this).val());
@@ -132,33 +156,55 @@
     });
 
     $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
-      if (stepDirection === 'forward') {
+      console.log('STEP', stepNumber);
+      if (stepDirection === 'forward' && stepNumber === 0) {
+        updateBlockedDays(new Date());
+      }
+
+      if (stepDirection === 'forward' && stepNumber === 1) {
+        if ($('input[name="availableTimeRadio"]').length > 0) {
+          $('#form-2').validate({
+            rules: { availableTimeRadio: { required: true } },
+            messages: { availableTimeRadio: { required: 'Please select an available time.'} },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+              error.addClass( "help-block" );
+              element.parents( ".col-sm-5" ).addClass( "has-feedback" );
+              error.insertAfter( element.parent( "div" ) );
+              if ( !element.next( "span" )[ 0 ] ) {
+                $( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
+              }
+            },
+          });
+
+          return $('#form-2').valid();
+        } else {
+          alert('Please select an available date on calendar before continue.');
+          return false;
+        }
+      } else if (stepDirection === 'forward' && stepNumber === 2) {
         $('#form-3').validate({
-          debug: true,
           focusInvalid: true,
           rules: {
             clientEmail: { required: true, minlength: 5 },
             clientName:  { required: true, minlength: 5 },
             clientPhone: { required: true, minlength: 3 },
+            clientVideocallId: { required: { depends: function(e) {
+              return $('input[name="serviceRadio"]:checked').val() === '2';
+            } } },
             referenceSelector: { required: true },
             termsAndConditionsCheck: { required: true }
           },
+          messages: { clientVideocallId: { required: 'This field is required if Videcall service is selected.'} },
           errorElement: "em",
           errorPlacement: function ( error, element ) {
-            // Add the `help-block` class to the error element
             error.addClass( "help-block" );
-
-            // Add `has-feedback` class to the parent div.form-group
-            // in order to add icons to inputs
             element.parents( ".col-sm-5" ).addClass( "has-feedback" );
-
             if ( element.prop( "type" ) === "checkbox" ) {
               error.insertAfter( element.parent( "div" ) );
             } else {
               error.insertAfter( element );
             }
-
-            // Add the span element, if doesn't exists, and apply the icon classes to it.
             if ( !element.next( "span" )[ 0 ] ) {
               $( "<span class='glyphicon glyphicon-remove form-control-feedback'></span>" ).insertAfter( element );
             }
@@ -184,21 +230,25 @@
       }
      });
 
+     var endDate = new Date();
+     endDate.setMonth(endDate.getMonth() + 2);
     $('#new_calendar').datepicker({
       format: "dd/mm/yyyy",
       maxViewMode: 1,
-      todayBtn: 'linked',
       keyboardNavigation: false,
       daysOfWeekDisabled: "0,6",
-      datesDisabled: ['16/10/2018'],
-      startDate: '15/10/2018',
-      endDate: '31/12/2018',
+      startDate: new Date(),
+      endDate: endDate,
       toggleActive: true
     }).on('changeDate', function(e) {
-      // $('.popover').popover('dispose');
-      $('.active.day').popover({
-       content: 'bla bla bla'
-     });
-    });
+      if (e.date) {
+        rebuildTimetable(e.date);
+      } else {
+        $('#available-times-container').html(`
+          <div class="alert alert-light" role="alert">
+            Please, select an available date on the left.
+          </div>`);
+      }
+    })
   });
 </script>

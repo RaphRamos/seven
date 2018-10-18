@@ -73,7 +73,7 @@ class Timetable < ApplicationRecord
       start_time = timetable.start_time
 
       loop do
-        slots << [start_time.strftime('%R'), (start_time + 30.minutes).strftime('%R')] unless busy_slots.include?(start_time.strftime('%R'))
+        slots << start_time.strftime('%H:%M') unless busy_slots.include?(start_time.strftime('%R'))
         start_time += 30.minutes
         break if start_time >= timetable.end_time
       end
