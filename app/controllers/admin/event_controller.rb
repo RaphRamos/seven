@@ -7,7 +7,10 @@ class Admin::EventController < ApplicationController
 
   def events
     agent_id = params[:agent_id]
-    events = Event.preload(:client, :event_type).where(agent_id: agent_id, start: params[:start].to_date..params[:end].to_date)
+    events = Event.where('events.start < ? AND events.end >= ?', params[:start].to_date,  params[:start].to_date)
+      .or(Event.where(start: params[:start].to_date..params[:end].to_date))
+      .or(Event.where(end: params[:start].to_date..params[:end].to_date))
+      .where(agent_id: agent_id)
     json = events.map do |e|
       event_color = if e.by_admin
                       '#ffb84d'
