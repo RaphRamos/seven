@@ -74,7 +74,11 @@ class Timetable < ApplicationRecord
 
       loop do
         if slot_with_60_minutes
-          slots << start_time.strftime('%H:%M') if !busy_slots.include?(start_time.strftime('%R')) && !busy_slots.include?((start_time + 30.minutes).strftime('%R'))
+           if !busy_slots.include?(start_time.strftime('%R')) &&
+              !busy_slots.include?((start_time + 30.minutes).strftime('%R')) &&
+              (start_time + 60.minutes) <= timetable.end_time
+             slots << start_time.strftime('%H:%M')
+           end
         else
           slots << start_time.strftime('%H:%M') unless busy_slots.include?(start_time.strftime('%R'))
         end
