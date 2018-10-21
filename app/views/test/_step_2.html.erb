@@ -23,7 +23,7 @@
       </div>
       <div class="col-md-6">
         <label for="referenceSelector">How did you hear from us?</label>
-        <%= select_tag 'referenceSelector', options_from_collection_for_select(@references, 'id', 'desc'), prompt: 'Please select one of the options below:', class: 'custom-select' %>
+        <%= select_tag 'referenceSelector', options_from_collection_for_select(@references, 'desc', 'desc'), prompt: 'Please select one of the options below:', class: 'custom-select' %>
       </div>
     </div>
     <div class="form-group">

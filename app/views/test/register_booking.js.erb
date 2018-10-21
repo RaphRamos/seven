@@ -1,0 +1,15 @@
+<%
+  if @event.temporary
+    fee_partial_url = case @event.appointment_id
+                        when 1
+                          'onshore_disclaimer'
+                        when 2
+                          'offshore_disclaimer'
+                        when 3
+                          'returning_disclaimer'
+                      end
+%>
+  $('#step-4').html("<%= escape_javascript(render partial: fee_partial_url ) %>");
+<% else %>
+  location.href = 'test/<%= @event.id%>'
+<% end %>

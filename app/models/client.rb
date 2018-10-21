@@ -4,7 +4,7 @@ class Client < ApplicationRecord
 
   validates :name, length: { minimum: 5 }, presence: true
   validates :email, length: { minimum: 5 }, presence: true
-  validates :location, length: { minimum: 3 }, presence: true
+  # validates :location, length: { minimum: 3 }, presence: true
   validates :phone, length: { minimum: 6 }, presence: true
 
   def notes

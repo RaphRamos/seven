@@ -13,14 +13,12 @@
             <li><a href="#step-2">Contact info</a></li>
             <li><a href="#step-3">Pick a date</a></li>
             <li><a href="#step-4">Payment</a></li>
-            <li><a href="#step-5">Booking details</a></li>
           </ul>
           <div>
             <%= render 'step_1' %>
             <%= render 'step_2' %>
             <%= render 'step_3' %>
             <%= render 'step_4' %>
-            <%= render 'step_5' %>
           </div>
         </div>
       </div>
@@ -98,8 +96,9 @@
   function rebuildTimetable(date) {
     var agent = $('input[name="agentRadio"]:checked').val();
     var service = $('input[name="serviceRadio"]:checked').val();
+    var email =   $('#clientEmail').val();
 
-    var params = { agent_id: agent, service_id: service, date: date };
+    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
 
     $('#available-times-container').html('<i class="fas fa-spinner"></i>');
     $.get("/test/fetch_timetable", params).done(function(resp) {
@@ -127,14 +126,25 @@
   function updateBlockedDays(date) {
     var agent = $('input[name="agentRadio"]:checked').val();
     var service = $('input[name="serviceRadio"]:checked').val();
+    var email =   $('#clientEmail').val();
 
-    var params = { agent_id: agent, service_id: service, date: date };
+    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
 
-    $('#available-times-container').html('<i class="fas fa-spinner"></i>');
     $.get("/test/fetch_blocked_days", params).done(function(resp) {
       $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
     });
   }
+
+  function getClientByEmail(email) {
+    $.get("/client_by_email", {email: email}).done(function(data) {
+      if (data.client) {
+        $("#clientName").val(data.client.name);
+        $("#clientPhone").val(data.client.phone);
+        $("#referenceSelector").val(data.client.reference);
+        $("#clientVideocallId").val(data.client.videocall);
+      }
+    });
+  };
 
   $(document).ready(function(){
     updateAgent($('input[name="agentRadio"]:checked').val());
@@ -151,18 +161,53 @@
       icon: false
     });
 
-    $('#smartwizard').smartWizard({
-      theme: 'arrows',
-      showStepURLhash: false
+    $('#clientEmail').on('change', function() {
+      getClientByEmail($(this).val());
     });
 
-    $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
-         if (stepNumber === 2) {
-           updateBlockedDays(new Date());
-         }
+    $('#smartwizard').smartWizard({
+      theme: 'arrows',
+      showStepURLhash: false,
+      useURLhash: false,
+      toolbarSettings: {
+        toolbarExtraButtons: [
+    			$('<button></button>').text('Book Now').addClass('btn btn-info')
+		        .on('click', function(){ alert('Opens paypal page'); })
+        ]
+      }
+    });
 
-         return true;
-      });
+    $('.sw-btn-group-extra').hide();
+
+    $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
+      if (stepNumber === 2) {
+       updateBlockedDays(new Date());
+      }
+
+      if (stepNumber === 3) {
+       var form1 = $('#form-1').serialize();
+       var form2 = $('#form-2').serialize();
+       var form3 = $('#form-3').serialize();
+       var params = `${form1}&${form2}&${form3}`;
+
+       $.get("/test/register_booking", params)
+        .done(function(data) {
+        })
+        .fail(function(data) {
+          console.log('FAILED', data);
+        });
+      }
+
+      if ($('button.sw-btn-next').hasClass('disabled')){
+        $('button.sw-btn-next').hide();
+				$('.sw-btn-group-extra').show(); // show the button extra only in the last page
+			} else {
+        $('button.sw-btn-next').show();
+				$('.sw-btn-group-extra').hide();
+			}
+
+      return true;
+    });
 
     $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
       if (stepDirection === 'forward' && stepNumber === 2) {
@@ -246,7 +291,8 @@
       toggleActive: true
     }).on('changeDate', function(e) {
       if (e.date) {
-        rebuildTimetable(e.date);
+        rebuildTimetable(e.format());
+        $('#selectedDate').val(e.format());
       } else {
         $('#available-times-container').html(`
           <div class="alert alert-light" role="alert">

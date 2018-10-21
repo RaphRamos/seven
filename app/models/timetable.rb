@@ -60,7 +60,7 @@ class Timetable < ApplicationRecord
     busy_slots.uniq
   end
 
-  def self.build_available_slots(day, agent_id, event_type_id)
+  def self.build_available_slots(day, agent_id, event_type_id, slot_with_60_minutes)
     slots = []
     timetables = Timetable.joins(:event_types)
                           .where(agent_id: agent_id,
@@ -73,7 +73,11 @@ class Timetable < ApplicationRecord
       start_time = timetable.start_time
 
       loop do
-        slots << start_time.strftime('%H:%M') unless busy_slots.include?(start_time.strftime('%R'))
+        if slot_with_60_minutes
+          slots << start_time.strftime('%H:%M') if !busy_slots.include?(start_time.strftime('%R')) && !busy_slots.include?((start_time + 30.minutes).strftime('%R'))
+        else
+          slots << start_time.strftime('%H:%M') unless busy_slots.include?(start_time.strftime('%R'))
+        end
         start_time += 30.minutes
         break if start_time >= timetable.end_time
       end

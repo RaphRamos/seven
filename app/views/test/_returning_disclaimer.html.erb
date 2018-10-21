@@ -1,0 +1,30 @@
+<div class="alert alert-secondary" role="alert">
+  <h4 class="alert-heading">You're almost there!</h4>
+  <p>Please read carefully the information below regarding your appointment.</p>
+  <hr>
+  <p class="mb-0">When ready, please press BOOK NOW to be redirected to the payment page.</p>
+</div>
+<p>
+  For clients in and outside Australia who have already undergone preliminary
+  appointments, Seven Migration renders subsequent face-to-face
+  consultations with our Registered Migration Agents in Perth (WA)
+  and Adelaide (SA) (subject to availability) as well as Video
+  Conferences for those elsewhere (subject to availability and time differences).
+</p>
+<p>
+  Consultation Fee: <%= number_to_currency Appointment.find(3).price, unit: 'AUD$'%> per appointment (GST Inclusive)*
+</p>
+<p>
+  Services Included:
+</p>
+<ul>
+  <li>Analysis of visa eligibility, according to clients’ circumstances and individual objectives/background.</li>
+  <li>Provision of migration advice and development of an initial migration plan, subject to clients’ circumstances and individual objectives/background.</li>
+  <li>Provision of general orientation in regards to professional validation processes (subject to individual analysis).</li>
+</ul>
+<p class="text-justify">
+  * Please also note that this Consultation Fee does not include fees
+  related to visa applications, legal representation (as well as any
+  other migration agent costs) or any other fees applicable throughout
+  the process of lodging and/or appealing for a visa.
+</p>

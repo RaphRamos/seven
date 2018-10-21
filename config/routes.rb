@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     collection do
       get 'fetch_timetable'
       get 'fetch_blocked_days'
+
+      get 'register_booking'
     end
   end
 

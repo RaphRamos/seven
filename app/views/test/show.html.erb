@@ -1,0 +1,28 @@
+<main id="main">
+  <div clas="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <div class="alert alert-success" role="alert">
+          Thank you for choosing Seven Migration bla bla bla...
+          <hr>
+          Below are the details of your booking:
+        </div>
+        <div>
+          <p>
+            Start Time: <%= @booking.start %>
+          </p>
+          <p>
+            Agent: <%= @booking.agent.name %>
+          </p>
+          <p>
+            Service: <%= @booking.event_type.desc %>
+          </p>
+          <br />
+          Botao para re-enviar email
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</main>
