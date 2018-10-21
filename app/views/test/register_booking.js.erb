@@ -9,7 +9,7 @@
                           'returning_disclaimer'
                       end
 %>
-  $('#step-4').html("<%= escape_javascript(render partial: fee_partial_url ) %>");
+  $('#step-4').html("<%= escape_javascript(render partial: fee_partial_url, locals: {event_id: @event.id} ) %>");
 <% else %>
   location.href = 'test/<%= @event.id%>'
 <% end %>

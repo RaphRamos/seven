@@ -168,16 +168,8 @@
     $('#smartwizard').smartWizard({
       theme: 'arrows',
       showStepURLhash: false,
-      useURLhash: false,
-      toolbarSettings: {
-        toolbarExtraButtons: [
-    			$('<button></button>').text('Book Now').addClass('btn btn-info')
-		        .on('click', function(){ alert('Opens paypal page'); })
-        ]
-      }
+      useURLhash: false
     });
-
-    $('.sw-btn-group-extra').hide();
 
     $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
       if (stepNumber === 2) {
@@ -197,14 +189,6 @@
           console.log('FAILED', data);
         });
       }
-
-      if ($('button.sw-btn-next').hasClass('disabled')){
-        $('button.sw-btn-next').hide();
-				$('.sw-btn-group-extra').show(); // show the button extra only in the last page
-			} else {
-        $('button.sw-btn-next').show();
-				$('.sw-btn-group-extra').hide();
-			}
 
       return true;
     });
@@ -237,7 +221,7 @@
           rules: {
             clientEmail: { required: true, minlength: 5 },
             clientName:  { required: true, minlength: 5 },
-            clientPhone: { required: true, minlength: 3 },
+            clientPhone: { required: true, minlength: 6 },
             clientVideocallId: { required: { depends: function(e) {
               return $('input[name="serviceRadio"]:checked').val() === '2';
             } } },

@@ -40,7 +40,7 @@ class TestController < ApplicationController
     client = create_or_find_client
 
     # Calculete correct fee
-    fee = ['1', '2'].include?(location) ? :onshore : :offshore
+    fee = ['1', '2'].include?(client.location) ? :onshore : :offshore
     num_bookings = Event.where(client_id: client.id, temporary: false).count
     fee = :returning if num_bookings >= 2
     fee = :premium if client.premium
