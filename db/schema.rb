@@ -12,9 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2018_10_18_122857) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -80,10 +77,10 @@ ActiveRecord::Schema.define(version: 2018_10_18_122857) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.bigint "agent_id", null: false
-    t.bigint "event_type_id", null: false
-    t.bigint "appointment_id", null: false
-    t.bigint "client_id", null: false
+    t.integer "agent_id", null: false
+    t.integer "event_type_id", null: false
+    t.integer "appointment_id", null: false
+    t.integer "client_id", null: false
     t.datetime "start", null: false
     t.datetime "end", null: false
     t.datetime "created_at", null: false
@@ -101,8 +98,8 @@ ActiveRecord::Schema.define(version: 2018_10_18_122857) do
   create_table "payments", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.float "price", default: 0.0, null: false
-    t.bigint "client_id", null: false
-    t.bigint "event_id", null: false
+    t.integer "client_id", null: false
+    t.integer "event_id", null: false
     t.string "transaction_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -111,8 +108,8 @@ ActiveRecord::Schema.define(version: 2018_10_18_122857) do
   end
 
   create_table "timetable_event_types", force: :cascade do |t|
-    t.bigint "timetable_id"
-    t.bigint "event_type_id"
+    t.integer "timetable_id"
+    t.integer "event_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_type_id"], name: "index_timetable_event_types_on_event_type_id"
@@ -120,7 +117,7 @@ ActiveRecord::Schema.define(version: 2018_10_18_122857) do
   end
 
   create_table "timetables", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.integer "agent_id", null: false
     t.string "dow", null: false
     t.time "start_time", null: false
     t.time "end_time", null: false
@@ -135,19 +132,10 @@ ActiveRecord::Schema.define(version: 2018_10_18_122857) do
     t.integer "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object"
+    t.text "object", limit: 1073741823
     t.datetime "created_at"
-    t.text "object_changes"
+    t.text "object_changes", limit: 1073741823
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "events", "agents"
-  add_foreign_key "events", "appointments"
-  add_foreign_key "events", "clients"
-  add_foreign_key "events", "event_types"
-  add_foreign_key "payments", "clients"
-  add_foreign_key "payments", "events"
-  add_foreign_key "timetable_event_types", "event_types"
-  add_foreign_key "timetable_event_types", "timetables"
-  add_foreign_key "timetables", "agents"
 end
