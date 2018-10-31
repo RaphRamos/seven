@@ -4,7 +4,7 @@
     <div class="col-md-6">
       <div class="form-group">
         <label for="clientEmail">Email Address</label>
-        <input type="email" class="form-control" id="clientEmail" name="clientEmail" placeholder="Please enter your email here">
+        <input type="email" class="form-control" id="clientEmail" name="clientEmail" placeholder="Please enter your email address here">
       </div>
     </div>
     <div class="col-md-6">
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <label for="referenceSelector">How did you hear from us?</label>
+        <label for="referenceSelector">How did you hear about us?</label>
         <%= select_tag 'referenceSelector', options_from_collection_for_select(@references, 'desc', 'desc'), prompt: 'Please select one of the options below:', class: 'custom-select' %>
       </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="termsAndConditionsCheck" name="termsAndConditionsCheck" required>
       <label class="custom-control-label" for="termsAndConditionsCheck">
-        I agree with <a href="#" class="gradient textGradient" data-toggle="modal" data-target="#termsOfServicesModal">Terms and Conditions.</a>
+        I have read and agree with <a href="#" class="gradient textGradient" data-toggle="modal" data-target="#termsOfServicesModal">Terms and Conditions.</a>
       </label>
   </div>
   </form>
