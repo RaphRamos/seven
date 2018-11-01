@@ -27,9 +27,24 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="clientVideocallId">Videocall ID</label>
-      <input type="text" class="form-control" id="clientVideocallId" aria-describedby="clientVideocallIdHelp" name="clientVideocallId" placeholder="Skype ID, Google Hangout User, Facebook User, ...">
-      <!-- <small id="clientVideocallIdHelp" class="form-text text-muted">(required if videocall service was selected)</small> -->
+      <h5>Video Conference Details</h5>
+      <div class="form-check-inline">
+        <input type="radio" id="videocallRadio1" name="videocallRadio" class="custom-control-input" value="Skype" checked>
+        <label for="videocallRadio1">Skype</label>
+      </div>
+      <div class="form-check-inline">
+        <input type="radio" id="videocallRadio2" name="videocallRadio" class="custom-control-input"  value="Google Hangout">
+        <label for="videocallRadio2">Google Hangout</label>
+      </div>
+      <div class="form-check-inline">
+        <input type="radio" id="videocallRadio3" name="videocallRadio" class="custom-control-input"  value="Facebook">
+        <label for="videocallRadio3">Facebook</label>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <input type="text" class="form-control" id="clientVideocallId" aria-describedby="clientVideocallIdHelp" name="clientVideocallId" placeholder="Please enter your Caller ID here">
+        </div>
+      </div>
     </div>
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="termsAndConditionsCheck" name="termsAndConditionsCheck" required>
