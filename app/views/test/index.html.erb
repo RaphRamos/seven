@@ -132,8 +132,6 @@
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
 
-    debugger
-
     $.get("/test/fetch_blocked_days", params).done(function(resp) {
       $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
     });
