@@ -1,19 +1,25 @@
 <div id="step-2" class="wizard-step-container">
+  
   <form id="form-2">
+    
+    <h5>Personal details</h5>
+    <hr>
+    
     <div class="row mb-3">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="clientEmail">Email Address</label>
-        <input type="email" class="form-control" id="clientEmail" name="clientEmail" placeholder="Please enter your email address here">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="clientEmail">Email Address</label>
+          <input type="email" class="form-control" id="clientEmail" name="clientEmail" placeholder="Please enter your email address here">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="clientName">Full Name</label>
+          <input type="text" class="form-control" id="clientName" name="clientName" placeholder="Please enter your full name here">
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="clientName">Full Name</label>
-        <input type="text" class="form-control" id="clientName" name="clientName" placeholder="Please enter your full name here">
-      </div>
-    </div>
-    </div>
+    
     <div class="row mb-3">
       <div class="col-md-6">
         <div class="form-group">
@@ -28,6 +34,7 @@
     </div>
     <div class="form-group">
       <h5>Video Conference Details</h5>
+      <hr>
       <div class="form-check-inline">
         <input type="radio" id="videocallRadio1" name="videocallRadio" class="custom-control-input" value="Skype" checked>
         <label for="videocallRadio1">Skype</label>
@@ -40,6 +47,8 @@
         <input type="radio" id="videocallRadio3" name="videocallRadio" class="custom-control-input"  value="Facebook">
         <label for="videocallRadio3">Facebook</label>
       </div>
+      <br>
+      <br>
       <div class="row">
         <div class="col-md-12">
           <input type="text" class="form-control" id="clientVideocallId" aria-describedby="clientVideocallIdHelp" name="clientVideocallId" placeholder="Please enter your Caller ID here">
@@ -51,6 +60,7 @@
       <label class="custom-control-label" for="termsAndConditionsCheck">
         I have read and agree with <a href="#" class="gradient textGradient" data-toggle="modal" data-target="#termsOfServicesModal">Terms and Conditions.</a>
       </label>
-  </div>
+    </div>
   </form>
+  
 </div>

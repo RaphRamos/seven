@@ -1,12 +1,14 @@
 <main id="main">
-  <div clas="container">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <h4 class="mb-3">Bookings</h4>
+  <div class="container">
+  <div class="fixedContainer">
+    <!-- <div class="row"> -->
+      <!-- <div class="col-md-2"></div> -->
+      <!-- <div class="col-md-8"> -->
+        <h4>Bookings</h4>
         <p>Please fill out the information below to schedule your appointment with Seven Migration.</p>
         <p>If you are a returning client, please fill in your email address and we'll search for your details.</p>
 
+        <!-- <div id="smartwizard" class="sw-main sw-theme-seven"> -->
         <div id="smartwizard">
           <ul>
             <li><a href="#step-1">Consultation Type</a></li>
@@ -21,9 +23,10 @@
             <%= render 'step_4' %>
           </div>
         </div>
-      </div>
-      <div class="col-md-2"></div>
-    </div>
+      <!-- </div> -->
+      <!-- <div class="col-md-2"></div> -->
+    <!-- </div> -->
+  </div>
   </div>
   <%= render 'shared/modals/terms_of_service' %>
 </main>
@@ -51,46 +54,50 @@
   }
 
   function updateAgent(agent) {
-    // Agent: 1 - Ana Julia, 2 - Claudio
-    var name = 'Ana Julia';
-    var imgUrl = '<%= asset_path 'ana.png' %>';
-    var desc = `
-    <p class="text-justify">
-      Ana Julia Carusi is a Registered Migration Agent who graduated at the Australian National University.
-      She is the Managing Director of Seven Migration and also Managing Director of Information Planet Perth, specialized in services for international students.
-    </p>
-    <p class="text-justify">
-      Originally from Brazil, Ana Julia has been in Australia for the past 10 years assisting migrants to reach their dreams.
-      She is also a member of the Migration Institute of Australia (MIA).
-    </p>
-    <p class="text-justify">
-    MARN 157155
-    </p>`;
+    var AGENT = {
+      CLAUDIO: {
+        name: 'Claudio Garzini',
+        photo: '<%= asset_path 'claudio_edit_.png' %>',
+        description: `
+        <p class="text-justify"> Claudio is an Australian Migration Law graduate and a Registered Migration Agent (MARN 1803676) who has been a valuable member of Seven Migration team since 2016.</p>
+        <p class="text-justify"> Prior to coming to Australia, Claudio worked for more than 6 years as an Education Consultant and Student Agency Manager in Brazil, his home country.</p>
+        <p class="text-justify"> Having helped over 400 clients seeking to study in Australia during this time, his expertise in dealing with Australian migration law surpasses that of experience at Seven Migration.</p>`
+      },
+      ANA: {
+        name: 'Ana Julia',
+        photo: '<%= asset_path 'ana.png' %>',
+        description: `
+        <p class="text-justify"> Ana Julia Carusi is a Registered Migration Agent who graduated at the Australian National University. She is the Managing Director of Seven Migration and also Managing Director of Information Planet Perth, specialized in services for international students.</p>
+        <p class="text-justify"> Originally from Brazil, Ana Julia has been in Australia for the past 10 years assisting migrants to reach their dreams. She is also a member of the Migration Institute of Australia (MIA).</p>
+        <p class="text-justify"> MARN 157155 </p>
+        `
+      }
+    };
 
-    if (agent === '2') {
-      name = 'Claudio Garzini';
-      imgUrl = '<%= asset_path 'claudio.jpg' %>';
-      desc = `
-      <p class="text-justify">
-        Claudio is an Australian Migration Law graduate and a Registered Migration Agent (MARN 1803676) who has been a valuable member of Seven Migration team since 2016.
-      </p>
-      <p class="text-justify">
-        Prior to coming to Australia, Claudio worked for more than 6 years as an Education Consultant and Student Agency Manager in Brazil, his home country.
-      </p>
-      <p class="text-justify">
-        Having helped over 400 clients seeking to study in Australia during this time, his expertise in dealing with Australian migration law surpasses that of experience at Seven Migration.
-      </p>`;
+    var AGENT_ENUM = {
+      '1': 'ANA',
+      '2': 'CLAUDIO'
+    };
+
+    function buildAgentCode(data) {
+      return `
+        <img class="mr-3 rounded-circle" src="${data.photo}" alt="${data.name}">
+        <div class="media-body">
+          <h5 class="mt-0">About ${data.name}</h5>
+          <hr />
+          ${data.description}
+        </div>
+      `;
     }
 
-    var component = `
-      <img class="mr-3 rounded-circle" src="${imgUrl}" alt="${name}">
-      <div class="media-body">
-        <h5 class="mt-0">About ${name}</h5>
-        ${desc}
-      </div>
-    `;
+    var selectedAgent = AGENT_ENUM[agent]
+    var agentData =  AGENT[selectedAgent]
 
-    $('#agentMedia').html(component);
+    if (agentData == null) {
+      console.error('no agent found')
+      return false
+    }
+    $('#agentMedia').html(buildAgentCode(agentData));
   }
 
   function rebuildTimetable(date) {
@@ -129,6 +136,8 @@
     var email =   $('#clientEmail').val();
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
+    
+    debugger
 
     $.get("/test/fetch_blocked_days", params).done(function(resp) {
       $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
@@ -166,7 +175,7 @@
     });
 
     $('#smartwizard').smartWizard({
-      theme: 'arrows',
+      theme: 'seven',
       showStepURLhash: false,
       useURLhash: false,
       lang: {  // Language variables

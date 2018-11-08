@@ -2,11 +2,28 @@
 @import "fullcalendar";
 @import "bootstrap-datepicker.standalone";
 @import "smart_wizard";
-@import "smart_wizard_theme_arrows";
+// @import "smart_wizard_theme_arrows";
+@import "smart_wizard_theme_seven";
 @import "jquery-ui";
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 @import url('https://fonts.googleapis.com/css?family=Rosario');
 @import url('https://use.fontawesome.com/releases/v5.2.0/css/all.css');
+
+
+$color_0: #ddd;
+$color_1: #d4d4d4;
+$white: #fff;
+$color_3: #f5f5f5;
+$color_4: #bbb;
+$color_5: #4285f4;
+$color_6: #46b8da;
+$color_7: #474882;
+$color_8: #b1dfbb;
+$color_9: #d9534f;
+$color_10: #eee;
+$color_11: #f3f3f3;
+$color_12: #283891;
+$color_13: #9b98c8;
 
 *,
 *::before,
@@ -348,7 +365,6 @@ h1, h2, h3, h4, h5 {
   align-items: center;
   background-position: center;
   background-repeat: no-repeat;
-
   background-image: url("data:image/svg+xml,%3Csvg%20version=%221.1%22%20xmlns=%22http://www.w3.org/2000/svg%22%20xmlns:xlink=%22http://www.w3.org/1999/xlink%22%20x=%220px%22%20y=%220px%22%20width=%2216px%22%20height=%2216px%22%20viewBox=%220%200%2016%2016%22%20enable-background=%22new%200%200%2016%2016%22%20xml:space=%22preserve%22%3E%3Cpath%20fill=%22%23464c96%22%20d=%22M15.376,13.75l-3.985-4c0.586-0.916,1.032-2.171,1.032-3.333c0-3.263-2.675-5.917-5.961-5.917C3.175,0.5,0.5,3.154,0.5,6.417c0,3.263,2.675,5.919,5.962,5.919c1.113,0,2.272-0.4,3.163-0.93l4.049,3.955L15.376,13.75z%20M2.518,6.455c0-2.179,1.785-3.953,3.981-3.953c2.195,0,3.983,1.773,3.983,3.953c0,2.18-1.788,3.952-3.983,3.952C4.304,10.407,2.518,8.635,2.518,6.455z%22/%3E%3C/svg%3E");
 
   &.iconOff {
@@ -743,7 +759,7 @@ img {
 }
 
 .error.help-block {
-  color: #dc3545;
+  color: var(--danger);
   display: block;
 }
 
@@ -762,6 +778,120 @@ img {
   }
 }
 
-.sw-theme-arrows .step-content {
-  padding: 10px 15px 5px 15px;
+select, input {
+  &[aria-describedby*='-error'] {
+    border-right: 3px solid;
+    border-color: var(--danger);
+  }
+}
+
+.fixedContainer{
+  max-width: 1250px !important;
+  margin: 0 auto;
+}
+
+
+#new_calendar{
+  
+  $calendar-default-bg-color: #efefef;
+  $calendar-border-color: #999;
+  $calendar-default-color: #333;
+  $calendar-border-radius: 3px;
+  
+  margin: 20px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 16px;
+  color: $calendar-default-color;
+  background-color: $calendar-default-bg-color;
+  border: 1px solid $calendar-border-color;
+  border-radius: 3px;
+  
+  table {
+    width: 100%;
+    border-radius: $calendar-border-radius;
+    overflow: hidden;
+  }
+  tr {
+    padding: 5px 0;
+  }
+  td, th {
+    padding: 10px;
+  }
+  
+  thead {
+    border-bottom: 1px solid $calendar-border-color;
+    background-color: $calendar-border-color;
+    
+    .prev,
+    .next,
+    .datepicker-switch {
+      cursor: pointer;
+      &:hover {
+        background-color: $color_13;
+        color: white;
+      }
+    }
+    
+    th {
+      background-color: #efefef;
+    }
+    tr:nth-child(3) {
+      border-top: 1px solid $calendar-border-color;
+      color: $calendar-border-color;
+    }
+  }
+  
+  tbody {
+    .day {
+      background-color: white;
+      &:hover {
+        background-color: $color_13;
+        color: white;
+      }
+    }
+    
+    .disabled {
+      background-color: #efefef;
+      color: $calendar-border-color;
+      pointer-events: none !important;
+    }
+    
+    .active {
+      background-color: $color_13;
+      color: white;
+    }
+  }
+  
+  
+  .datepicker-months {
+    // display: block !important;
+    tbody {
+      td {
+        display: table-cell;
+        direction: ltr;
+        padding: 0;
+        span {
+          display: block;
+          width: 25%;
+          height: 54px;
+          line-height: 54px;
+          float: left;
+          cursor: pointer;
+          background-color: white;
+          
+          &.disabled {
+            background-color: #efefef;
+            color: $calendar-border-color;
+            pointer-events: none !important;
+          }
+          
+          &:hover {
+            background-color: $color_13;
+            color: white;
+          }
+        }
+      }
+    }
+  }
 }
