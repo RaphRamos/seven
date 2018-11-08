@@ -14,6 +14,17 @@ $color_11: #f3f3f3;
 $color_12: #283891;
 $color_13: #9b98c8;
 
+// @TODO needs a better finishing
+$wizard-bg-color: transparent;
+$wizard-border-color: #d4d4d4;
+$header-bg-color: #ededed;
+$content-bg-color: white;
+$footer-bg-color: #ededed;
+$header-step-inactive-bg-color: white;
+$header-step-inactive-text-color: #999;
+$header-step-active-bg-color: #474882;
+$header-step-active-text-color: white;
+
 // MIXINS
 @mixin bgGradient($color1, $color2) {
 	background: $color1;
@@ -33,27 +44,29 @@ $color_13: #9b98c8;
 
 %button {
 	border-color: $color_13;
-	color: $color_13;
-	background-color: $color_11;
-	
+	color: $color_7;
+	background-color: white;
+
 	outline: none !important;
 	box-shadow: none !important;
-	
+
 	&:hover,
 	&:active {
+		border-color: $color_13 !important;
 		color: $color_7 !important;
-		border-color: $color_7 !important;
 		background-color: #ededed !important;
 	}
-	
+
 	&:disabled {
 		@extend %buttonDisabled;
 	}
 }
 
 %buttonDisabled {
-	cursor: not-allowed;
-	opacity: .3;
+	border-color: #ccc;
+	color: #ccc;
+	background-color: #efefef;
+	opacity: .8;
 	pointer-events: none;
 }
 
@@ -61,10 +74,10 @@ $color_13: #9b98c8;
 	background-color: $color_7;
 	border-color: $color_7;
 	color: white;
-	
+
 	outline: none !important;
 	box-shadow: none !important;
-	
+
 	&:active,
 	&:hover {
 		background-color: $color_7;
@@ -74,26 +87,36 @@ $color_13: #9b98c8;
 }
 
 %ariaError {
-  &[aria-describedby*='-error'] {
-    border-right: 3px solid;
-    border-color: $color_7;
-  }
+	&[aria-describedby*='-error'] {
+		border-right: 3px solid;
+		border-color: $color_7;
+	}
+}
+
+.btn-seven {
+	@extend %button;
+}
+.btn-seven-active {
+	@extend %buttonSelected;
 }
 
 .sw-theme-seven {
 	border-radius: 5px;
-	border: 1px solid $color_0;
-		
-	background-color: $color_3;
-	
+	border: 1px solid $wizard-border-color;
+	background-color: $wizard-bg-color;
 	position: relative;
 	z-index: 1;
-	
+
+	a {
+		font-weight: bold;
+		color: $color_7;
+	}
+
 	// checkbox hackish buttons
 	.ui-button {
 		@extend %button;
 	}
-	
+
 	input {
 		&:disabled {
 			+ .ui-button {
@@ -101,22 +124,22 @@ $color_13: #9b98c8;
 			}
 		}
 	}
-	
+
 	select, input {
 		@extend %ariaError;
 	}
-	
-	
+
+
 	// active
 	.ui-state-active {
 		@extend %buttonSelected;
 		pointer-events: none;
 	}
-	
+
 	.sw-btn-group {
 		margin: 0 !important;
 	}
-	
+
 	.sw-btn-prev {
 		border-right: 1px solid transparent;
 		margin-right: 2px !important;
@@ -124,6 +147,10 @@ $color_13: #9b98c8;
 	.sw-btn-prev,
 	.sw-btn-next {
 		@extend %buttonSelected;
+		&.sw-btn-last {
+			margin-right: 0;
+			border-radius: 0.25rem !important;
+		}
 	}
 	> {
 		.sw-container {
@@ -133,33 +160,32 @@ $color_13: #9b98c8;
 			height: 30px;
 		}
 		.sw-toolbar-bottom {
+			background-color: $footer-bg-color;
+			border-top: 1px solid $wizard-border-color;
 		}
 	}
-	
+
 	.step-content {
 		padding: 20px;
-		border: 0 solid $color_1;
-		text-align: left;
-		
-		background-color: $white;
+		background-color: $content-bg-color;
 	}
-	
+
 	.sw-toolbar {
-		padding: 20px;
+		padding: 10px  20px;
 		margin-bottom: 0 !important;
 	}
 	> ul.step-anchor {
 		border: 0;
-		border-bottom: 1px solid $color_0;
+		border-bottom: 1px solid $wizard-border-color;
 		padding: 0;
-		background: $color_3;
+		background: $header-bg-color;
 		border-radius: 0;
 		border-top-right-radius: 5px;
 		list-style: none;
 		overflow: hidden;
 		> li {
 			> a {
-				color: $color_4;
+				color: $header-step-inactive-text-color;
 				text-decoration: none;
 				padding: 10px 0 10px 45px;
 				position: relative;
@@ -167,9 +193,9 @@ $color_13: #9b98c8;
 				border: 0 !important;
 				border-radius: 0;
 				outline-style: none;
-				background: $color_3;
+				background: $header-step-inactive-bg-color;
 				&:hover {
-					color: $color_4;
+					color: $header-step-inactive-text-color;
 					text-decoration: none;
 					padding: 10px 0 10px 45px;
 					position: relative;
@@ -177,14 +203,14 @@ $color_13: #9b98c8;
 					border: 0 !important;
 					border-radius: 0;
 					outline-style: none;
-					background: $color_3;
-					color: $color_4;
+					background: $header-step-inactive-bg-color;
+					color: $header-step-inactive-text-color;
 					text-decoration: none;
 					outline-style: none;
-					background: $color_3;
-					border-color: $color_3;
+					background: $header-step-inactive-bg-color;
+					border-color: $header-step-inactive-text-color;
 					&:after {
-						border-left-color: $color_3;
+						border-left-color: $header-step-inactive-bg-color;
 					}
 				}
 				&:after {
@@ -194,7 +220,7 @@ $color_13: #9b98c8;
 					height: 0;
 					border-top: 50px solid transparent;
 					border-bottom: 50px solid transparent;
-					border-left: 30px solid $color_3;
+					border-left: 30px solid $header-step-inactive-bg-color;
 					position: absolute;
 					top: 50%;
 					margin-top: -50px;
@@ -227,11 +253,11 @@ $color_13: #9b98c8;
 				background: $color_6 !important;
 			}
 			&.active > a {
-				border-color: $color_7 !important;
-				color: $white !important;
-				background: $color_7 !important;
+				border-color: $header-step-active-bg-color !important;
+				color: $header-step-active-text-color !important;
+				background: $header-step-active-bg-color !important;
 				&:after {
-					border-left: 30px solid $color_7 !important;
+					border-left: 30px solid $header-step-active-bg-color !important;
 				}
 			}
 			&.done > a {

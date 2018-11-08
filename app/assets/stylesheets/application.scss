@@ -792,13 +792,12 @@ select, input {
 
 
 #new_calendar{
-  
+
   $calendar-default-bg-color: #efefef;
   $calendar-border-color: #999;
   $calendar-default-color: #333;
   $calendar-border-radius: 3px;
-  
-  margin: 20px;
+
   text-align: center;
   font-size: 16px;
   line-height: 16px;
@@ -806,7 +805,7 @@ select, input {
   background-color: $calendar-default-bg-color;
   border: 1px solid $calendar-border-color;
   border-radius: 3px;
-  
+
   table {
     width: 100%;
     border-radius: $calendar-border-radius;
@@ -818,11 +817,11 @@ select, input {
   td, th {
     padding: 10px;
   }
-  
+
   thead {
     border-bottom: 1px solid $calendar-border-color;
     background-color: $calendar-border-color;
-    
+
     .prev,
     .next,
     .datepicker-switch {
@@ -832,16 +831,22 @@ select, input {
         color: white;
       }
     }
-    
+
     th {
       background-color: #efefef;
     }
     tr:nth-child(3) {
       border-top: 1px solid $calendar-border-color;
-      color: $calendar-border-color;
+      color: #333;
+
+      th {
+        &.dow {
+          background-color: white !important;
+        }
+      }
     }
   }
-  
+
   tbody {
     .day {
       background-color: white;
@@ -850,20 +855,20 @@ select, input {
         color: white;
       }
     }
-    
+
     .disabled {
       background-color: #efefef;
       color: $calendar-border-color;
       pointer-events: none !important;
     }
-    
+
     .active {
       background-color: $color_13;
       color: white;
     }
   }
-  
-  
+
+
   .datepicker-months {
     // display: block !important;
     tbody {
@@ -879,13 +884,13 @@ select, input {
           float: left;
           cursor: pointer;
           background-color: white;
-          
+
           &.disabled {
             background-color: #efefef;
             color: $calendar-border-color;
             pointer-events: none !important;
           }
-          
+
           &:hover {
             background-color: $color_13;
             color: white;
@@ -894,4 +899,20 @@ select, input {
       }
     }
   }
+}
+
+.alert-seven {
+  background-color: #ededed;
+  color: #212529;
+}
+
+.alert-light {
+  border-left: 4px solid;
+  border-radius: 0;
+  // background-color: #efefef;
+  // color: white;
+}
+
+#form-3{
+  // background-color: #efefef;
 }

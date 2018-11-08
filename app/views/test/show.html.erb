@@ -1,28 +1,69 @@
 <main id="main">
-  <div clas="container">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <div class="alert alert-success" role="alert">
-          Thank you for choosing Seven Migration bla bla bla...
+  <div class="container">
+    <div class="fixedContainer">
+
+      <h4>Thank you for choosing Seven Migration!</h4>
+      <hr>
+
+      <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas odio, ducimus ad repellat accusantium, delectus maxime officiis vel harum ipsam nemo amet a enim sapiente inventore, sint totam voluptates modi.</div>
+      <div>Quisquam, eos recusandae aliquid, quaerat nihil numquam accusamus voluptate eligendi corrupti, ullam, adipisci aut iure expedita beatae. Beatae praesentium iure deserunt est nobis sint, inventore ipsam quae quibusdam dolorem necessitatibus.</div>
+      <div>Unde, quibusdam! Rem vel ipsam ad fugiat. Iure amet, quam aperiam ducimus maiores excepturi sapiente quia, rerum, porro fugit aspernatur aliquam autem vel minus pariatur, consectetur? Optio quisquam ullam facilis.</div>
+      <div>Minus voluptate ducimus delectus, eos molestias, reprehenderit ut beatae vel voluptas. Accusamus voluptatem dolores minima porro repudiandae nam tempora voluptate exercitationem rem voluptas error incidunt, odit, est quaerat voluptatibus sapiente.</div>
+
+      <br>
+
+      <div class="card">
+        <div class="card-body">
+
+          <h4 class="mb-4">Booking Details</h4>
           <hr>
-          Below are the details of your booking:
-        </div>
-        <div>
-          <p>
-            Start Time: <%= @booking.start %>
-          </p>
-          <p>
-            Agent: <%= @booking.agent.name %>
-          </p>
-          <p>
-            Service: <%= @booking.event_type.desc %>
-          </p>
-          <br />
-          Botao para re-enviar email
+
+          <p>Often, the aforementioned badass stuff will be in the form of Bootstrap-based websites. So, it's critical that you're familiar with Bootstrap and feel pretty comfortable bending it to your will. Experience using popular page builders, like Beaver Builder, Visual Composer and Divi, is a big plus. Beaver Builder especially.</p>
+          <br>
+
+          <div class="row">
+            <div class="col-md-5">
+
+              <div class="row">
+                <div class="col-md-4">Start Time:</div>
+                <div class="col-md-8"><%= @booking.start %></div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">Agent Name</div>
+                <div class="col-md-8"><%= @booking.agent.name %></div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">Agent Name</div>
+                <div class="col-md-8"><%= @booking.event_type.desc %></div>
+              </div>
+
+            </div>
+            <div class="col-md-7"></div>
+          </div>
+
+          <br>
+          <br>
+
+          <div class="row">
+
+            <div class="col-md-6">
+              <button type="button" class="btn btn-seven">Re-send booking</button>
+              <button type="button" class="btn btn-seven btn-seven-active">Back</button>
+            </div>
+
+            <div class="col-md-6 text-right">
+              <button type="button" class="btn btn-seven">Back</button>
+              <button type="button" class="btn btn-seven btn-seven-active">Re-send booking</button>
+            </div>
+
+          </div>
+
         </div>
       </div>
-      <div class="col-md-2"></div>
+
     </div>
   </div>
+
 </main>
