@@ -185,6 +185,7 @@ $header-step-active-text-color: white;
 		overflow: hidden;
 		> li {
 			> a {
+				font-weight: normal;
 				color: $header-step-inactive-text-color;
 				text-decoration: none;
 				padding: 10px 0 10px 45px;
