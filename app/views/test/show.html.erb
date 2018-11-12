@@ -5,10 +5,7 @@
       <h4>Thank you for choosing Seven Migration!</h4>
       <hr>
 
-      <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas odio, ducimus ad repellat accusantium, delectus maxime officiis vel harum ipsam nemo amet a enim sapiente inventore, sint totam voluptates modi.</div>
-      <div>Quisquam, eos recusandae aliquid, quaerat nihil numquam accusamus voluptate eligendi corrupti, ullam, adipisci aut iure expedita beatae. Beatae praesentium iure deserunt est nobis sint, inventore ipsam quae quibusdam dolorem necessitatibus.</div>
-      <div>Unde, quibusdam! Rem vel ipsam ad fugiat. Iure amet, quam aperiam ducimus maiores excepturi sapiente quia, rerum, porro fugit aspernatur aliquam autem vel minus pariatur, consectetur? Optio quisquam ullam facilis.</div>
-      <div>Minus voluptate ducimus delectus, eos molestias, reprehenderit ut beatae vel voluptas. Accusamus voluptatem dolores minima porro repudiandae nam tempora voluptate exercitationem rem voluptas error incidunt, odit, est quaerat voluptatibus sapiente.</div>
+      <div>Aqui vcs vao me dizer um texto bem bonito paranebizando o cliente for per escolhido a seven que informando que o booking esta confirmado.</div>
 
       <br>
 
@@ -18,25 +15,26 @@
           <h4 class="mb-4">Booking Details</h4>
           <hr>
 
-          <p>Often, the aforementioned badass stuff will be in the form of Bootstrap-based websites. So, it's critical that you're familiar with Bootstrap and feel pretty comfortable bending it to your will. Experience using popular page builders, like Beaver Builder, Visual Composer and Divi, is a big plus. Beaver Builder especially.</p>
+          <p>Aki vcs me passam um texto informando o que a pessoa tem que trazer para o booking ou qualquer outra coisa que queiram</p>
+          <p>Os dados do booking estao abaixo:</p>
           <br>
 
           <div class="row">
             <div class="col-md-5">
 
               <div class="row">
-                <div class="col-md-4">Start Time:</div>
-                <div class="col-md-8"><%= @booking.start %></div>
+                <div class="col-md-4">Date and Time:</div>
+                <div class="col-md-8"><b><%= @booking.start.in_time_zone.strftime '%d/%b/%Y - %I:%M %P' %></b></div>
               </div>
 
               <div class="row">
-                <div class="col-md-4">Agent Name</div>
-                <div class="col-md-8"><%= @booking.agent.name %></div>
+                <div class="col-md-4">Agent Name:</div>
+                <div class="col-md-8"><b><%= @booking.agent.name %></b></div>
               </div>
 
               <div class="row">
-                <div class="col-md-4">Agent Name</div>
-                <div class="col-md-8"><%= @booking.event_type.desc %></div>
+                <div class="col-md-4">Service:</div>
+                <div class="col-md-8"><b><%= @booking.event_type.desc %></b></div>
               </div>
 
             </div>
@@ -46,15 +44,10 @@
           <br>
           <br>
 
+          <p>Any other info down here???</p>
+
           <div class="row">
-
-            <div class="col-md-6">
-              <button type="button" class="btn btn-seven">Re-send booking</button>
-              <button type="button" class="btn btn-seven btn-seven-active">Back</button>
-            </div>
-
-            <div class="col-md-6 text-right">
-              <button type="button" class="btn btn-seven">Back</button>
+            <div class="col-md-12 text-right">
               <button type="button" class="btn btn-seven btn-seven-active">Re-send booking</button>
             </div>
 

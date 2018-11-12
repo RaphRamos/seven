@@ -42,21 +42,21 @@ class TestController < ApplicationController
     # Calculete correct fee
     fee = ['1', '2'].include?(client.location) ? :onshore : :offshore
     num_bookings = Event.where(client_id: client.id, temporary: false).count
-    fee = :returning if num_bookings >= 2
+    fee = :returning if num_bookings >= num_free_bookings(client.id)
     fee = :premium if client.premium
 
     # Booking details
     agent_id = params[:agentRadio]
     service_id = params[:serviceRadio]
     start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".to_time
-    temporary_booking = num_bookings != 1
+    temporary_booking = num_bookings.zero? || fee == :returning
     temporary_booking = false if fee == :premium
     duration = num_bookings >=2 || fee == :premium ? 30.minutes : 1.hour
 
     appointment_id = case fee
-                       when :onshore
-                         1
                        when :offshore
+                         1
+                       when :onshore
                          2
                        else
                          3
@@ -92,13 +92,20 @@ class TestController < ApplicationController
     name = params[:clientName]
     phone = params[:clientPhone]
     reference = params[:referenceSelector]
-    videcall_info = params[:clientVidecallId]
+    videocall_details = "#{params[:videocallRadio]}: #{params[:clientVideocallId]}"
     location = params[:locationRadio]
 
     client = Client.find_or_create_by(email: email)
     client.update_attributes!(name: name, phone: phone, reference: reference,
-      location: location)
+      location: location, videocall_details: videocall_details)
 
     client
+  end
+
+  def num_free_bookings(client_id)
+    events = Event.where(client_id: client_id, temporary: false).order(created_at: :asc)
+    return 1 if events.empty?
+
+    events.first.appointment.returns    
   end
 end
