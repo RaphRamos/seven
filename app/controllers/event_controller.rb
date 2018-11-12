@@ -1,127 +1,111 @@
 class EventController < ApplicationController
 
-  def new_calendar
+  def index
+    @references = build_reference_list_ui
   end
 
-  def new
-    @event = Event.new
-    @event.client = Client.new
-    @agents = Agent.all
-    @eventTypes = EventType.all
-    @appointments = Appointment.all
-    @references = ClientReference.where(active: true)
-  end
-
-  def create
-    event = Event.create!(event_params)
-    redirect_to new_event_path
-  end
-
-  def busy_events
+  def fetch_timetable
     agent_id = params[:agent_id]
-    event_type_id = params[:event_type_id]
-    start_day = params[:start].to_date
-    end_day = params[:end].to_date
+    service_id = params[:service_id]
+    day = params[:date].to_date
 
-    dow = Timetable.joins(:event_types)
-                   .where(agent_id: agent_id, event_types: { id: event_type_id })
-                   .pluck(:dow)
-                   .join(',')
-                   .split(',')
+    slot_with_60_minutes = true
+    client = Client.find_by_email(params[:clientEmail])
+    slot_with_60_minutes = client.events.where(temporary: false).count < 2 if client.present?
 
-    response = {}
-    response = (start_day..end_day).to_a.flat_map do |day|
-      if dow.include?(day.wday.to_s)
-        Timetable.build_busy_slots(day, agent_id).map do |a_slot|
-          { start: a_slot.first, end: a_slot.second, dow: [day.wday], rendering: 'background' }
-        end
-      end
+    agent_timetable = Timetable.build_available_slots(day, agent_id, service_id, slot_with_60_minutes)
+
+    render json: { timetable: agent_timetable }
+  end
+
+  def fetch_blocked_days
+    agent_id = params[:agent_id]
+    service_id = params[:service_id]
+    start_of_month = params[:date].to_date
+    end_of_month =  params[:date].to_date + 2.months
+
+    slot_with_60_minutes = true
+    client = Client.find_by_email(params[:clientEmail])
+    slot_with_60_minutes = client.events.where(temporary: false).count < 2 if client.present?
+
+    list_blocked_days = (start_of_month..end_of_month).to_a.map do |day|
+      timetable = Timetable.build_available_slots(day, agent_id, service_id, slot_with_60_minutes)
+      day.strftime('%d/%m/%Y') if timetable.empty?
     end.compact
-    render json: response
-    # render json: Event.busy_events(params[:start].to_date,
-    #                                params[:end].to_date,
-    #                                params[:agent_id])
+
+    render json: { blocked_days: list_blocked_days}
   end
 
-  def temp_events
-    render json: Event.temp_events_for(params[:start].to_date,
-                                       params[:end].to_date,
-                                       params[:client_email],
-                                       params[:agent_id])
-  end
+  def register_booking
+    client = create_or_find_client
 
-  def create_temp_event
-    event = Event.new(event_params)
-    lastTempEvent = Event.joins(:client).where(temporary: true, clients: { email: event.client.email}).last
+    # Calculete correct fee
+    fee = ['1', '2'].include?(client.location) ? :onshore : :offshore
+    num_bookings = Event.where(client_id: client.id, temporary: false).count
+    fee = :returning if num_bookings >= num_free_bookings(client.id)
+    fee = :premium if client.premium
 
-    if lastTempEvent.present?
-      lastTempEvent.start = event.start
-      lastTempEvent.event_type_id = event.event_type_id
-      lastTempEvent.appointment_id = event.appointment_id
-      event = lastTempEvent
-    end
+    # Booking details
+    agent_id = params[:agentRadio]
+    service_id = params[:serviceRadio]
+    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".to_time
+    temporary_booking = num_bookings.zero? || fee == :returning
+    temporary_booking = false if fee == :premium
+    duration = num_bookings >=2 || fee == :premium ? 30.minutes : 1.hour
 
-    num_events = Client.find_by_email(event.client.email)&.events&.where(temporary: false)&.count || 0
-    app_duration = num_events > 0 ? 30.minutes : 1.hour
-    event.end = event.start + app_duration
-    event.temporary = true
-    event.by_admin = false
+    appointment_id = case fee
+                       when :offshore
+                         1
+                       when :onshore
+                         2
+                       else
+                         3
+                     end
 
-    if Event.overlaps?(event.start, event.end, event.agent_id)
-      render json: { success: false, errors: 'Time chosen is not available.' }
-    elsif event.save!
-      render json: { success: true, event_id: event.id, free: free_appointment?(event.client.email) }
+    @event = Event.create(agent_id: agent_id, event_type_id: service_id,
+      client_id: client.id, event_type_id: service_id, start: start_booking,
+      end: start_booking + duration, temporary: temporary_booking,
+      by_admin: false, appointment_id: appointment_id)
+
+    if @event.save!
+      # sucess
     else
-      render json: { success: false, errors: event.errors.full_messages }
-    end
-  end
-
-  def timetable
-    agent_id = params[:agent_id]
-    event_type_id = params[:event_type_id]
-    # start_day = params[:start]&.to_date || Time.now.beginning_of_week.to_date
-    # end_day = start_day.end_of_week.to_date
-    #
-    response = {}
-    # response[:businessHours] = (start_day..end_day).to_a.flat_map do |day|
-    #   Timetable.build_available_slots(day, agent_id, event_type_id).map do |a_slot|
-    #     { start: a_slot.first, end: a_slot.second, dow: [day.wday] }
-    #   end
-    # end
-
-    first_appointment = !Client.joins(:events).where(email: params[:client_email], events: { temporary: false }).present?
-    response[:businessHours] = Timetable.joins(:event_types).where(agent_id: agent_id,
-      activated: true, event_types: { id: event_type_id }).map do |tt|
-        { start: tt.start_time.strftime('%R'),
-          end: (first_appointment ? tt.end_time - 30.minutes : tt.end_time).strftime('%R'),
-          dow: tt.dow.split(',').map(&:to_i) }
-      end
-    response[:hiddenDays] = Array(0..6) - response[:businessHours].map {|d| d[:dow] }.flatten
-    render json: response
-  end
-
-  def confirm_event
-    event = Event.find(params[:event_id])
-    if free_appointment?(event.client.email)
-      event.temporary = false
-      event.save!
-
-      EventMailer.with(event: event).confirmation_email.deliver_now
+      # fail
     end
 
-    redirect_to :root
+  end
+
+  def show
+    @booking = Event.find(params[:id])
   end
 
   private
-    def event_params
-      params.require(:event).permit(:agent_id, :event_type_id, :appointment_id,
-        :start, :end, :terms_of_service,
-        client_attributes: [:location, :name, :email, :phone, :reference])
-    end
 
-    def free_appointment?(client_email)
-      num_events = Client.find_by_email(client_email)&.events&.where(temporary: false)&.count || 0
-      qtd_appointment_paid = Client.find_by_email(client_email)&.events&.where(temporary: false)&.last&.appointment&.returns || 0
-      num_events > 0 && num_events < qtd_appointment_paid
-    end
+  def build_reference_list_ui
+    other = ClientReference.where(desc: 'Other', active: true).first
+    (ClientReference.where(active: true) - [other]) << other
+  end
+
+  def create_or_find_client
+    # CLient details
+    email = params[:clientEmail]
+    name = params[:clientName]
+    phone = params[:clientPhone]
+    reference = params[:referenceSelector]
+    videocall_details = "#{params[:videocallRadio]}: #{params[:clientVideocallId]}"
+    location = params[:locationRadio]
+
+    client = Client.find_or_create_by(email: email)
+    client.update_attributes!(name: name, phone: phone, reference: reference,
+      location: location, videocall_details: videocall_details)
+
+    client
+  end
+
+  def num_free_bookings(client_id)
+    events = Event.where(client_id: client_id, temporary: false).order(created_at: :asc)
+    return 1 if events.empty?
+
+    events.first.appointment.returns    
+  end
 end

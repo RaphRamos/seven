@@ -103,7 +103,7 @@
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
 
     $('#available-times-container').html('<i class="fas fa-spinner"></i>');
-    $.get("/test/fetch_timetable", params).done(function(resp) {
+    $.get("/event/fetch_timetable", params).done(function(resp) {
       if (resp.timetable.length > 0) {
         var availableTimesList = resp.timetable.map((time, i) => {
           return `
@@ -132,7 +132,7 @@
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
 
-    $.get("/test/fetch_blocked_days", params).done(function(resp) {
+    $.get("/event/fetch_blocked_days", params).done(function(resp) {
       $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
     });
   }
@@ -191,7 +191,7 @@
        var form3 = $('#form-3').serialize();
        var params = `${form1}&${form2}&${form3}`;
 
-       $.get("/test/register_booking", params)
+       $.get("/event/register_booking", params)
         .done(function(data) {
         })
         .fail(function(data) {
