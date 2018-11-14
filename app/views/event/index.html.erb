@@ -171,9 +171,13 @@
       theme: 'seven',
       showStepURLhash: false,
       useURLhash: false,
-      lang: {  // Language variables
+      keyNavigation: false,
+      lang: {
         next: 'Next',
         previous: 'Back'
+      },
+      anchorSettings: {
+        anchorClickable: false
       }
     });
 
@@ -199,6 +203,7 @@
         });
 
         $('button.sw-btn-prev').addClass('sw-btn-last');
+        $('button.sw-btn-prev').hide();
       }
 
       if($('button.sw-btn-next').hasClass('disabled')){
