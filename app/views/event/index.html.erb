@@ -2,9 +2,7 @@
   <div class="container">
     <div class="fixedContainer">
 
-      <h4>Bookings</h4>
-      <p>Please fill out the information below to schedule your appointment with Seven Migration.</p>
-      <p>If you are a returning client, please fill in your email address and we'll search for your details.</p>
+      <h3>Bookings</h3>
 
       <div id="smartwizard">
         <ul>
@@ -54,12 +52,12 @@
         name: 'Claudio Garzini',
         photo: '<%= asset_path 'claudio_edit_.png' %>',
         description: `
-        <p class="text-justify"> Claudio is an Australian Migration Law graduate and a Registered Migration Agent (MARN 1803676) who has been a valuable member of Seven Migration team since 2016.</p>
+        <p class="text-justify"> Claudio is an Australian Migration Law graduate and a Registered Migration Agent (MARN 1803676) who has been a valuable member of Seven Migration's team since 2016.</p>
         <p class="text-justify"> Prior to coming to Australia, Claudio worked for more than 6 years as an Education Consultant and Student Agency Manager in Brazil, his home country.</p>
         <p class="text-justify"> Having helped over 400 clients seeking to study in Australia during this time, his expertise in dealing with Australian migration law surpasses that of experience at Seven Migration.</p>`
       },
       ANA: {
-        name: 'Ana Julia',
+        name: 'Ana Julia Carusi',
         photo: '<%= asset_path 'ana.png' %>',
         description: `
         <p class="text-justify"> Ana Julia Carusi is an experienced Registered Migration Agent (MARN 157155) who is nationally recognised for her expertise across several visa schemes.</p>
@@ -250,7 +248,7 @@
             referenceSelector: { required: true },
             termsAndConditionsCheck: { required: true }
           },
-          messages: { clientVideocallId: { required: 'This field is required if Videcall service is selected.'} },
+          messages: { clientVideocallId: { required: 'This field is required if Video Call service is selected.'} },
           errorElement: "em",
           errorPlacement: function ( error, element ) {
             error.addClass( "help-block" );
@@ -302,7 +300,7 @@
       } else {
         $('#available-times-container').html(`
           <div class="alert alert-light" role="alert">
-              Please, choose an available date on the calendar to the left and then select a time slot.
+              Please choose an available date on the calendar to the left and then select a time slot.
           </div>`);
       }
     })
