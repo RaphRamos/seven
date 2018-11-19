@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get 'fetch_timetable'
       get 'fetch_blocked_days'
       get 'register_booking'
+      get 'send_confirmation_email'
     end
   end
 

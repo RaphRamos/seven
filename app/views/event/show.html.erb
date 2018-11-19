@@ -58,7 +58,7 @@
 
           <div class="row">
             <div class="col-md-12 text-right">
-              <button type="button" class="btn btn-seven btn-seven-active">Re-send booking</button>
+              <button type="button" class="btn btn-seven btn-seven-active" id="re-send-email">Re-send booking</button>
             </div>
 
           </div>
@@ -70,3 +70,14 @@
   </div>
 
 </main>
+
+<script>  
+  $(document).ready(function(){
+    $('#re-send-email').on('click', function (){
+      var params = { id: <%= @booking.id %> }
+      $.get("/event/send_confirmation_email", params).done(function(e){
+        alert("We've sent the booking confirmation to your email address. If you do not receive email in 10 minutes, please contact Seven Migration.");
+      });
+    });
+  });
+</script>

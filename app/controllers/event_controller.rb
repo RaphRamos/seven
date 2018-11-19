@@ -1,6 +1,9 @@
 class EventController < ApplicationController
 
   def index
+    booking = Event.where(id: params[:custom])
+    redirect_to booking.first and return if booking&.first&.present?
+
     @references = build_reference_list_ui
   end
 
@@ -9,9 +12,7 @@ class EventController < ApplicationController
     service_id = params[:service_id]
     day = params[:date].to_date
 
-    slot_with_60_minutes = true
-    client = Client.find_by_email(params[:clientEmail])
-    slot_with_60_minutes = client.events.where(temporary: false).count < 2 if client.present?
+    slot_with_60_minutes = booking_slot_size(params[:clientEmail]) == 60
 
     agent_timetable = Timetable.build_available_slots(day, agent_id, service_id, slot_with_60_minutes)
 
@@ -24,9 +25,7 @@ class EventController < ApplicationController
     start_of_month = params[:date].to_date
     end_of_month =  params[:date].to_date + 2.months
 
-    slot_with_60_minutes = true
-    client = Client.find_by_email(params[:clientEmail])
-    slot_with_60_minutes = client.events.where(temporary: false).count < 2 if client.present?
+    slot_with_60_minutes = booking_slot_size(params[:clientEmail]) == 60
 
     list_blocked_days = (start_of_month..end_of_month).to_a.map do |day|
       timetable = Timetable.build_available_slots(day, agent_id, service_id, slot_with_60_minutes)
@@ -79,6 +78,11 @@ class EventController < ApplicationController
     @booking = Event.find(params[:id])
   end
 
+  def send_confirmation_email
+    booking = Event.find(params[:id])
+    EventMailer.with(event: booking).confirmation_email.deliver_now
+  end
+
   private
 
   def build_reference_list_ui
@@ -107,5 +111,10 @@ class EventController < ApplicationController
     return 1 if events.empty?
 
     events.first.appointment.returns    
+  end
+
+  def booking_slot_size(client_email)
+    qtd_bookings = Client.find_by_email(client_email)&.events&.where(temporary: false)&.count || 0
+    qtd_bookings < 1 ? 60 : 30
   end
 end
