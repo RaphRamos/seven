@@ -47,7 +47,7 @@ class EventController < ApplicationController
     # Booking details
     agent_id = params[:agentRadio]
     service_id = params[:serviceRadio]
-    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".to_time
+    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]} +0800".to_time
     temporary_booking = num_bookings.zero? || fee == :returning
     temporary_booking = false if fee == :premium
     duration = num_bookings >=2 || fee == :premium ? 30.minutes : 1.hour

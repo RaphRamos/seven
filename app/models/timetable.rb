@@ -87,7 +87,7 @@ class Timetable < ApplicationRecord
       end
     end
 
-    slots
+    slots.sort
   end
 
   private
