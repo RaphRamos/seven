@@ -22,7 +22,7 @@ class EventController < ApplicationController
   def fetch_blocked_days
     agent_id = params[:agent_id]
     service_id = params[:service_id]
-    start_of_month = params[:date].to_date
+    start_of_month = params[:date].to_date + 2.days
     end_of_month =  params[:date].to_date + 2.months
 
     slot_with_60_minutes = booking_slot_size(params[:clientEmail]) == 60
@@ -50,7 +50,7 @@ class EventController < ApplicationController
     start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]} +0800".to_time
     temporary_booking = num_bookings.zero? || fee == :returning
     temporary_booking = false if fee == :premium
-    duration = num_bookings >=2 || fee == :premium ? 30.minutes : 1.hour
+    duration = fee == :premium ? 30.minutes : booking_slot_size(client.email).minutes
 
     appointment_id = case fee
                        when :offshore
@@ -110,7 +110,7 @@ class EventController < ApplicationController
     events = Event.where(client_id: client_id, temporary: false).order(created_at: :asc)
     return 1 if events.empty?
 
-    events.first.appointment.returns    
+    events.first.appointment.returns
   end
 
   def booking_slot_size(client_email)
