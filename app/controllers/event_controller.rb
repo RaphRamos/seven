@@ -22,7 +22,7 @@ class EventController < ApplicationController
   def fetch_blocked_days
     agent_id = params[:agent_id]
     service_id = params[:service_id]
-    start_of_month = params[:date].to_date + 2.days
+    start_of_month = params[:date].to_date
     end_of_month =  params[:date].to_date + 2.months
 
     slot_with_60_minutes = booking_slot_size(params[:clientEmail]) == 60
@@ -31,6 +31,9 @@ class EventController < ApplicationController
       timetable = Timetable.build_available_slots(day, agent_id, service_id, slot_with_60_minutes)
       day.strftime('%d/%m/%Y') if timetable.empty?
     end.compact
+
+    list_blocked_days << start_of_month.strftime('%d/%m/%Y')
+    list_blocked_days << (start_of_month + 1.day).strftime('%d/%m/%Y')
 
     render json: { blocked_days: list_blocked_days}
   end
