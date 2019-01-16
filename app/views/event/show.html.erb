@@ -16,25 +16,25 @@
           <hr>
 
           <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-6">
 
               <div class="row">
-                <div class="col-md-4">Date and Time:</div>
-                <div class="col-md-8"><b><%= @booking.start.in_time_zone.strftime '%d/%b/%Y - %I:%M %P' %></b> (Perth Timezone)</div>
+                <div class="col-md-3">Date and Time:</div>
+                <div class="col-md-9"><b><%= @booking.start.in_time_zone.strftime '%d/%b/%Y - %I:%M %P' %></b> (Perth Timezone)</div>
               </div>
 
               <div class="row">
-                <div class="col-md-4">Agent Name:</div>
-                <div class="col-md-8"><b><%= @booking.agent.name %></b></div>
+                <div class="col-md-3">Agent Name:</div>
+                <div class="col-md-9"><b><%= @booking.agent.name %></b></div>
               </div>
 
               <div class="row">
-                <div class="col-md-4">Service:</div>
-                <div class="col-md-8"><b><%= @booking.event_type.desc %></b></div>
+                <div class="col-md-3">Service:</div>
+                <div class="col-md-9"><b><%= @booking.event_type.desc %></b></div>
               </div>
 
             </div>
-            <div class="col-md-7"></div>
+            <div class="col-md-6"></div>
           </div>
 
           <br>
