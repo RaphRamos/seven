@@ -13,7 +13,7 @@
           Conferences for those elsewhere (subject to availability and time differences).
         </p>
         <p>
-          Consultation Fee: AUD$50.00 per appointment (GST Inclusive)* 
+          Consultation Fee: <%= number_to_currency Appointment.find(3).price, unit: 'AUD$'%> per appointment (GST Inclusive)* 
         </p>
         <p>
           Services Included:  

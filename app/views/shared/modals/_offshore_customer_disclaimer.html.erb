@@ -11,7 +11,7 @@
           availability and time differences).
         </p>
         <p>
-          Consultation Fee: AUD$215.00 (GST Inclusive)*
+          Consultation Fee: <%= number_to_currency Appointment.find(1).price, unit: 'AUD$'%> (GST Inclusive)*
         </p>
         <p>
           Services Included:  
