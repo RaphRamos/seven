@@ -47,7 +47,7 @@ RailsAdmin.config do |config|
   end
 
   config.model 'Event' do
-    include_fields :id, :client, :agent, :event_type, :appointment, :temporary, :start, :end, :notes, :created_at, :updated_at, :admin_comment
+    include_fields :id, :client, :agent, :event_type, :appointment, :event_service, :temporary, :start, :end, :notes, :created_at, :updated_at, :admin_comment
     field :client do
       nested_form false
     end

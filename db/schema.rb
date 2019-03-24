@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_124505) do
+ActiveRecord::Schema.define(version: 2019_03_11_122633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,14 @@ ActiveRecord::Schema.define(version: 2018_11_12_124505) do
     t.string "videocall_details"
   end
 
+  create_table "event_services", force: :cascade do |t|
+    t.string "desc"
+    t.float "first_app_price"
+    t.float "return_app_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "event_types", force: :cascade do |t|
     t.string "desc", null: false
     t.boolean "available", default: true, null: false
@@ -93,9 +101,11 @@ ActiveRecord::Schema.define(version: 2018_11_12_124505) do
     t.text "notes"
     t.boolean "by_admin", default: true, null: false
     t.string "admin_comment"
+    t.bigint "event_service_id"
     t.index ["agent_id"], name: "index_events_on_agent_id"
     t.index ["appointment_id"], name: "index_events_on_appointment_id"
     t.index ["client_id"], name: "index_events_on_client_id"
+    t.index ["event_service_id"], name: "index_events_on_event_service_id"
     t.index ["event_type_id"], name: "index_events_on_event_type_id"
   end
 
@@ -145,6 +155,7 @@ ActiveRecord::Schema.define(version: 2018_11_12_124505) do
   add_foreign_key "events", "agents"
   add_foreign_key "events", "appointments"
   add_foreign_key "events", "clients"
+  add_foreign_key "events", "event_services"
   add_foreign_key "events", "event_types"
   add_foreign_key "payments", "clients"
   add_foreign_key "payments", "events"

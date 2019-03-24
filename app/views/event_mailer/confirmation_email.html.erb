@@ -22,7 +22,7 @@
               </div>
               <div style="position: relative;display: inline-block;width: 100%;">
                 <label style="color:#788a95;font-size:15px;">Service:&nbsp;</label>
-                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.event_type.desc %></p>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= "#{@event.event_service.desc}: (#{@event.event_type.desc})" %></p>
               </div>
               <div style="position: relative;display: inline-block;width: 100%;">
                 <label style="color:#788a95;font-size:15px;">Agent:&nbsp;</label>

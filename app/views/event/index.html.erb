@@ -25,6 +25,19 @@
 </main>
 
 <script type="text/javascript">
+  function updateEventService(){
+    var appType = $('input[name="eventServiceRadio"]:checked').val();
+
+    if (appType === '1') {
+      $('label[for="agentRadio2"]').trigger('click');
+      $('#agentRadio1').attr('disabled', true);
+    } else {
+      $('#agentRadio1').attr('disabled', false);
+    }
+
+    return true;
+  }
+
   function updateServices(location) {
     // location: 1 - Perth, 2 - Australia, 3 - Outside Australia
     // Habilita todos os servicos
@@ -50,7 +63,7 @@
     var AGENT = {
       CLAUDIO: {
         name: 'Claudio Garzini',
-        photo: '<%= asset_path 'claudio_edit_.png' %>',
+        photo: '<%= asset_path 'claudio_edited.jpg' %>',
         description: `
         <p class="text-justify"> Claudio is an Australian Migration Law graduate and Registered Migration Agent (MARN 1803676) who has been a valuable member of Seven Migration's team since 2016.</p>
         <p class="text-justify"> Prior to moving to Australia, Claudio worked for more than 6 years as an Education Consultant and Student Agency Manager in Brazil, his home country.</p>
@@ -95,7 +108,7 @@
 
   function rebuildTimetable(date) {
     var agent = $('input[name="agentRadio"]:checked').val();
-    var service = $('input[name="serviceRadio"]:checked').val();
+    var service = $('input[name="eventTypeRadio"]:checked').val();
     var email =   $('#clientEmail').val();
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
@@ -125,7 +138,7 @@
 
   function updateBlockedDays(date) {
     var agent = $('input[name="agentRadio"]:checked').val();
-    var service = $('input[name="serviceRadio"]:checked').val();
+    var service = $('input[name="eventTypeRadio"]:checked').val();
     var email =   $('#clientEmail').val();
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
@@ -149,6 +162,10 @@
   $(document).ready(function(){
     updateAgent($('input[name="agentRadio"]:checked').val());
 
+    $('input[name="eventServiceRadio"]').on('change', function() {
+      updateEventService();
+    });
+
     $('input[name="locationRadio"]').on('change', function() {
       updateServices($(this).val());
     });
@@ -164,6 +181,8 @@
     $('#clientEmail').on('change', function() {
       getClientByEmail($(this).val());
     });
+
+    updateEventService();
 
     $('#smartwizard').smartWizard({
       theme: 'seven',
@@ -243,7 +262,7 @@
             clientName:  { required: true, minlength: 5 },
             clientPhone: { required: true, minlength: 6 },
             clientVideocallId: { required: { depends: function(e) {
-              return $('input[name="serviceRadio"]:checked').val() === '2';
+              return $('input[name="eventTypeRadio"]:checked').val() === '2';
             } } },
             referenceSelector: { required: true },
             termsAndConditionsCheck: { required: true }
@@ -303,6 +322,6 @@
               Please choose an available date on the calendar to the left and then select a time slot.
           </div>`);
       }
-    })
+    });
   });
 </script>

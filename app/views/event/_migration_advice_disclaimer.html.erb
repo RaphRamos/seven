@@ -1,11 +1,10 @@
 <p>
-  For returning clients, Seven Migration renders subsequent in-person 
-  consultations and phone call consultations with our Registered Migration Agents in Perth (WA) 
-  and in Adelaide (SA) (subject to availability) as well as 
-  Video Conference Calls for those elsewhere (subject to availability and time differences). 
+  For clients, Seven Migration renders in-person consultations with our Registered Migration Agents in Perth (WA) and 
+  in Adelaide (SA) (subject to availability) as well as Video Conference Calls or
+  Phone Calls for those elsewhere (subject to availability and time differences). 
 </p>
 <p>
-  Consultation Fee: <%= number_to_currency Appointment.find(3).price, unit: 'AUD$'%> per appointment (GST Inclusive)*
+  Consultation Fee: <%= number_to_currency EventService.find(1).first_app_price, unit: 'AUD$'%> per appointment (GST Inclusive)*
 </p>
 <p>
   Services Included:
@@ -16,15 +15,16 @@
   <li>Provision of general orientation concerning professional validation processes (subject to individual analysis).</li>
 </ul>
 <p class="text-justify">
-  * Please note that this Consultation Fee does not, however, include fees related but not limited to: 
-  (i) visa application charges; (ii) legal representation fees (e.g., migration agent costs); 
-  or (iii) any other fees/charges/disbursements applicable throughout the process of lodging 
-  a visa application and/or appealing to a decision.
+  * Please note that this <i>Consultation Fee</i> <b>does not</b> include fees 
+  related but not limited to visa applications, legal representation 
+  charges (or any other migration agent costs) or any other fees 
+  applicable throughout the process of lodging a visa application 
+  and/or appealing a decision.
 </p>
 <div class="paypal-button">
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
     <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="hosted_button_id" value="DSZZXJLZN2SP4">
+    <input type="hidden" name="hosted_button_id" value="LUUUDGEVMCG82">
     <input type="hidden" name="custom" value="<%= event_id %>" id="paypal_custom_variable">
     <input type="image" src="https://www.paypalobjects.com/en_AU/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
     <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">

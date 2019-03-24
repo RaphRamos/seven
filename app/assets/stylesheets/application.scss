@@ -928,3 +928,13 @@ select, input {
 #form-3{
   // background-color: #efefef;
 }
+
+.datepicker table tr td.new, .datepicker table tr td.old {
+  height: 0;
+  line-height: 0;
+  visibility: hidden;
+}
+
+#termsOfServicesModal h6 {
+  text-align: justify;
+}

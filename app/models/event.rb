@@ -5,6 +5,7 @@ class Event < ApplicationRecord
   belongs_to :event_type
   belongs_to :appointment
   belongs_to :client
+  belongs_to :event_service
 
   accepts_nested_attributes_for :client
 

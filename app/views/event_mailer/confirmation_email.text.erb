@@ -5,7 +5,7 @@ Hi <%= @event.client.name %>,
 Your appointment has been booked with Seven Migration.
 
 When:  <%= @event_formated_date %> (Perth Timezone)
-Service: <%= @event.event_type.desc %>
+Service: <%= "#{@event.event_service.desc}: (#{@event.event_type.desc})" %>
 Agent: <%= @event.agent.name %>
 Booking ID: <%= @event.id %>
 

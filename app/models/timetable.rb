@@ -27,12 +27,14 @@ class Timetable < ApplicationRecord
     end
   end
 
-  def self.build_busy_slots(day, agent_id)
+  def self.build_busy_slots(day, agent_id, last_temp_event)
     events = Event.where('events.start < ? AND events.end >= ?', day.beginning_of_day, day.beginning_of_day)
                   .or(Event.where(start: day.beginning_of_day..day.end_of_day))
                   .or(Event.where(end: day.beginning_of_day..day.end_of_day))
                   .where(agent_id: agent_id)
                   .order(:start)
+
+    events -= [last_temp_event] # Remove last temporary as it can be overwritten
 
     busy_slots = []
 
@@ -50,8 +52,7 @@ class Timetable < ApplicationRecord
 
       start_time = first.to_time
       loop do
-        busy_slots << start_time.strftime('%R')
-        # busy_slots << [start_time.strftime('%R'), (start_time + 30.minutes).strftime('%R')]
+        busy_slots << start_time.strftime('%H')
         start_time += 30.minutes
         break if start_time >= last.to_time
       end
@@ -60,7 +61,7 @@ class Timetable < ApplicationRecord
     busy_slots.uniq
   end
 
-  def self.build_available_slots(day, agent_id, event_type_id, slot_with_60_minutes)
+  def self.build_available_slots(day, agent_id, event_type_id, last_temp_event)
     slots = []
     timetables = Timetable.joins(:event_types)
                           .where(agent_id: agent_id,
@@ -68,21 +69,13 @@ class Timetable < ApplicationRecord
                           .select { |tt| tt.dow.split(',').include?(day.wday.to_s) }
     return slots if timetables.empty?
 
-    busy_slots = build_busy_slots(day, agent_id)
+    busy_slots = build_busy_slots(day, agent_id, last_temp_event)
     timetables.each do |timetable|
       start_time = timetable.start_time
 
       loop do
-        if slot_with_60_minutes
-           if !busy_slots.include?(start_time.strftime('%R')) &&
-              !busy_slots.include?((start_time + 30.minutes).strftime('%R')) &&
-              (start_time + 60.minutes) <= timetable.end_time
-             slots << start_time.strftime('%H:%M')
-           end
-        else
-          slots << start_time.strftime('%H:%M') unless busy_slots.include?(start_time.strftime('%R'))
-        end
-        start_time += 30.minutes
+        slots << start_time.strftime('%H:%M') unless busy_slots.include?(start_time.strftime('%H'))
+        start_time += 60.minutes
         break if start_time >= timetable.end_time
       end
     end

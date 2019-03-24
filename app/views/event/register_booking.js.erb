@@ -1,15 +1,23 @@
 <%
-  if @event.temporary
+  fee_partial_url = ''
+
+  if @new_booking_rule
+    fee_partial_url = @event.event_service_id == 1 ? 'skills_advice_disclaimer' : 'migration_advice_disclaimer'
+    fee_partial_url = 'returning_disclaimer' if @bookings_count.positive?
+  else
     fee_partial_url = case @event.appointment_id
-                        when 1
-                          'offshore_disclaimer'
-                        when 2
-                          'onshore_disclaimer'
-                        when 3
-                          'returning_disclaimer'
+                      when 1
+                        'offshore_disclaimer'
+                      when 2
+                        'onshore_disclaimer'
+                      when 3
+                        'returning_disclaimer'
                       end
+  end
+
+  if @event.temporary
 %>
   $('#step-4-content').html("<%= escape_javascript(render partial: fee_partial_url, locals: {event_id: @event.id} ) %>");
 <% else %>
   location.href = 'event/<%= @event.id%>'
-<% end %>
+<% end %> 

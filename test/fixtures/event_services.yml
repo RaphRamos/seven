@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  desc: MyString
+  firstAppPrice: 1.5
+  returnAppPrice: 1.5
+
+two:
+  desc: MyString
+  firstAppPrice: 1.5
+  returnAppPrice: 1.5
