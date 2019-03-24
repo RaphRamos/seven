@@ -83,7 +83,7 @@ class EventController < ApplicationController
 
     if @event
       # sucess
-      # _send_confirmation_email(@event) unless @event.temporary
+      _send_confirmation_email(@event) unless @event.temporary
     else
       # fail
     end
