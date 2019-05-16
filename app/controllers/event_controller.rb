@@ -24,10 +24,11 @@ class EventController < ApplicationController
     start_of_month = params[:date].to_date
     end_of_month =  params[:date].to_date + 2.months
     last_temp_event = _last_temp_event(params[:clientEmail])
+    block_all = params[:location] == '3' #offshore
 
     list_blocked_days = (start_of_month..end_of_month).to_a.map do |day|
       timetable = Timetable.build_available_slots(day, agent_id, service_id, last_temp_event)
-      day.strftime('%d/%m/%Y') if timetable.empty?
+      day.strftime('%d/%m/%Y') if timetable.empty? || block_all
     end.compact
 
     list_blocked_days << start_of_month.strftime('%d/%m/%Y')

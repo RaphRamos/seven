@@ -140,8 +140,9 @@
     var agent = $('input[name="agentRadio"]:checked').val();
     var service = $('input[name="eventTypeRadio"]:checked').val();
     var email =   $('#clientEmail').val();
+    var location = $('input[name="locationRadio"]:checked').val();
 
-    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
+    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email, location: location };
 
     $.get("/event/fetch_blocked_days", params).done(function(resp) {
       $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
