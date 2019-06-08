@@ -8,8 +8,8 @@ class EventController < ApplicationController
   end
 
   def fetch_timetable
-    agent_id = params[:agent_id]
     service_id = params[:service_id]
+    agent_id = service_id == '1' ? 3 : params[:agent_id] # Skills assessment always agent id 3
     day = params[:date].to_date
     last_temp_event = _last_temp_event(params[:clientEmail])
 
@@ -19,8 +19,8 @@ class EventController < ApplicationController
   end
 
   def fetch_blocked_days
-    agent_id = params[:agent_id]
     service_id = params[:service_id]
+    agent_id = service_id == '1' ? 3 : params[:agent_id] # Skills assessment always agent id 3
     start_of_month = params[:date].to_date
     end_of_month =  params[:date].to_date + 2.months
     last_temp_event = _last_temp_event(params[:clientEmail])
@@ -45,10 +45,10 @@ class EventController < ApplicationController
       @event = _new_booking(client)
       @bookings_count = client.events.where(temporary: false).count
     else # Remove when old rule (free returns) is not valid anymore.
-      agent_id = params[:agentRadio]
+      event_service_id = params[:eventServiceRadio]
+      agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
       start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]} +0800".to_time
       event_type_id = params[:eventTypeRadio]
-      event_service_id = params[:eventServiceRadio]
       # Calculete correct fee
       fee = ['1', '2'].include?(client.location) ? :onshore : :offshore
       num_bookings = Event.where(client_id: client.id, temporary: false).count
@@ -113,10 +113,10 @@ class EventController < ApplicationController
   end
 
   def _new_booking(client)
-    agent_id = params[:agentRadio]
+    event_service_id = params[:eventServiceRadio]
+    agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
     start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]} +0800".to_time
     event_type_id = params[:eventTypeRadio]
-    event_service_id = params[:eventServiceRadio]
     temporary_booking = !client.premium?
     duration = 60.minutes
     appointment_id =  ['1', '2'].include?(client.location) ? 2 : 1

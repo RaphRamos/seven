@@ -11,6 +11,10 @@
         <input type="radio" id="eventServiceRadio1" name="eventServiceRadio" class="custom-control-input" value="1">
         <label for="eventServiceRadio1">Skills Assessment Advice</label>
       </div>
+      <div class="form-check-inline">
+        <p id="migration-info-text" class="service-under-text">This service relates to the analysis of clients’ eligibility to Australian visas <strong>ONLY</strong>. Throughout Migration Advice consultations, our Registered Migration Agents will analyse your individual circumstances in order to provide you with a comprehensive migration plan. Please note, however, that, during these consultations, our Migration Agents <strong>WILL NOT</strong> be looking into skills assessment matters and their respective eligibility requirements. For that, please select ‘Skills Assessment Advice' on the above menu.</p>
+        <p id="skills-info-text" class="service-under-text">This service relates to the analysis of clients’ skills assessment only. Throughout Skills Assessment Advice meetings, specialised professionals <strong>(who are not Registered Migration Agents)</strong> will provide you with an overview of how some of these processes work (including major steps and associated costs), before making a recommendation as to whether or not you should proceed with a particular application. Please note, however, that, during these consultations, our advisers <strong>WILL NOT</strong> be looking into visa matters and their respective eligibility requirements. For that, please select ‘Migration Advice' on the above menu.</p>
+      </div>
     </div>
     <div class="form-group">
       <h5>Select Your Location</h5>
@@ -49,20 +53,36 @@
         <label for="eventTypeRadio3" data-toggle="tooltip" title="Only within Australia" data-placement="bottom">Phone Call</label>
       </div>
     </div>
-    <div class="form-group">
-      <h5>Select a Migration Agent</h5>
-      <hr>
-      <div class="form-check-inline">
-        <input type="radio" id="agentRadio2" name="agentRadio" class="custom-control-input"  value="2" checked>
-        <label for="agentRadio2">Claudio Garzini</label>
+    <div id="agent-section">
+      <div class="form-group">
+        <h5>Select a Migration Agent</h5>
+        <hr>
+        <div class="form-check-inline">
+          <input type="radio" id="agentRadio2" name="agentRadio" class="custom-control-input"  value="2" checked>
+          <label for="agentRadio2">Claudio Garzini</label>
+        </div>
+        <div class="form-check-inline">
+          <input type="radio" id="agentRadio1" name="agentRadio" class="custom-control-input"  value="1">
+          <label for="agentRadio1">Ana Julia Carusi</label>
+        </div>
       </div>
-      <div class="form-check-inline">
-        <input type="radio" id="agentRadio1" name="agentRadio" class="custom-control-input"  value="1">
-        <label for="agentRadio1">Ana Julia Carusi</label>
+      <div class="form-group">
+        <div class="media" id='agentMedia'>
+        </div>
       </div>
     </div>
-    <div class="form-group">
-      <div class="media" id='agentMedia'>
+    <div id="skills-section">
+      <div class="form-group">
+        <h5>About Skills Assessment</h5>
+        <hr>
+        <div class="media">
+          <img class="mr-3 rounded-circle" src='<%= asset_path 'skills_assessment.jpg' %>'>
+          <div class="media-body">
+              <p class="text-justify">Clients who wish to validate their profession or trade in Australia might be required to have their skills and work experience assessed and/or recognised by relevant authorities. </p>
+              <p class="text-justify">Our Skills Assessment Advice service focuses on providing clients with an overview of how some of these processes work, what are the main steps and costs associated with them, and what documents and evidence you will be required to provide authorities with in order to be successful. </p>
+              <p class="text-justify">Throughout such meetings, our advisers will also analyse your individual circumstances before making a recommendation as to whether or not you proceed with a particular skills assessment application.</p>
+          </div>
+        </div>
       </div>
     </div>
   </form>

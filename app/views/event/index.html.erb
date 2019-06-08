@@ -29,9 +29,21 @@
     var appType = $('input[name="eventServiceRadio"]:checked').val();
 
     if (appType === '1') {
+      $('#migration-info-text').addClass('hide');
+      $('#skills-info-text').removeClass('hide');
+
+      $('#agent-section').addClass('hide');
+      $('#skills-section').removeClass('hide');
+
       $('label[for="agentRadio2"]').trigger('click');
       $('#agentRadio1').attr('disabled', true);
     } else {
+      $('#migration-info-text').removeClass('hide');
+      $('#skills-info-text').addClass('hide');
+
+      $('#agent-section').removeClass('hide');
+      $('#skills-section').addClass('hide');
+
       $('#agentRadio1').attr('disabled', false);
     }
 
