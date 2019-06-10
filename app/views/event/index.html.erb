@@ -122,6 +122,11 @@
     var agent = $('input[name="agentRadio"]:checked').val();
     var service = $('input[name="eventTypeRadio"]:checked').val();
     var email =   $('#clientEmail').val();
+    var appType = $('input[name="eventServiceRadio"]:checked').val();
+
+    if (appType === '1') {
+      agent = '3';
+    }
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
 
@@ -153,6 +158,11 @@
     var service = $('input[name="eventTypeRadio"]:checked').val();
     var email =   $('#clientEmail').val();
     var location = $('input[name="locationRadio"]:checked').val();
+    var appType = $('input[name="eventServiceRadio"]:checked').val();
+
+    if (appType === '1') {
+      agent = '3';
+    }
 
     var params = { agent_id: agent, service_id: service, date: date, clientEmail: email, location: location };
 

@@ -9,7 +9,7 @@ class EventController < ApplicationController
 
   def fetch_timetable
     service_id = params[:service_id]
-    agent_id = service_id == '1' ? 3 : params[:agent_id] # Skills assessment always agent id 3
+    agent_id = params[:agent_id] # Skills assessment always agent id 3
     day = params[:date].to_date
     last_temp_event = _last_temp_event(params[:clientEmail])
 
@@ -20,7 +20,7 @@ class EventController < ApplicationController
 
   def fetch_blocked_days
     service_id = params[:service_id]
-    agent_id = service_id == '1' ? 3 : params[:agent_id] # Skills assessment always agent id 3
+    agent_id = params[:agent_id] # Skills assessment always agent id 3
     start_of_month = params[:date].to_date
     end_of_month =  params[:date].to_date + 2.months
     last_temp_event = _last_temp_event(params[:clientEmail])
@@ -40,7 +40,7 @@ class EventController < ApplicationController
   def register_booking
     client = create_or_find_client
     @new_booking_rule = _new_booking_rule?(client)
-    
+
     if @new_booking_rule
       @event = _new_booking(client)
       @bookings_count = client.events.where(temporary: false).count
@@ -76,11 +76,11 @@ class EventController < ApplicationController
                                         by_admin: false, appointment_id: appointment_id)
                  last_temp_event
                else
-                 Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id, 
-                              start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false, 
+                 Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id,
+                              start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false,
                               appointment_id: appointment_id)
                end
-    end    
+    end
 
     if @event
       # sucess
@@ -129,8 +129,8 @@ class EventController < ApplicationController
                              by_admin: false, appointment_id: appointment_id)
       last_temp_event
     else
-      Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id, 
-                   start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false, 
+      Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id,
+                   start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false,
                    appointment_id: appointment_id)
     end
   end
