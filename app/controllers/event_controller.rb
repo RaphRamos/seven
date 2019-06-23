@@ -24,11 +24,11 @@ class EventController < ApplicationController
     start_of_month = params[:date].to_date
     end_of_month =  params[:date].to_date + 2.months
     last_temp_event = _last_temp_event(params[:clientEmail])
-    block_all = params[:location] == '3' #offshore
+    off_shore = params[:location] == '3' #offshore
 
     list_blocked_days = (start_of_month..end_of_month).to_a.map do |day|
       timetable = Timetable.build_available_slots(day, agent_id, service_id, last_temp_event)
-      day.strftime('%d/%m/%Y') if timetable.empty? || block_all
+      day.strftime('%d/%m/%Y') if timetable.empty? || (off_shore && _block_off_shore?(day))
     end.compact
 
     list_blocked_days << start_of_month.strftime('%d/%m/%Y')
@@ -174,5 +174,19 @@ class EventController < ApplicationController
 
   def _last_temp_event(client_email)
     Event.joins(:client).where(clients: { email: client_email}, temporary: true ).order(:id).last
+  end
+
+  def _block_off_shore?(day)
+    # Ana = 5 / Claudio = 2
+    agent_id = params[:agent_id]
+    num_events_off_shore = Event.where(start: day.beginning_of_week..day.end_of_week, agent_id: agent_id, appointment_id: 1).count
+
+    if agent_id == '1'
+      num_events_off_shore >= 5
+    elsif agent_id == '2'
+      num_events_off_shore >= 2
+    else
+      false
+    end
   end
 end
