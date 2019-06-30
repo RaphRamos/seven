@@ -5,4 +5,9 @@ class EventMailerPreview < ActionMailer::Preview
     @event = Client.find(1241).events.first
     EventMailer.with(event: @event).confirmation_email
   end
+
+  def reminder_email
+    @event = Client.find(1241).events.first
+    EventMailer.with(event: @event).reminder_email
+  end
 end

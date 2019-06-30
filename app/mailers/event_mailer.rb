@@ -5,4 +5,10 @@ class EventMailer < ApplicationMailer
     @event_formated_date = @event.start.strftime('%a %b %d, %Y %I:%M %P')
     mail(to: @event.client.email, subject: 'Appointment Confirmation - Seven Migration')
   end
+
+  def reminder_email
+    @event = params[:event]
+    @event_formated_date = @event.start.strftime('%a %b %d, %Y %I:%M %P')
+    mail(to: @event.client.email, subject: 'Appointment Reminder - Seven Migration')
+  end
 end
