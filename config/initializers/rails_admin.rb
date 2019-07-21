@@ -1,9 +1,18 @@
 RailsAdmin.config do |config|
-  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'TimetableEventType']
+  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'TimetableEventType', 'Appointment', 'EventService', 'EventType']
   config.main_app_name = ["Seven Migration", "- BackOffice"]
   config.total_columns_width = 2000
-
   ### Popular gems integration
+
+  config.navigation_static_links = {
+    'Agents Calendar' => '/admin_calendar',
+    'Multiple Bookings' => '/admin/event/new',
+    'Immi Account' => 'https://online.immi.gov.au/lusc/login',
+    'Monday' => 'https://sevenmigration.monday.com/',
+    'Small PDF' => 'https://smallpdf.com/',
+    'PayPal' => 'https://www.paypal.com/listing/transactions'
+  }
+  # config.navigation_static_label = "Others"
 
   ## == Devise ==
   config.authenticate_with do
@@ -68,7 +77,7 @@ RailsAdmin.config do |config|
     dashboard                     # mandatory
     index                         # mandatory
     new
-    # export
+    export
     bulk_delete
     show
     edit

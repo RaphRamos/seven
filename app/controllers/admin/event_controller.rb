@@ -42,6 +42,31 @@ class Admin::EventController < ApplicationController
     end
   end
 
+  def new
+  end
+
+  def create
+    agents = params[:agents]
+    start_date = params[:start_date].to_time
+    end_date = params[:end_date].to_time
+    admin_comment = params[:admin_comment]
+
+    events = agents.map do |agent_id|
+      e = Event.new(agent_id: agent_id, start: start_date, end: end_date, event_type_id: 1, appointment_id: 1,
+                   client_id: 1482, temporary: false, by_admin: true, admin_comment: admin_comment, event_service_id: 1)
+      e.save
+      e
+    end
+
+    if events.any? { |e| e.errors.present? }
+      @errors = events.first.errors.full_messages
+    else
+      @message = 'Block events successfully created!'
+    end
+
+    render :new
+  end
+
   def timetable
     agent_id = params[:agent_id]
     response = Timetable.where(agent_id: agent_id, activated: true).map do |tt|

@@ -10,6 +10,7 @@ class Event < ApplicationRecord
   accepts_nested_attributes_for :client
 
   validates :terms_of_service, acceptance: true, unless: :temporary
+  validates_presence_of :start, :end
   validates_associated :client
 
   def autosave_associated_records_for_client

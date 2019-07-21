@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-header">
+    <h5>Block Agenda</h5>
+  </div>
+  <div class="card-body">
+    <% if @message %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong><%= @message %></strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <% end %>
+    <% @errors&.each do |e| %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= e %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <% end %>
+    <%= form_tag(admin_event_index_path, method: "post") do |f| %>
+      <div class="form-group">
+        <h5>Agents</h5>
+        <%= select_tag("agents", options_from_collection_for_select(Agent.all, "id", "name", Agent.all.pluck(:id)), { class: 'form-control', multiple: true, style: "max-width: 300px;" } ) %>
+      </div>
+      <div class="form-group">
+        <h5>Reason</h5>
+        <%= text_field_tag(:admin_comment) %>
+      </div>
+      <div class="form-group row" style="max-width: 750px">
+        <div class="col-md-6">
+          <h5>Start</h5>
+          <%= text_field_tag(:start_date) %>
+        </div>
+        <div class="col-md-6">
+          <h5>End</h5>
+          <%= text_field_tag(:end_date) %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= submit_tag "Save", data: { confirm: "Are you sure?" } %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  $(function () {
+    $('#start_date').datetimepicker({
+      inline: true,
+      step: 30,
+      format: 'd/m/Y H:i',
+      allowBlank: false
+    });
+    $('#end_date').datetimepicker({
+      inline: true,
+      step: 30,
+      format: 'd/m/Y H:i',
+      allowBlank: false
+    });
+  });
+</script>

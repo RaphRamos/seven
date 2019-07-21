@@ -23,6 +23,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :admin do
+    resources :event, only: [:new, :create]
+  end
+
   resources :payment_notifications, only: [:create]
 
   get '/client_by_email', to: 'client#client_by_email'
