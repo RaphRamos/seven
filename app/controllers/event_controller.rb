@@ -40,10 +40,10 @@ class EventController < ApplicationController
   def register_booking
     client = create_or_find_client
     @new_booking_rule = _new_booking_rule?(client)
+    @bookings_count = client.events.where(temporary: false).count
 
     if @new_booking_rule
       @event = _new_booking(client)
-      @bookings_count = client.events.where(temporary: false).count
     else # Remove when old rule (free returns) is not valid anymore.
       event_service_id = params[:eventServiceRadio]
       agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
