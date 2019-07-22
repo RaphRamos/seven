@@ -1,5 +1,5 @@
 RailsAdmin.config do |config|
-  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'TimetableEventType', 'Appointment', 'EventService', 'EventType']
+  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'TimetableEventType']
   config.main_app_name = ["Seven Migration", "- BackOffice"]
   config.total_columns_width = 2000
   ### Popular gems integration
