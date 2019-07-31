@@ -6,4 +6,17 @@ class ClientController < ApplicationController
     render json: { client: client }
   end
 
+  def index
+    @filterrific = initialize_filterrific(
+      Client,
+      params[:filterrific]
+    ) or return
+    @clients = @filterrific.find.page(params[:page])
+ 
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
 end

@@ -21,6 +21,7 @@
 //= require fullcalendar/lang/en-au.js
 //= require jquery.smartWizard.min
 //= require jquery-ui.min
+//= require filterrific/filterrific-jquery
 //= require_tree .
 
 function clearCalendar() {

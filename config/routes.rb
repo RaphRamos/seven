@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :client
+
   namespace :admin do
     resources :event, only: [:new, :create]
   end
