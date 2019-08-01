@@ -155,7 +155,8 @@ class EventController < ApplicationController
 
     client = Client.find_or_create_by(email: email)
     client.update_attributes!(name: name, phone: phone, reference: reference,
-      location: location, videocall_details: videocall_details)
+      location: location, videocall_details: videocall_details, ip_address: request.remote_ip,
+      country: request.location.country, state: request.location.state)
 
     client
   end
