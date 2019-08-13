@@ -122,16 +122,3 @@ function filterAppointmentType(onshore) {
   }
   $("#event_appointment_id").trigger('change');
 };
-function userFromAU() {
-  $.ajax('http://ip-api.com/json')
-  .then(
-      function success(response) {
-          console.log('User\'s Location Data is ', response);
-          console.log('User\'s Country', response.country);
-          return response.county == 'Australia';
-      },
-      function fail(data, status) {
-          return 'error';
-      }
-  );
-};

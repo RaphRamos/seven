@@ -7,6 +7,8 @@ class Event < ApplicationRecord
   belongs_to :client
   belongs_to :event_service
 
+  has_one :payment
+
   accepts_nested_attributes_for :client
 
   validates :terms_of_service, acceptance: true, unless: :temporary
@@ -57,5 +59,9 @@ class Event < ApplicationRecord
          .or(Event.where('events.end > ? AND events.end < ?', event_start, event_end))
          .where(agent_id: agent_id)
          .count.positive?
+  end
+
+  def first_event?
+    client.events.order(:created_at).first.id == id
   end
 end

@@ -20,15 +20,15 @@
       <h5>Select Your Location</h5>
       <hr>
       <div class="form-check-inline">
-        <input type="radio" id="locationRadio1" name="locationRadio" class="custom-control-input" value="1" checked>
+        <input type="radio" id="locationRadio1" name="locationRadio" class="custom-control-input" value="1"  <%= offshore_user? ? 'disabled' : 'checked' %> >
         <label for="locationRadio1">Perth Only</label>
       </div>
       <div class="form-check-inline">
-        <input type="radio" id="locationRadio2" name="locationRadio" class="custom-control-input"  value="2">
+        <input type="radio" id="locationRadio2" name="locationRadio" class="custom-control-input"  value="2"  <%= offshore_user? ? 'disabled' : '' %> >
         <label for="locationRadio2">Australia</label>
       </div>
       <div class="form-check-inline">
-        <input type="radio" id="locationRadio3" name="locationRadio" class="custom-control-input"  value="3">
+        <input type="radio" id="locationRadio3" name="locationRadio" class="custom-control-input"  value="3" <%= offshore_user? ? 'checked' : 'disabled' %> >
         <label for="locationRadio3">Outside Australia</label>
       </div>
       <div class="row">
@@ -41,15 +41,15 @@
       <h5>Select a Consultation Type</h5>
       <hr>
       <div class="form-check-inline">
-        <input type="radio" id="eventTypeRadio1" name="eventTypeRadio" class="custom-control-input"  value="1" checked>
+        <input type="radio" id="eventTypeRadio1" name="eventTypeRadio" class="custom-control-input"  value="1" <%= offshore_user? ? 'disabled' : 'checked' %>>
         <label for="eventTypeRadio1" data-toggle="tooltip" title="Only in Perth" data-placement="bottom">In-Person</label>
       </div>
       <div class="form-check-inline">
-        <input type="radio" id="eventTypeRadio2" name="eventTypeRadio" class="custom-control-input"  value="2">
+        <input type="radio" id="eventTypeRadio2" name="eventTypeRadio" class="custom-control-input"  value="2" <%= offshore_user? ? 'checked' : '' %>>
         <label for="eventTypeRadio2">Video Call</label>
       </div>
       <div class="form-check-inline">
-        <input type="radio" id="eventTypeRadio3" name="eventTypeRadio" class="custom-control-input"  value="3">
+        <input type="radio" id="eventTypeRadio3" name="eventTypeRadio" class="custom-control-input"  value="3" <%= offshore_user? ? 'disabled' : '' %>>
         <label for="eventTypeRadio3" data-toggle="tooltip" title="Only within Australia" data-placement="bottom">Phone Call</label>
       </div>
     </div>
