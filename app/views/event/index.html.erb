@@ -75,7 +75,7 @@
     var AGENT = {
       CLAUDIO: {
         name: 'Claudio Garzini',
-        photo: '<%= asset_path 'claudio_edited.jpg' %>',
+        photo: '<%= asset_path 'claudio_edited_v2.png' %>',
         description: `
         <p class="text-justify"> Claudio is an Australian Migration Law graduate and Registered Migration Agent (MARN 1803676) who has been a valuable member of Seven Migration's team since 2016.</p>
         <p class="text-justify"> Prior to moving to Australia, Claudio worked for more than 6 years as an Education Consultant and Student Agency Manager in Brazil, his home country.</p>
@@ -89,12 +89,24 @@
         <p class="text-justify"> Originally from Brazil, Ana has been in Australia for more 12 years and, since her arrival, she has assisted more than 3,000 foreigners to reach their objectives here.</p>
         <p class="text-justify"> As Seven Migration’s Managing Director and lead Migration Agent, Ana has been responsible for countless successful visa applications.</p>
         `
+      },
+      ANA_LETICIA: {
+        name: 'Ana Leticia Gnavi',
+        photo: '<%= asset_path 'ana_leticia.png' %>',
+        description: `
+        <p class="text-justify"> Ana Leticia is an Australian Registered Migration Agent (MARN 1801467) who has been living in Perth, WA, since 2003.</p>
+        <p class="text-justify"> Having initiated a career in Economics and International Relations and Trade in her country of birth, Brazil, Ana completed a subsequent Masters Degree in International Relations at Curtin University in 2006.</p>
+        <p class="text-justify"> As a passionate and committed professional, Ana moved on to graduate, with high distinction, from a Graduate Certificate in Migration Law and Practice at the Australian National University in 2017 and has, since then, initiated a prosperous career as a Migration Agent in Australia.</p>
+        <p class="text-justify"> In addition to being a highly knowledgeable and technical professional, as a migrant herself, Ana is also aware of the journey migrants go through when establishing a new life in Australia and is, therefore, able to better assist them as a result of her own personal experience. </p>
+        <p class="text-justify"> Ana is also fluent English, Portuguese and Spanish speaker. </p>
+        `
       }
     };
 
     var AGENT_ENUM = {
       '1': 'ANA',
-      '2': 'CLAUDIO'
+      '2': 'CLAUDIO',
+      '4': 'ANA_LETICIA'
     };
 
     function buildAgentCode(data) {
