@@ -25,6 +25,60 @@
 </main>
 
 <script type="text/javascript">
+  function onLanguageChange() {
+    var lang = $('input[name="languageRadio"]:checked').val();
+
+    $($('input[name="agentRadio"]').get().reverse()).each(function() {
+      if ($(this).data('language').split(', ').includes(lang)){
+        $(this).attr('disabled', false);
+        $(this).labels().first().trigger('click');
+        // console.log('Agent Enabled:', $(this).val())
+      } else {
+        $(this).attr('disabled', true);
+        //  console.log('Agent Disabled:', $(this).val())
+      }
+    });
+
+    $($('input[name="officeLocationRadio"]').get().reverse()).each(function() {
+      if ($(this).data('language').split(', ').includes(lang)){
+        $(this).attr('disabled', false);
+        $(this).labels().first().trigger('click');
+        //  console.log('Office Enabled:', $(this).val())
+      } else {
+        $(this).attr('disabled', true);
+        //  console.log('Office Disabled:', $(this).val())
+      }
+    });
+
+    $($('input[name="eventServiceRadio"]').get().reverse()).each(function() {
+      if ($(this).data('language').split(', ').includes(lang)){
+        $(this).attr('disabled', false);
+        $(this).labels().first().trigger('click');
+        //  console.log('Service Enabled:', $(this).val())
+      } else {
+        $(this).attr('disabled', true);
+        //  console.log('Service Disabled:', $(this).val())
+      }
+    });
+  }
+
+  function onOfficeLocationChange() {
+    var loc = $('input[name="officeLocationRadio"]:checked').val();
+    var lang = $('input[name="languageRadio"]:checked').val();
+    $('#locationTimezone').html(loc);
+
+    $($('input[name="agentRadio"]').get().reverse()).each(function() {
+      var available_in_this_location = $(this).data('location').split(', ').includes(loc);
+      var available_in_this_language = $(this).data('language').split(', ').includes(lang);
+      if (available_in_this_location && available_in_this_language){
+        $(this).attr('disabled', false);
+        $(this).labels().first().trigger('click');
+      } else {
+        $(this).attr('disabled', true);
+      }
+    });
+  }
+
   function updateEventService(){
     var appType = $('input[name="eventServiceRadio"]:checked').val();
 
@@ -36,7 +90,7 @@
       $('#skills-section').removeClass('hide');
 
       $('label[for="agentRadio2"]').trigger('click');
-      $('#agentRadio1').attr('disabled', true);
+      // $('#agentRadio1').attr('disabled', true);
     } else {
       $('#migration-info-text').removeClass('hide');
       $('#skills-info-text').addClass('hide');
@@ -44,7 +98,7 @@
       $('#agent-section').removeClass('hide');
       $('#skills-section').addClass('hide');
 
-      $('#agentRadio1').attr('disabled', false);
+      // $('#agentRadio1').attr('disabled', false);
     }
 
     return true;
@@ -135,12 +189,13 @@
     var service = $('input[name="eventTypeRadio"]:checked').val();
     var email =   $('#clientEmail').val();
     var appType = $('input[name="eventServiceRadio"]:checked').val();
+    var officeLocation = $('input[name="officeLocationRadio"]:checked').val();
 
     if (appType === '1') {
       agent = '3';
     }
 
-    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email };
+    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email, officeLocation: officeLocation };
 
     $('#available-times-container').html('<i class="fas fa-spinner"></i>');
     $.get("/event/fetch_timetable", params).done(function(resp) {
@@ -171,12 +226,13 @@
     var email =   $('#clientEmail').val();
     var location = $('input[name="locationRadio"]:checked').val();
     var appType = $('input[name="eventServiceRadio"]:checked').val();
+    var officeLocation = $('input[name="officeLocationRadio"]:checked').val();
 
     if (appType === '1') {
       agent = '3';
     }
 
-    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email, location: location };
+    var params = { agent_id: agent, service_id: service, date: date, clientEmail: email, location: location, officeLocation: officeLocation };
 
     $.get("/event/fetch_blocked_days", params).done(function(resp) {
       $('#new_calendar').datepicker('setDatesDisabled', resp.blocked_days);
@@ -196,6 +252,14 @@
 
   $(document).ready(function(){
     updateAgent($('input[name="agentRadio"]:checked').val());
+
+    $('input[name="languageRadio"]').on('change', function() {
+      onLanguageChange();
+    });
+
+    $('input[name="officeLocationRadio"]').on('change', function() {
+      onOfficeLocationChange();
+    });
 
     $('input[name="eventServiceRadio"]').on('change', function() {
       updateEventService();
@@ -217,6 +281,8 @@
       getClientByEmail($(this).val());
     });
 
+    onLanguageChange();
+    onOfficeLocationChange();
     updateEventService();
 
     $('#smartwizard').smartWizard({

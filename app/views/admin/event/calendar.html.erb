@@ -1,8 +1,14 @@
 <main id="main">
   <div class="container">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
+        <%= label_tag :agent_id, "Agent", { style: "color: #474882; font-size: 1.4rem;" } %>
         <%= select_tag :agent_id, options_from_collection_for_select(@agents, 'id', 'name', @agents[0].id), { class: 'custom-select d-block w-100' } %>
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <%= label_tag :timezone, "Show bookings in Time Zone", { style: "color: #474882; font-size: 1.4rem;" } %>
+        <%= select_tag :timezone, options_from_collection_for_select(Location.available(false), 'name', 'name', 'Perth'), { class: 'custom-select d-block w-100' } %>
       </div>
     </div>
     <div class="row">
@@ -19,7 +25,8 @@
 <script>
 function loadTimetable(){
   var agentId = $("#agent_id").val();
-  $.get("/admin_timetable", { agent_id: agentId }).done(function(response) {
+  var timezone = $("#timezone").val();
+  $.get("/admin_timetable", { agent_id: agentId, timezone: timezone }).done(function(response) {
      eventCalendar(response);
    });
 };
@@ -29,14 +36,16 @@ function eventCalendar(timetable) {
     defaultView: 'agendaWeek',
     allDaySlot: false,
     height: 'auto',
-    timezone: 'Sydney',
     selectable: true,
     eventSources: [
       {
         url: '/admin_events',
         data: {
           agent_id: function() {
-            return $('#agent_id').val()
+            return $('#agent_id').val();
+          },
+          timezone: function() {
+            return $("#timezone").val();
           }
         }
       }
@@ -69,6 +78,10 @@ function postEvent(event){
 function onPageLoad(){
   loadTimetable();
   $('#agent_id').on('change', function(){
+    clearCalendar();
+    loadTimetable();
+  });
+  $('#timezone').on('change', function(){
     clearCalendar();
     loadTimetable();
   });

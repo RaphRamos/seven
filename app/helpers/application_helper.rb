@@ -13,6 +13,14 @@ module ApplicationHelper
   end
 
   def offshore_user?
-    request.location.country != 'AU'
+    request.location.country == 'AU'
+  end
+
+  def agent_languages
+    @agent_languages ||= Agent.languages.sort
+  end
+
+  def office_locations
+    @office_locations ||= Location.all.pluck(:name)
   end
 end

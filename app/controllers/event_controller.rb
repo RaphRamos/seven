@@ -5,6 +5,9 @@ class EventController < ApplicationController
     redirect_to booking.first and return if booking&.first&.present?
 
     @references = build_reference_list_ui
+
+    @ui_data = {
+    }
   end
 
   def fetch_timetable
@@ -12,8 +15,10 @@ class EventController < ApplicationController
     agent_id = params[:agent_id] # Skills assessment always agent id 3
     day = params[:date].to_date
     last_temp_event = _last_temp_event(params[:clientEmail])
+    office_location = Location.find_by_name(params[:officeLocation])
+    # debugger
 
-    agent_timetable = Timetable.build_available_slots(day, agent_id, service_id, last_temp_event)
+    agent_timetable = Timetable.build_available_slots(day, agent_id, service_id, last_temp_event, office_location)
 
     render json: { timetable: agent_timetable }
   end
@@ -25,9 +30,11 @@ class EventController < ApplicationController
     end_of_month =  params[:date].to_date + 2.months
     last_temp_event = _last_temp_event(params[:clientEmail])
     off_shore = params[:location] == '3' #offshore
+    office_location = Location.find_by_name(params[:officeLocation])
 
+    # debugger
     list_blocked_days = (start_of_month..end_of_month).to_a.map do |day|
-      timetable = Timetable.build_available_slots(day, agent_id, service_id, last_temp_event)
+      timetable = Timetable.build_available_slots(day, agent_id, service_id, last_temp_event, office_location)
       day.strftime('%d/%m/%Y') if timetable.empty? || (off_shore && _block_off_shore?(day))
     end.compact
 
@@ -47,7 +54,8 @@ class EventController < ApplicationController
     else # Remove when old rule (free returns) is not valid anymore.
       event_service_id = params[:eventServiceRadio]
       agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
-      start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]} +0800".to_time
+      office_location = Location.find_by_name(params[:officeLocationRadio])
+      start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.name)
       event_type_id = params[:eventTypeRadio]
       # Calculete correct fee
       fee = ['1', '2'].include?(client.location) ? :onshore : :offshore
@@ -73,12 +81,12 @@ class EventController < ApplicationController
       @event = if last_temp_event.present?
                  last_temp_event.update(agent_id: agent_id, event_type_id: event_type_id, event_service_id: event_service_id,
                                         start: start_booking, end: start_booking + duration, temporary: temporary_booking,
-                                        by_admin: false, appointment_id: appointment_id)
+                                        by_admin: false, appointment_id: appointment_id, location_id: office_location.id)
                  last_temp_event
                else
                  Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id,
                               start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false,
-                              appointment_id: appointment_id)
+                              appointment_id: appointment_id, location_id: office_location.id)
                end
     end
 
@@ -115,7 +123,8 @@ class EventController < ApplicationController
   def _new_booking(client)
     event_service_id = params[:eventServiceRadio]
     agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
-    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]} +0800".to_time
+    office_location = Location.find_by_name(params[:officeLocationRadio])
+    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.name)
     event_type_id = params[:eventTypeRadio]
     temporary_booking = !client.premium?
     duration = 60.minutes
@@ -126,12 +135,12 @@ class EventController < ApplicationController
     if last_temp_event.present?
       last_temp_event.update(agent_id: agent_id, event_type_id: event_type_id, event_service_id: event_service_id,
                              start: start_booking, end: start_booking + duration, temporary: temporary_booking,
-                             by_admin: false, appointment_id: appointment_id)
+                             by_admin: false, appointment_id: appointment_id, location_id: office_location.id)
       last_temp_event
     else
       Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id,
                    start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false,
-                   appointment_id: appointment_id)
+                   appointment_id: appointment_id, location_id: office_location.id)
     end
   end
 
@@ -151,7 +160,7 @@ class EventController < ApplicationController
     phone = params[:clientPhone]
     reference = params[:referenceSelector]
     videocall_details = "#{params[:videocallRadio]}: #{params[:clientVideocallId]}"
-    location = params[:locationRadio]
+    location = params[:officeLocationRadio]
 
     client = Client.find_or_create_by(email: email)
     client.update_attributes!(name: name, phone: phone, reference: reference,

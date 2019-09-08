@@ -1,6 +1,7 @@
 class Timetable < ApplicationRecord
   has_paper_trail
   belongs_to :agent
+  belongs_to :location
   has_many :timetable_event_types, dependent: :delete_all
   has_many :event_types, through: :timetable_event_types
 
@@ -27,7 +28,7 @@ class Timetable < ApplicationRecord
     end
   end
 
-  def self.build_busy_slots(day, agent_id, last_temp_event)
+  def self.build_busy_slots(day, agent_id, last_temp_event, location)
     events = Event.where('events.start < ? AND events.end >= ?', day.beginning_of_day, day.beginning_of_day)
                   .or(Event.where(start: day.beginning_of_day..day.end_of_day))
                   .or(Event.where(end: day.beginning_of_day..day.end_of_day))
@@ -42,12 +43,15 @@ class Timetable < ApplicationRecord
       first = '0:00'
       last = '23:59'
 
-      if event.start.between?(day.beginning_of_day, day.end_of_day)
-        first = event.start.strftime('%R')
+      event_start = event.start.in_time_zone(location.name)
+      event_end = event.start.in_time_zone(location.name)
+
+      if event_start.between?(day.beginning_of_day, day.end_of_day)
+        first = event_start.strftime('%R')
       end
 
-      if event.end.between?(day.beginning_of_day, day.end_of_day)
-        last = event.end.strftime('%R')
+      if event_end.between?(day.beginning_of_day, day.end_of_day)
+        last = event_end.strftime('%R')
       end
 
       start_time = first.to_time
@@ -61,15 +65,22 @@ class Timetable < ApplicationRecord
     busy_slots.uniq
   end
 
-  def self.build_available_slots(day, agent_id, event_type_id, last_temp_event)
+  def self.build_available_slots(day, agent_id, event_type_id, last_temp_event, location)
     slots = []
     timetables = Timetable.joins(:event_types)
-                          .where(agent_id: agent_id,
-                                 event_types: { id: event_type_id })
-                          .select { |tt| tt.dow.split(',').include?(day.wday.to_s) }
-    return slots if timetables.empty?
+                          .where('? BETWEEN from_date AND to_date', day)
+                          .where(agent_id: agent_id, event_types: { id: event_type_id })
+                          
+    if timetables.empty?
+      timetables = Timetable.joins(:event_types)
+                            .where(agent_id: agent_id, location: location, event_types: { id: event_type_id })
+                            .select { |tt| tt.from_date.nil? }
+    end
 
-    busy_slots = build_busy_slots(day, agent_id, last_temp_event)
+    timetables = timetables.select { |tt| tt.dow.split(',').include?(day.wday.to_s) }
+    return slots if timetables.empty? || timetables.any? { |tt| tt.location != location }
+
+    busy_slots = build_busy_slots(day, agent_id, last_temp_event, location)
     timetables.each do |timetable|
       start_time = timetable.start_time
 

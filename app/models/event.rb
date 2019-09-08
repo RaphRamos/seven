@@ -6,6 +6,7 @@ class Event < ApplicationRecord
   belongs_to :appointment
   belongs_to :client
   belongs_to :event_service
+  belongs_to :location
 
   has_one :payment
 

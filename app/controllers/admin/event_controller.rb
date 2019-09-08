@@ -2,7 +2,7 @@ class Admin::EventController < ApplicationController
   before_action :authenticate_admin!
 
   def calendar
-    @agents = Agent.all.order(:id)
+    @agents = Agent.all.order(:name)
   end
 
   def events
@@ -13,17 +13,18 @@ class Admin::EventController < ApplicationController
       .where(agent_id: agent.id)
     json = events.map do |e|
       event_color = if e.by_admin
-                      '#ffb84d'
+                      '#737476' # cinza
                     elsif e.temporary
-                      '#6fa026'
+                      '#0C481C' # verde
                     else
-                      '#474882'
+                      '#474882' # roxo
                     end
       title = e.admin_comment.blank? ? e.client.name : e.admin_comment
-      { title: "#{title}\n #{e.event_type.desc.split('Appointment ').second}",
-        start: e.start.in_time_zone(agent.time_zone),
-        end: e.end.in_time_zone(agent.time_zone),
+      { title: "#{'** ' if e.first_event?}#{title}\n #{_service_type_desc(e)} - #{e.location.name}",
+        start: e.start.in_time_zone(params[:timezone]),
+        end: e.end.in_time_zone(params[:timezone]),
         color: event_color,
+        textColor: e.first_event? ? '#D7C31D' : '#FFFFFF',
         id: e.id,
         url: rails_admin.edit_path(model_name: e.class.name, id: e.id) }
     end.to_json
@@ -76,5 +77,20 @@ class Admin::EventController < ApplicationController
       end
 
     render json: response.to_json
+  end
+
+  private
+
+  def _service_type_desc(event)
+    case event.event_type.id
+    when 1
+      'In Person'
+    when 2
+      'Video'
+    when 3
+      'Phone'
+    else
+      'xxx'
+    end
   end
 end

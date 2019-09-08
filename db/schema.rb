@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_27_113844) do
+ActiveRecord::Schema.define(version: 2019_09_08_093616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,15 @@ ActiveRecord::Schema.define(version: 2019_08_27_113844) do
     t.index ["unlock_token"], name: "index_admins_on_unlock_token", unique: true
   end
 
+  create_table "agent_locations", force: :cascade do |t|
+    t.bigint "agent_id", null: false
+    t.bigint "location_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_agent_locations_on_agent_id"
+    t.index ["location_id"], name: "index_agent_locations_on_location_id"
+  end
+
   create_table "agents", force: :cascade do |t|
     t.string "name", null: false
     t.string "display_name", null: false
@@ -44,6 +53,8 @@ ActiveRecord::Schema.define(version: 2019_08_27_113844) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "time_zone", default: "Perth"
+    t.string "language", default: "English, Portuguese"
+    t.boolean "active", default: true
   end
 
   create_table "appointments", force: :cascade do |t|
@@ -106,11 +117,21 @@ ActiveRecord::Schema.define(version: 2019_08_27_113844) do
     t.boolean "by_admin", default: true, null: false
     t.string "admin_comment"
     t.bigint "event_service_id"
+    t.bigint "location_id", default: 1
     t.index ["agent_id"], name: "index_events_on_agent_id"
     t.index ["appointment_id"], name: "index_events_on_appointment_id"
     t.index ["client_id"], name: "index_events_on_client_id"
     t.index ["event_service_id"], name: "index_events_on_event_service_id"
     t.index ["event_type_id"], name: "index_events_on_event_type_id"
+    t.index ["location_id"], name: "index_events_on_location_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "address", default: ""
   end
 
   create_table "payments", force: :cascade do |t|
@@ -142,7 +163,11 @@ ActiveRecord::Schema.define(version: 2019_08_27_113844) do
     t.boolean "activated", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "from_date"
+    t.date "to_date"
+    t.bigint "location_id"
     t.index ["agent_id"], name: "index_timetables_on_agent_id"
+    t.index ["location_id"], name: "index_timetables_on_location_id"
   end
 
   create_table "versions", force: :cascade do |t|
@@ -156,6 +181,8 @@ ActiveRecord::Schema.define(version: 2019_08_27_113844) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "agent_locations", "agents"
+  add_foreign_key "agent_locations", "locations"
   add_foreign_key "events", "agents"
   add_foreign_key "events", "appointments"
   add_foreign_key "events", "clients"

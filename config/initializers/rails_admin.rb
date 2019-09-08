@@ -56,7 +56,7 @@ RailsAdmin.config do |config|
   end
 
   config.model 'Event' do
-    include_fields :id, :client, :agent, :event_type, :appointment, :event_service, :temporary, :start, :end, :notes, :created_at, :updated_at, :admin_comment
+    include_fields :id, :client, :agent, :event_type, :appointment, :event_service, :location, :temporary, :start, :end, :notes, :created_at, :updated_at, :admin_comment
     field :client do
       nested_form false
     end
@@ -64,7 +64,7 @@ RailsAdmin.config do |config|
 
   config.model 'Timetable' do
     list do
-      include_fields :id, :agent, :dow, :start_time, :end_time, :activated, :timetable_event_types, :event_types
+      include_fields :id, :agent, :dow, :start_time, :end_time, :location, :activated, :timetable_event_types, :event_types
       field :dow do
         pretty_value do
           value&.split(',')&.map { |v| Timetable.dow_to_string(v) }&.join(', ')
