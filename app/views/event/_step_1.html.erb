@@ -1,28 +1,27 @@
 <div id="step-1" class="wizard-step-container">
   <form id='form-1'>
     <div class="form-group">
-      <h5>Select appointment language</h5>
-      <hr>
+      <h5>What's your preferred language?</h5>
       <% agent_languages.each_with_index do |lang, i| %>
         <div class="form-check-inline">
         <input type="radio" id="languageRadio<%= i %>" name="languageRadio" class="custom-control-input" value="<%= lang %>" <%= 'checked' if lang == 'English' %> >
           <label for="languageRadio<%= i %>"><%= lang %></label>
         </div>
       <% end %>
+      <hr>
     </div>
     <div class="form-group">
-      <h5>Select office location</h5>
-      <hr>
-      <% Location.available(offshore_user?()).each do |loc| %>
+      <h5>Choose one of the offices below:</h5>
+      <% Location.available.each do |loc| %>
         <div class="form-check-inline">
         <input type="radio" id="officeLocationRadio<%= loc.id %>" name="officeLocationRadio" class="custom-control-input" data-language="<%= loc.agents.pluck(:language).flat_map {|l| l.split(', ')}.uniq.join(', ') %>" value="<%= loc.name %>" <%= 'checked' if loc.name == 'Perth' %> >
           <label for="officeLocationRadio<%= loc.id %>"><%= loc.name %></label>
         </div>
       <% end %>
+      <hr>
     </div>
     <div class="form-group">
-      <h5>Select Your Service</h5>
-      <hr>
+      <h5>What service are you looking for?</h5>
       <div class="form-check-inline">
         <input type="radio" id="eventServiceRadio2" name="eventServiceRadio" class="custom-control-input" value="2" data-language="Portuguese, English, Spanish" checked>
         <label for="eventServiceRadio2">Migration Advice</label>
@@ -35,10 +34,10 @@
         <p id="migration-info-text" class="service-under-text">This service relates to the analysis of clients’ eligibility to Australian visas <strong>ONLY</strong>. Throughout Migration Advice consultations, our Registered Migration Agents will analyse your individual circumstances in order to provide you with a comprehensive migration plan. Please note, however, that, during these consultations, our Migration Agents <strong>WILL NOT</strong> be looking into skills assessment matters and their respective eligibility requirements. For that, please select ‘Skills Assessment Advice' on the above menu.</p>
         <p id="skills-info-text" class="service-under-text">This service relates to the analysis of clients’ skills assessment only. Throughout Skills Assessment Advice meetings, specialised professionals <strong>(who are not Registered Migration Agents)</strong> will provide you with an overview of how some of these processes work (including major steps and associated costs), before making a recommendation as to whether or not you should proceed with a particular application. Please note, however, that, during these consultations, our advisers <strong>WILL NOT</strong> be looking into visa matters and their respective eligibility requirements. For that, please select ‘Migration Advice' on the above menu.</p>
       </div>
+      <hr>
     </div>
     <div class="form-group">
-      <h5>Select a Consultation Type</h5>
-      <hr>
+      <h5>How would you like to meet?</h5>
       <div class="form-check-inline">
         <input type="radio" id="eventTypeRadio1" name="eventTypeRadio" class="custom-control-input"  value="1" <%= offshore_user? ? 'disabled' : 'checked' %>>
         <label for="eventTypeRadio1" data-toggle="tooltip" title="Only in Perth" data-placement="bottom">In-Person</label>
@@ -47,11 +46,11 @@
         <input type="radio" id="eventTypeRadio2" name="eventTypeRadio" class="custom-control-input"  value="2" <%= offshore_user? ? 'checked' : '' %>>
         <label for="eventTypeRadio2">Video Call</label>
       </div>
+      <hr>
     </div>
     <div id="agent-section">
       <div class="form-group">
-        <h5>Select a Migration Agent</h5>
-        <hr>
+        <h5>Agents available:</h5>
         <% (Agent.active.order(id: :asc) - [Agent.skill_advice]).each do |agent| %>
           <div class="form-check-inline">
             <input type="radio" id="agentRadio<%= agent.id %>" name="agentRadio" class="custom-control-input" value="<%= agent.id %>" data-language="<%= agent.language %>" data-location="<%= agent.locations.pluck(:name).join(', ') %>" <%= agent.id == 2 ? 'checked' : ''%> >
@@ -67,7 +66,6 @@
     <div id="skills-section">
       <div class="form-group">
         <h5>About Skills Assessment</h5>
-        <hr>
         <div class="media">
           <img class="mr-3 rounded-circle" src='<%= asset_path 'skills_assessment.jpg' %>'>
           <div class="media-body">
