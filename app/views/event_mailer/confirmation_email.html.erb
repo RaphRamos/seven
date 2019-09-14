@@ -15,31 +15,28 @@
               <p style="color:#788a95;font-size: 15px;margin: 10px 0px 15px; text-align: justify;">Your appointment has been successfully scheduled.</p>
               <p style="color:#788a95;font-size: 15px;margin: 10px 0px 15px; text-align: justify;">In preparation for your consultation, you will be required to provide us with the following documents:</P>
               <ul style="line-height: 16px;">
-                <li style="color:#788a95;font-size: 15px;margin: 10px 0px 15px;">A scanned copy of your passport (for clients in Australia only); and</li>
+                <li style="color:#788a95;font-size: 15px;margin: 10px 0px 15px;">A copy of your current visa (for clients in Australia only); and</li>
                 <li style="color:#788a95;font-size: 15px;margin: 10px 0px 15px;">A copy of your Curriculum Vitae (i.e., Resume).</li>
               </ul>
-              <p style="color:#788a95;font-size: 15px;margin: 10px 0px 15px; text-align: justify;">We would appreciate if you could please send the above documents to <a href="mailto:info@sevenmigration.com.au">info@sevenmigration.com.au</a> at least two days prior to your appointment.</p>
+              <p style="color:#788a95;font-size: 15px;margin: 10px 0px 15px; text-align: justify;">We would appreciate if you could please send the above documents to <a href="mailto:info@sevenmigration.com.au" style="color:#33c3ba; text-decoration:none;">info@sevenmigration.com.au</a> at least two days prior to your appointment.</p>
             </div>
             <div style="border-bottom: 1px solid #e5e5e5;margin-bottom: 20px;padding-bottom: 15px;">
               <div style="position: relative;display: inline-block;width: 100%;">
                 <label style="color:#788a95;font-size:15px;">When:&nbsp;</label>
-
-                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event_formated_date %> <strong>(Perth Timezone)</strong></p>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><strong><%= @event_formated_date %> (<%= @event.location.name%> Timezone)</strong></p>
               </div>
               <div style="position: relative;display: inline-block;width: 100%;">
                 <label style="color:#788a95;font-size:15px;"><%= "#{@event.event_service.desc}" %>:&nbsp;</label>
-                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.event_type.desc %></p>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><strong><%= @event.event_type.desc %></strong></p>
               </div>
               <div style="position: relative;display: inline-block;width: 100%;">
                 <label style="color:#788a95;font-size:15px;">Specialist Name:&nbsp;</label>
-                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.agent.name %></p>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><strong><%= @event.agent.name %></strong></p>
               </div>
-
               <div style="position: relative;display: inline-block;width: 100%;word-wrap: break-word;">
                 <label style="color:#788a95;font-size:15px;">Booking ID:&nbsp;</label>
-                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><%= @event.id %></p>
+                <p style="display: inline-block;margin: 0;color:#637374;font-size:15px;"><strong><%= @event.id %></strong></p>
               </div>
-
             </div>
             <div style="border-bottom: 1px solid #e5e5e5;margin-bottom: 20px;padding-bottom: 15px;">
               <p style="color:#788a95;font-size: 15px;margin: 10px 0px 15px; text-align: justify;">Please note our team will contact you directly on the date of your consultation, so there is no need for you to take any action before the time of your appointment.</p>
@@ -54,14 +51,15 @@
           <td style="background-color:rgba(241, 245, 247, 0.5);padding:20px;border-top-right-radius: 7px;border-bottom-right-radius: 7px;">
             <div style="width: 158px; line-height:0px;padding : 2px;"><img src="http://lh3.googleusercontent.com/-3Zv7qew1Oqdq8rp1nJHClSfOShxDO25FD5OrmWqWPmj223Fh_M9DFDOQKlbegvPFFb5nhKiYqbAjrjdrvM8PrmaHjvbvwGjMJo=s250" style="height: auto; width: 158px;border-radius: 5px;margin-bottom: 20px;"/></div>
 
-            <div style="color:#4e5b63;width:150px;">Seven Migration</div>
+            <div style="color:#4e5b63;width:150px;"><%= @event.location.office_name %></div>
             <dl style="margin: 0px 0px 20px 0px;color:#95a5a6;line-height: 20px;width: 150px;">
-              <dd style="margin:0 0 5px 0;">Level 3, 23 Barrack Street,
-                <br/>Perth,
-                <br/>WA, 6000<br/>61677000</dd>
+              <dd style="margin:0 0 5px 0;"><%= @event.location.address%>,
+                <br/><%= @event.location.city%>,
+                <br/><%= @event.location.state%>, <%= @event.location.postcode%>
+                <br/><%= @event.location.phone%></dd>
               <a href="mailto:info@sevenmigration.com.au" style="color:#33c3ba; text-decoration:none;">Email</a>
-              <a href="http://www.sevenmigration.com.au" style="display: block;margin:0 0 5px 0; cursor: pointer; text-decoration: none;color: #33c3ba;">View Website</a>
-              <a href="http://maps.google.com/?q=Level+3,+23+Barrack+Street,+Perth,+WA,+6000" target="_blank;" style=" color:#33c3ba; text-decoration: none;display: inline-block;width: 100%;">Get Directions</a>
+              <a href="http://www.sevenmigration.com.au" style="display: block; cursor: pointer; text-decoration: none;color: #33c3ba;">View Website</a>
+              <a href="<%= "http://maps.google.com/?q=#{@event.location.address},+#{@event.location.city},+#{@event.location.state},+#{@event.location.postcode}" %>" target="_blank;" style=" color:#33c3ba; text-decoration: none;display: inline-block;width: 100%;">Get Directions</a>
             </dl><br/>
           </td>
 

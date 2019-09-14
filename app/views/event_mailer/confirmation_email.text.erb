@@ -5,13 +5,13 @@ Hi <%= @event.client.name %>,
 Your appointment has been successfully scheduled.
 
 In preparation for your consultation, you will be required to provide us with the following documents:
-  * A scanned copy of your passport (for clients in Australia only); and
+  * A copy of your current visa (for clients in Australia only); and
   * A copy of your Curriculum Vitae (i.e., Resume).
 
 We would appreciate if you could please send the above documents to info@sevenmigration.com.au at least two days prior to your appointment.
 
-When:  <%= @event_formated_date %> (Perth Timezone)
-Service: <%= "#{@event.event_service.desc}: (#{@event.event_type.desc})" %>
+When:  <%= @event_formated_date %> (<%= @event.location.name %> Timezone)
+<%= @event.event_service.desc %>: <%= @event.event_type.desc %>
 Specialist Name: <%= @event.agent.name %>
 Booking ID: <%= @event.id %>
 
@@ -19,7 +19,3 @@ Please note our team will contact you directly on the date of your consultation,
 
 Thank you,
 Seven Migration.
-
-Always use a Registered Migration Agent. Our agents are Registered with the OMARA – Office of the Migration Agents Registration Authority. Registered Agents are bound by a Code of Conduct to protect your rights as a client. You can access the code here
-
-This is an automatic email from Seven Migration, please do not reply.

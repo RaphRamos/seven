@@ -1,5 +1,5 @@
 RailsAdmin.config do |config|
-  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'TimetableEventType']
+  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'TimetableEventType', 'AgentLocation']
   config.main_app_name = ["Seven Migration", "- BackOffice"]
   config.total_columns_width = 2000
   ### Popular gems integration
@@ -49,14 +49,18 @@ RailsAdmin.config do |config|
   config.show_gravatar = false
 
   config.model 'Client' do
-    exclude_fields :events
+    exclude_fields :events, :created_at, :updated_at
     field :notes do
       read_only true
     end
   end
 
+  config.model 'Agent' do
+    include_fields :id, :name, :time_zone, :language, :locations, :active
+  end
+
   config.model 'Event' do
-    include_fields :id, :client, :agent, :event_type, :appointment, :event_service, :location, :temporary, :start, :end, :notes, :created_at, :updated_at, :admin_comment
+    include_fields :id, :client, :agent, :event_type, :appointment, :event_service, :location, :temporary, :start, :end, :notes, :created_at, :updated_at, :language, :offshore, :admin_comment
     field :client do
       nested_form false
     end

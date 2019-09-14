@@ -20,7 +20,7 @@ class Admin::EventController < ApplicationController
                       '#474882' # roxo
                     end
       title = e.admin_comment.blank? ? e.client.name : e.admin_comment
-      { title: "#{'** ' if e.first_event?}#{title}\n #{_service_type_desc(e)} - #{e.location.name}",
+      { title: "#{'** ' if e.first_event?}#{title}\n #{_service_type_desc(e)} - #{e.location.name} (#{e.language[0..2]})",
         start: e.start.in_time_zone(params[:timezone]),
         end: e.end.in_time_zone(params[:timezone]),
         color: event_color,

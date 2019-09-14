@@ -55,6 +55,7 @@ class EventController < ApplicationController
       event_service_id = params[:eventServiceRadio]
       agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
       office_location = Location.find_by_name(params[:officeLocationRadio])
+      language = params[:languageRadio]
       start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.name)
       event_type_id = params[:eventTypeRadio]
       # Calculete correct fee
@@ -81,12 +82,13 @@ class EventController < ApplicationController
       @event = if last_temp_event.present?
                  last_temp_event.update(agent_id: agent_id, event_type_id: event_type_id, event_service_id: event_service_id,
                                         start: start_booking, end: start_booking + duration, temporary: temporary_booking,
-                                        by_admin: false, appointment_id: appointment_id, location_id: office_location.id)
+                                        by_admin: false, appointment_id: appointment_id, location_id: office_location.id,
+                                        language: language, offshore: _is_request_offshore?())
                  last_temp_event
                else
                  Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id,
                               start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false,
-                              appointment_id: appointment_id, location_id: office_location.id)
+                              appointment_id: appointment_id, location_id: office_location.id, language: language, offshore: _is_request_offshore?())
                end
     end
 
@@ -124,6 +126,7 @@ class EventController < ApplicationController
     event_service_id = params[:eventServiceRadio]
     agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
     office_location = Location.find_by_name(params[:officeLocationRadio])
+    language = params[:languageRadio]
     start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.name)
     event_type_id = params[:eventTypeRadio]
     temporary_booking = !client.premium?
@@ -135,12 +138,13 @@ class EventController < ApplicationController
     if last_temp_event.present?
       last_temp_event.update(agent_id: agent_id, event_type_id: event_type_id, event_service_id: event_service_id,
                              start: start_booking, end: start_booking + duration, temporary: temporary_booking,
-                             by_admin: false, appointment_id: appointment_id, location_id: office_location.id)
+                             by_admin: false, appointment_id: appointment_id, location_id: office_location.id,
+                             language: language, offshore: _is_request_offshore?())
       last_temp_event
     else
       Event.create(agent_id: agent_id, event_type_id: event_type_id, client_id: client.id, event_service_id: event_service_id,
                    start: start_booking, end: start_booking + duration, temporary: temporary_booking, by_admin: false,
-                   appointment_id: appointment_id, location_id: office_location.id)
+                   appointment_id: appointment_id, location_id: office_location.id, language: language, offshore: _is_request_offshore?())
     end
   end
 
@@ -198,5 +202,9 @@ class EventController < ApplicationController
     else
       false
     end
+  end
+
+  def _is_request_offshore?
+    request.location.country != 'AU'
   end
 end
