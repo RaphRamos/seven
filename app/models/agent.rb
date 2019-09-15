@@ -8,7 +8,7 @@ class Agent < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   def self.languages
-    Agent.active.pluck(:language).flat_map { |l| l.split(', ') }.map(&:capitalize).uniq
+    Agent.active.pluck(:language).flat_map { |l| l.split(', ') }.map(&:capitalize).uniq.sort
   end
 
   def self.skill_advice
