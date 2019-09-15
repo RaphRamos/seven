@@ -8,7 +8,7 @@
       <div class="col-md-4"></div>
       <div class="col-md-4">
         <%= label_tag :timezone, "Show bookings in Time Zone", { style: "color: #474882; font-size: 1.4rem;" } %>
-        <%= select_tag :timezone, options_from_collection_for_select(Location.available(false), 'name', 'name', 'Perth'), { class: 'custom-select d-block w-100' } %>
+        <%= select_tag :timezone, options_from_collection_for_select(Location.available, 'name', 'name', 'Perth'), { class: 'custom-select d-block w-100' } %>
       </div>
     </div>
     <div class="row">
