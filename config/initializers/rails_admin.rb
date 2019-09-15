@@ -55,10 +55,6 @@ RailsAdmin.config do |config|
     end
   end
 
-  config.model 'Agent' do
-    include_fields :id, :name, :time_zone, :language, :locations, :active
-  end
-
   config.model 'Event' do
     include_fields :id, :client, :agent, :event_type, :appointment, :event_service, :location, :temporary, :start, :end, :notes, :created_at, :updated_at, :language, :offshore, :admin_comment
     field :client do
