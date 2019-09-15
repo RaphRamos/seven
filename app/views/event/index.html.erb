@@ -51,10 +51,15 @@
     });
 
     $($('input[name="eventServiceRadio"]').get().reverse()).each(function() {
+      var loc = $('input[name="officeLocationRadio"]:checked').val();
       if ($(this).data('language').split(', ').includes(lang)){
-        $(this).attr('disabled', false);
-        $(this).labels().first().trigger('click');
-        //  console.log('Service Enabled:', $(this).val())
+        console.log($(this).attr('id'), loc);
+        if ($(this).attr('id') === 'eventServiceRadio1' && loc !== 'Perth') {
+          $('#eventServiceRadio1').attr('disabled', true);
+        } else {
+          $(this).attr('disabled', false);
+          $(this).labels().first().trigger('click');
+        }
       } else {
         $(this).attr('disabled', true);
         //  console.log('Service Disabled:', $(this).val())
@@ -77,6 +82,12 @@
         $(this).attr('disabled', true);
       }
     });
+
+    if (loc == 'Perth' && ['English', 'Portuguese'].includes(lang)) {
+      $('#eventServiceRadio1').attr('disabled', false);
+    } else {
+      $('#eventServiceRadio1').attr('disabled', true);
+    }
   }
 
   function updateEventService(){

@@ -16,11 +16,11 @@
           <hr>
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-9">
 
               <div class="row">
                 <div class="col-md-3">Date and Time:</div>
-                <div class="col-md-9"><b><%= @booking.start.in_time_zone.strftime '%d/%b/%Y - %I:%M %P' %></b> (Perth Timezone)</div>
+                <div class="col-md-9"><b><%= @booking.start.in_time_zone(@booking.location.name).strftime '%d/%b/%Y - %I:%M %P' %></b> (<%= @booking&.location&.name || 'Perth' %> Timezone)</div>
               </div>
 
               <div class="row">
@@ -29,12 +29,12 @@
               </div>
 
               <div class="row">
-                <div class="col-md-3">Service:</div>
+                <div class="col-md-3"><%= @booking.event_service.desc %>:</div>
                 <div class="col-md-9"><b><%= @booking.event_type.desc %></b></div>
               </div>
 
             </div>
-            <div class="col-md-6"></div>
+            <div class="col-md-3"></div>
           </div>
 
           <br>
@@ -45,7 +45,7 @@
           </p>
           <ul>
             <li>
-              <p style="margin-bottom: 0;">A scanned copy of your passport (for clients in Australia <b>only</b>); and</p>
+              <p style="margin-bottom: 0;">A copy of your current visa (for clients in Australia only); and</p>
             </li>
             <li>
               <p>A copy of your Curriculum Vitae (i.e., Resume).</p>
