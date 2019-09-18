@@ -69,11 +69,11 @@ class Timetable < ApplicationRecord
     slots = []
     timetables = Timetable.joins(:event_types)
                           .where('? BETWEEN from_date AND to_date', day)
-                          .where(agent_id: agent_id, event_types: { id: event_type_id })
+                          .where(agent_id: agent_id, event_types: { id: event_type_id }, activated: true)
                           
     if timetables.empty?
       timetables = Timetable.joins(:event_types)
-                            .where(agent_id: agent_id, location: location, event_types: { id: event_type_id })
+                            .where(agent_id: agent_id, location: location, event_types: { id: event_type_id }, activated: true)
                             .select { |tt| tt.from_date.nil? }
     end
 

@@ -53,7 +53,7 @@
     $($('input[name="eventServiceRadio"]').get().reverse()).each(function() {
       var loc = $('input[name="officeLocationRadio"]:checked').val();
       if ($(this).data('language').split(', ').includes(lang)){
-        console.log($(this).attr('id'), loc);
+        // console.log($(this).attr('id'), loc);
         if ($(this).attr('id') === 'eventServiceRadio1' && loc !== 'Perth') {
           $('#eventServiceRadio1').attr('disabled', true);
         } else {
