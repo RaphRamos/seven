@@ -33,8 +33,9 @@ class Admin::EventController < ApplicationController
 
   def update
     event = Event.find(params[:event_id])
-    event.start = params[:event_start]
-    event.end = params[:event_end]
+    offset = ActiveSupport::TimeZone[event.location.name].formatted_offset(false)
+    event.start = "#{params[:event_start]} #{offset}"
+    event.end = "#{params[:event_end]} #{offset}"
 
     if event.save(validate: false)
       render json: :ok
@@ -44,6 +45,10 @@ class Admin::EventController < ApplicationController
   end
 
   def new
+  end
+
+  def new_by_admin
+    debugger
   end
 
   def create
