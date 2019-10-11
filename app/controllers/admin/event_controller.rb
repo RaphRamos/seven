@@ -7,10 +7,12 @@ class Admin::EventController < ApplicationController
 
   def events
     agent = Agent.find(params[:agent_id])
-    events = Event.where('events.start < ? AND events.end >= ?', params[:start].to_date,  params[:start].to_date)
-      .or(Event.where(start: params[:start].to_date..params[:end].to_date))
-      .or(Event.where(end: params[:start].to_date..params[:end].to_date))
-      .where(agent_id: agent.id)
+    start_of_week = params[:start].to_date.beginning_of_week - 1.day
+    end_of_week = params[:end].to_date.end_of_week
+    events = Event.where('events.start < ? AND events.end >= ?', start_of_week,  start_of_week)
+                  .or(Event.where(start: start_of_week..end_of_week))
+                  .or(Event.where(end: start_of_week..end_of_week))
+                  .where(agent_id: agent.id)
     json = events.map do |e|
       event_color = if e.by_admin
                       '#737476' # cinza
@@ -33,7 +35,7 @@ class Admin::EventController < ApplicationController
 
   def update
     event = Event.find(params[:event_id])
-    offset = ActiveSupport::TimeZone[event.location.name].formatted_offset(false)
+    offset = Time.now.in_time_zone(event.location.name).formatted_offset(false)
     event.start = "#{params[:event_start]} #{offset}"
     event.end = "#{params[:event_end]} #{offset}"
 
