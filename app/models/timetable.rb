@@ -94,6 +94,23 @@ class Timetable < ApplicationRecord
     slots.sort
   end
 
+  def self.build_timetable(day, agent_id)
+    timetables = Timetable.where(agent_id: agent_id, activated: true)
+                          .where('? BETWEEN from_date AND to_date', day)
+
+    timetables = Timetable.where(agent_id: agent_id, activated: true, from_date: nil) unless timetables.present?
+
+    timetables.map do |tt|
+      if day.wday.in?(tt.dow.split(',').map(&:to_i))
+        { 
+          start: tt.start_time.strftime('%R'), 
+          end: tt.end_time.strftime('%R'), 
+          dow: [day.wday]
+        }
+      end
+    end.compact
+  end
+
   private
 
   # Rails Admin esta repassando a hora da tela como se fosse UTC, removendo 8 horas fica horario de Perth

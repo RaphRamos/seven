@@ -23,40 +23,35 @@
   <%= hidden_field_tag :event_end %>
 <% end %>
 <script>
-function loadTimetable(){
-  var agentId = $("#agent_id").val();
-  var timezone = $("#timezone").val();
-  $.get("/admin_timetable", { agent_id: agentId, timezone: timezone }).done(function(response) {
-     eventCalendar(response);
-   });
-};
-function eventCalendar(timetable) {
+function eventCalendar() {
   $(".calendar-message").hide();
   return $('#event_calendar').fullCalendar({
     defaultView: 'agendaWeek',
     allDaySlot: false,
     height: 'auto',
     selectable: true,
-    eventSources: [
-      {
-        url: '/admin_events',
-        data: {
-          agent_id: function() {
-            return $('#agent_id').val();
-          },
-          timezone: function() {
-            return $("#timezone").val();
-          }
+    events: {
+      url: '/admin_events',
+      data: {
+        agent_id: function() {
+          return $('#agent_id').val();
+        },
+        timezone: function() {
+          return $("#timezone").val();
         }
+      },
+      success: function(data, status, response) {
+        $('#event_calendar').fullCalendar('option', {
+            businessHours: data[data.length -1]
+        });
       }
-    ],
+    },
     selectOverlap: false,
     hiddenDays: [0, 6],
     minTime: '06:00:00',
     maxTime: '21:00:00',
     nowIndicator: true,
     editable: true,
-    businessHours: timetable,
     eventDrop: function (event, delta, revertFunc, jsEvent, ui, view){
       postEvent(event);
     },
@@ -76,14 +71,14 @@ function postEvent(event){
   );
 };
 function onPageLoad(){
-  loadTimetable();
+   eventCalendar();
   $('#agent_id').on('change', function(){
     clearCalendar();
-    loadTimetable();
+    eventCalendar();
   });
   $('#timezone').on('change', function(){
     clearCalendar();
-    loadTimetable();
+    eventCalendar();
   });
 };
 $(document).on('turbolinks:load', onPageLoad);

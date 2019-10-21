@@ -23,6 +23,5 @@ Rails.application.routes.draw do
   get '/admin_calendar', to: 'admin/event#calendar'
   get '/admin_events', to: 'admin/event#events'
   post '/admin_events', to: 'admin/event#update'
-  get '/admin_timetable', to: 'admin/event#timetable'
 
 end

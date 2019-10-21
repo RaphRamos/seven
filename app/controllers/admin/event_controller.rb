@@ -29,8 +29,11 @@ class Admin::EventController < ApplicationController
         textColor: e.first_event? ? '#D7C31D' : '#FFFFFF',
         id: e.id,
         url: rails_admin.edit_path(model_name: e.class.name, id: e.id) }
-    end.to_json
-    render json: json
+    end
+
+    json << (start_of_week..end_of_week).flat_map { |day| Timetable.build_timetable(day, agent)}.compact
+
+    render json: json.to_json
   end
 
   def update
@@ -73,17 +76,6 @@ class Admin::EventController < ApplicationController
     end
 
     render :new
-  end
-
-  def timetable
-    agent_id = params[:agent_id]
-    response = Timetable.where(agent_id: agent_id, activated: true).map do |tt|
-        { start: tt.start_time.strftime('%R'),
-          end: tt.end_time.strftime('%R'),
-          dow: tt.dow.split(',').map(&:to_i) }
-      end
-
-    render json: response.to_json
   end
 
   private
