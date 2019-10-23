@@ -9,6 +9,7 @@ class Admin::EventController < ApplicationController
     agent = Agent.find(params[:agent_id])
     start_of_week = params[:start].to_date.beginning_of_week - 1.day
     end_of_week = params[:end].to_date.end_of_week
+    office_location = Location.find_by_name(params[:timezone])
     events = Event.where('events.start < ? AND events.end >= ?', start_of_week,  start_of_week)
                   .or(Event.where(start: start_of_week..end_of_week))
                   .or(Event.where(end: start_of_week..end_of_week))
@@ -23,8 +24,8 @@ class Admin::EventController < ApplicationController
                     end
       title = e.admin_comment.blank? ? e.client.name : e.admin_comment
       { title: "#{'** ' if e.first_event?}#{title}\n #{_service_type_desc(e)} - #{e.location.name} (#{e.language[0..2]})",
-        start: e.start.in_time_zone(params[:timezone]),
-        end: e.end.in_time_zone(params[:timezone]),
+        start: e.start.in_time_zone(office_location.timezone),
+        end: e.end.in_time_zone(office_location.timezone),
         color: event_color,
         textColor: e.first_event? ? '#D7C31D' : '#FFFFFF',
         id: e.id,
