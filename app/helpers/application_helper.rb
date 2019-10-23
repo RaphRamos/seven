@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def offshore_user?
-    request.location.country != 'AU'
+    request.location.country == 'AU'
   end
 
   def agent_languages

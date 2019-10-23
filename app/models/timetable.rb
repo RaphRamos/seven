@@ -43,8 +43,8 @@ class Timetable < ApplicationRecord
       first = '0:00'
       last = '23:59'
 
-      event_start = event.start.in_time_zone(location.name)
-      event_end = event.end.in_time_zone(location.name)
+      event_start = event.start.in_time_zone(location.timezone)
+      event_end = event.end.in_time_zone(location.timezone)
 
       if event_start.between?(day.beginning_of_day, day.end_of_day)
         first = event_start.strftime('%R')

@@ -56,7 +56,7 @@ class EventController < ApplicationController
       agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
       office_location = Location.find_by_name(params[:officeLocationRadio])
       language = params[:languageRadio]
-      start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.name)
+      start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.timezone)
       event_type_id = params[:eventTypeRadio]
       # Calculete correct fee
       fee = ['1', '2'].include?(client.location) ? :onshore : :offshore
@@ -127,7 +127,7 @@ class EventController < ApplicationController
     agent_id = event_service_id == '1' ? 3 : params[:agentRadio] # Skills assessment always agent id 3
     office_location = Location.find_by_name(params[:officeLocationRadio])
     language = params[:languageRadio]
-    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.name)
+    start_booking = "#{params[:selectedDate]} #{params[:availableTimeRadio]}".in_time_zone(office_location.timezone)
     event_type_id = params[:eventTypeRadio]
     temporary_booking = !client.premium?
     duration = 60.minutes
