@@ -39,7 +39,7 @@ class Admin::EventController < ApplicationController
 
   def update
     event = Event.find(params[:event_id])
-    offset = Time.now.in_time_zone(event.location.name).formatted_offset(false)
+    offset = Time.now.in_time_zone(event.location.timezone).formatted_offset(false)
     event.start = "#{params[:event_start]} #{offset}"
     event.end = "#{params[:event_end]} #{offset}"
 
