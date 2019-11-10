@@ -67,9 +67,8 @@ class Timetable < ApplicationRecord
 
   def self.build_available_slots(day, agent_id, event_type_id, last_temp_event, location)
     slots = []
-    timetables = Timetable.joins(:event_types)
-                          .where('? BETWEEN from_date AND to_date', day)
-                          .where(agent_id: agent_id, event_types: { id: event_type_id }, activated: true)
+    timetables = Timetable.where('? BETWEEN from_date AND to_date', day)
+                          .where(agent_id: agent_id, activated: true)
                           
     if timetables.empty?
       timetables = Timetable.joins(:event_types)
@@ -78,7 +77,7 @@ class Timetable < ApplicationRecord
     end
 
     timetables = timetables.select { |tt| tt.dow.split(',').include?(day.wday.to_s) }
-    return slots if timetables.empty? || timetables.any? { |tt| tt.location != location }
+    return slots if timetables.empty? || timetables.any? { |tt| tt.location != location || !event_type_id.in?(tt.event_type_ids) }
 
     busy_slots = build_busy_slots(day, agent_id, last_temp_event, location)
     timetables.each do |timetable|
