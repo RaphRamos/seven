@@ -77,7 +77,8 @@ class Timetable < ApplicationRecord
     end
 
     timetables = timetables.select { |tt| tt.dow.split(',').include?(day.wday.to_s) }
-    return slots if timetables.empty? || timetables.any? { |tt| tt.location != location || !event_type_id.in?(tt.event_type_ids) }
+    timetables = timetables.select { |tt| event_type_id.to_i.in?(tt.event_type_ids) }
+    return slots if timetables.empty? || timetables.any? { |tt| tt.location != location }
 
     busy_slots = build_busy_slots(day, agent_id, last_temp_event, location)
     timetables.each do |timetable|
