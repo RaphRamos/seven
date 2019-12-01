@@ -58,6 +58,7 @@ h1, h2, h3, h4, h5 {
   display: -ms-flex;
   display: flex;
   width: 100%;
+	display: none;
 
   &.sticky {
     position: sticky;
@@ -645,6 +646,7 @@ img {
   font-size: 13px;
   color: #777;
   padding: 20px 0;
+	display: none;
 }
 
 
