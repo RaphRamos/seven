@@ -809,6 +809,9 @@ select, input {
 .fixedContainer{
   max-width: 1250px !important;
   margin: 0 auto;
+	&>h3 {
+		display: none;
+	}
 }
 
 
