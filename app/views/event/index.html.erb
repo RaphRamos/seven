@@ -193,6 +193,27 @@
         <p class="text-justify"> Passionate about customer service and thrilled with the opportunity to help individuals obtain different visas to Australia, Juliana developed great knowledge and passion for Migration law and became an RMA herself in 2015 after graduating at Victoria University.</p>
         <p class="text-justify"> Ahead of Seven Migration in NSW, Juliana is the new addition to our team of RMA’s and will be too responsible for guiding our clientele towards their migration dreams to Australia.</p>
         `
+      },
+      AMANDA: {
+        name: 'Amanda Tsui',
+        photo: '<%= asset_path 'amanda_edited.jpg' %>',
+        description: `
+        <p class="text-justify"> Amanda Tsui is a Registered Migration Agent (MARN 1801087) who is passionate and committed to assisting clients in their migration dreams to Australia.</p>
+        <p class="text-justify"> Originally from Hong Kong, Amanda lived in Singapore before coming to Australia as an international student for her university studies in Commerce and Law.</p>
+        <p class="text-justify"> Amanda’s interest in Migration Law came from her love of the law and her desire to help others to migrate to Australia like herself. After completing a  Bachelor of Commerce (Accounting) (Honours), a Bachelor of Laws and Legal Practice (Honours) and a Masters in Taxation, Amanda furthered her studies in Australia by completing a Graduate Certificate of Migration Law and Practice in 2017.</p>
+        <p class="text-justify"> Since becoming a RMA in 2018, she has specialised in several skilled and business investor visas and has used her experience as a lawyer working in different areas of the law to expand her professional repertoire and extend practice across multiple fields, becoming a leading, all-round legal practitioner in South Australia.</p>
+        <p class="text-justify"> Amanda is also a fluent English, Mandarin and Cantonese speaker.</p>
+        `
+      },
+      MARIANA: {
+        name: 'Mariana Alcantara',
+        photo: '<%= asset_path 'mariana_edited.jpg' %>',
+        description: `
+        <p class="text-justify"> Mariana Alcantara is an Australian Registered Migration Agent (MARN 1801570) who is passionate about migration law and international relations.</p>
+        <p class="text-justify"> Born in El Salvador, Mariana was raised in Australia and has managed to cultivate and maintain strong cultural ties to both countries over the years.</p>
+        <p class="text-justify"> Fluent in Spanish and English as well as able to confidently understand Portuguese, Mariana successfully completed a Bachelor Degree and a Master Degree in International Studies at the University of South Australia in 2006 and 2008 and later graduated from a Graduate Certificate in Migration Law at the Australian National University.</p>
+        <p class="text-justify"> As a migration agent based in Adelaide, SA, Mariana prides herself on providing outstanding professional and customer service to an ever-increasing client portfolio and is committed to assisting her loyal clientele to reach their migration goals in Australia.</p>
+        `
       }
     };
 
@@ -200,7 +221,9 @@
       '1': 'ANA',
       '2': 'CLAUDIO',
       '6': 'ANA_LETICIA',
-      '7': 'JULIANA'
+      '7': 'JULIANA',
+      '8': 'AMANDA',
+      '9': 'MARIANA' 
     };
 
     function buildAgentCode(data) {
@@ -218,7 +241,6 @@
     var agentData =  AGENT[selectedAgent]
 
     if (agentData == null) {
-      console.error('no agent found')
       return false
     }
     $('#agentMedia').html(buildAgentCode(agentData));
