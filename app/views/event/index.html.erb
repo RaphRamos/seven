@@ -50,7 +50,9 @@
     $($('input[name="agentRadio"]').get().reverse()).each(function() {
       if ($(this).data('language').split(', ').includes(lang)){
         $(this).attr('disabled', false);
+        // console.log('Agent:', $(this));
         $(this).labels().first().trigger('click');
+        $(this).first().trigger('click');
         // console.log('Agent Enabled:', $(this).val())
       } else {
         $(this).attr('disabled', true);
@@ -62,6 +64,7 @@
       if ($(this).data('language').split(', ').includes(lang)){
         $(this).attr('disabled', false);
         $(this).labels().first().trigger('click');
+        $(this).first().trigger('click');
         //  console.log('Office Enabled:', $(this).val())
       } else {
         $(this).attr('disabled', true);
@@ -78,6 +81,7 @@
         } else {
           $(this).attr('disabled', false);
           $(this).labels().first().trigger('click');
+          $(this).first().trigger('click');
         }
       } else {
         $(this).attr('disabled', true);
@@ -97,6 +101,7 @@
       if (available_in_this_location && available_in_this_language){
         $(this).attr('disabled', false);
         $(this).labels().first().trigger('click');
+        $(this).first().trigger('click');
       } else {
         $(this).attr('disabled', true);
       }
