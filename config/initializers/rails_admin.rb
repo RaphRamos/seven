@@ -49,7 +49,7 @@ RailsAdmin.config do |config|
   config.show_gravatar = false
 
   config.model 'Client' do
-    exclude_fields :events, :created_at, :updated_at
+    exclude_fields :events
     field :notes do
       read_only true
     end
