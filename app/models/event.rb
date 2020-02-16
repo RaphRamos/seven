@@ -9,6 +9,7 @@ class Event < ApplicationRecord
   belongs_to :location
 
   has_one :payment
+  has_many :versions, class_name: '::PaperTrail::Version', as: :item
 
   accepts_nested_attributes_for :client
 
